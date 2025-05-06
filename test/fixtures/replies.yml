@@ -3,9 +3,7 @@
 one:
   discussion: one
   user: one
-  marked_as_answer: false
 
 two:
   discussion: two
   user: two
-  marked_as_answer: false

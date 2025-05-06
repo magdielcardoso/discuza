@@ -4,11 +4,16 @@
 # model remove the "{}" from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-user_one:
+one:
   name: 'Test User One'
   email: 'userone@example.com'
   # Use um helper ou configure a senha diretamente no teste para segurança
   encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>
+
+two:
+  name: 'Test User Two'
+  email: 'usertwo@example.com'
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password456') %>
 
 # two: {}
 # column: value
