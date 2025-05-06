@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discuza Documentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style type="text/tailwindcss">
+        @layer base {
+            h1, h2, h3, h4, h5, h6 {
+                font-family: 'Space Grotesk', sans-serif; /* Matching application.css */
+            }
+        }
+        @layer utilities {
+            .content-section h2 {
+                @apply text-2xl sm:text-3xl font-bold text-slate-900 mb-6 pb-3 border-b-2 border-lime-500;
+            }
+            .content-section h3 {
+                @apply text-xl sm:text-2xl font-semibold text-slate-800 mt-8 mb-4;
+            }
+            .content-section h4 {
+                @apply text-lg sm:text-xl font-semibold text-slate-700 mt-6 mb-3;
+            }
+            .content-section p, .content-section ul, .content-section ol {
+                @apply mb-4 text-slate-700 leading-relaxed;
+            }
+            .content-section ul {
+                @apply list-disc list-inside;
+            }
+            .content-section ol {
+                @apply list-decimal list-inside;
+            }
+            .content-section a {
+                @apply text-lime-600 hover:text-lime-500 hover:underline; /* Inspired by application.css */
+            }
+            .content-section pre {
+                @apply bg-slate-800 text-slate-100 p-4 rounded-md overflow-x-auto text-sm my-4;
+            }
+            .content-section code:not(pre code) {
+                @apply bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded-md text-sm;
+            }
+            .content-section img.screenshot {
+                @apply max-w-full rounded-lg shadow-lg my-6 border border-slate-200;
+            }
+            .content-section table {
+                @apply w-full border-collapse my-6 text-sm;
+            }
+            .content-section th, .content-section td {
+                @apply border border-slate-300 px-4 py-2 text-left;
+            }
+            .content-section th {
+                @apply bg-slate-100 font-semibold;
+            }
+            .content-section blockquote {
+                @apply border-l-4 border-lime-500 pl-4 italic text-slate-600 my-6;
+            }
+        }
+        /* Custom scrollbar for webkit browsers */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #84cc16; /* lime-500 */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a3e635; /* lime-400 */
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-md fixed top-0 left-0 h-full overflow-y-auto p-6 space-y-4 hidden md:block">
+            <a href="#" class="block mb-2">
+                <img src="https://github.com/magdielcardoso/discuza/raw/develop/app/assets/images/logo_light.svg" alt="Discuza Logo" class="h-10">
+            </a>
+            <p class="text-xs text-slate-500 text-left mb-6 -mt-1">Version 0.1.0</p>
+            <nav id="docs-nav">
+                <button id="translate-button-desktop" class="translation-toggle-button w-full mb-4 px-3 py-2 rounded-md text-sm font-medium text-slate-700 bg-slate-100 hover:bg-lime-50 hover:text-lime-700 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-lime-500">
+                    🇧🇷 Mudar para Português
+                </button>
+                <ul class="space-y-1">
+                    <li data-source-key="readme">
+                        <a href="#readme" class="nav-link group block px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-lime-50 hover:text-lime-700">
+                            <span class="nav-text">README</span>
+                        </a>
+                    </li>
+                    <li data-source-key="contributing">
+                        <a href="#contributing" class="nav-link group block px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-lime-50 hover:text-lime-700">
+                            <span class="nav-text">Contributing</span>
+                        </a>
+                    </li>
+                    <li data-source-key="license">
+                        <a href="#license" class="nav-link group block px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-lime-50 hover:text-lime-700">
+                            <span class="nav-text">License</span>
+                        </a>
+                    </li>
+                    <li data-source-key="support">
+                        <a href="#support" class="nav-link group block px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-lime-50 hover:text-lime-700">
+                            <span class="nav-text">Support</span>
+                        </a>
+                    </li>
+                    <li data-source-key="security">
+                        <a href="#security" class="nav-link group block px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-lime-50 hover:text-lime-700">
+                            <span class="nav-text">Security Policy</span>
+                        </a>
+                    </li>
+                    <li data-source-key="codeofconduct">
+                        <a href="#codeofconduct" class="nav-link group block px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-lime-50 hover:text-lime-700">
+                            <span class="nav-text">Code of Conduct</span>
+                        </a>
+                    </li>
+                    <li data-source-key="changelog">
+                        <a href="#changelog" class="nav-link group block px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-lime-50 hover:text-lime-700">
+                            <span class="nav-text">Changelog</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="text-xs text-slate-500 mt-auto pt-6 border-t border-slate-200">
+                Discuza Docs &copy; <span id="current-year"></span>
+            </div>
+        </aside>
+
+        <!-- Mobile Header -->
+        <header class="md:hidden fixed top-0 left-0 right-0 bg-white shadow-md p-4 z-50">
+            <div class="container mx-auto flex justify-between items-center">
+                <img src="https://github.com/magdielcardoso/discuza/raw/develop/app/assets/images/logo_light.svg" alt="Discuza Logo" class="h-8">
+                <button id="mobile-menu-button" class="text-slate-600 hover:text-lime-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+            <nav id="mobile-docs-nav" class="hidden mt-2 py-2 bg-white border-t border-slate-200">
+                 <button id="translate-button-mobile" class="translation-toggle-button w-full my-2 mx-auto block px-4 py-2 text-sm font-medium text-slate-700 bg-slate-100 hover:bg-lime-50 hover:text-lime-700 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500" style="max-width: calc(100% - 2rem);">
+                    🇧🇷 Mudar para Português
+                </button>
+                 <ul class="space-y-1">
+                    <li data-source-key="readme">
+                        <a href="#readme" class="nav-link group block px-4 py-2 text-sm font-medium text-slate-700 hover:bg-lime-50 hover:text-lime-700">
+                            <span class="nav-text">README</span>
+                        </a>
+                    </li>
+                    <li data-source-key="contributing">
+                        <a href="#contributing" class="nav-link group block px-4 py-2 text-sm font-medium text-slate-700 hover:bg-lime-50 hover:text-lime-700">
+                            <span class="nav-text">Contributing</span>
+                        </a>
+                    </li>
+                    <li data-source-key="license">
+                        <a href="#license" class="nav-link group block px-4 py-2 text-sm font-medium text-slate-700 hover:bg-lime-50 hover:text-lime-700">
+                            <span class="nav-text">License</span>
+                        </a>
+                    </li>
+                    <li data-source-key="support">
+                        <a href="#support" class="nav-link group block px-4 py-2 text-sm font-medium text-slate-700 hover:bg-lime-50 hover:text-lime-700">
+                            <span class="nav-text">Support</span>
+                        </a>
+                    </li>
+                    <li data-source-key="security">
+                        <a href="#security" class="nav-link group block px-4 py-2 text-sm font-medium text-slate-700 hover:bg-lime-50 hover:text-lime-700">
+                            <span class="nav-text">Security Policy</span>
+                        </a>
+                    </li>
+                    <li data-source-key="codeofconduct">
+                        <a href="#codeofconduct" class="nav-link group block px-4 py-2 text-sm font-medium text-slate-700 hover:bg-lime-50 hover:text-lime-700">
+                            <span class="nav-text">Code of Conduct</span>
+                        </a>
+                    </li>
+                    <li data-source-key="changelog">
+                        <a href="#changelog" class="nav-link group block px-4 py-2 text-sm font-medium text-slate-700 hover:bg-lime-50 hover:text-lime-700">
+                            <span class="nav-text">Changelog</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Main content -->
+        <main class="flex-1 md:ml-64 px-4 py-6 md:p-6 pt-20 md:pt-10">
+            <div class="max-w-4xl mx-auto">
+                <section id="readme" class="content-section scroll-mt-20">
+                    <!-- Content will be populated from README.md -->
+                <h2>README</h2>
+
+                    <div class="bg-white p-6 rounded-lg shadow-sm mb-8 lang-en">
+                        <h3>English Content (from README.md)</h3>
+                        <h4>🚀 Quick Start (Using Make)</h4>
+                        <pre><code># 1. Clone the repository and enter the folder
+git clone https://github.com/magdielcardoso/discuza.git
+cd discuza
+
+# 2. Run the automated setup
+make setup
+
+# 3. Configure credentials (required the first time)
+#    Follow the instructions in the editor that opens.
+make credentials
+
+# 4. Start the server
+make start</code></pre>
+                        <p>Access the application at <code>http://localhost:3000</code>. See other useful commands with <code>make help</code>.</p>
+
+                        <h4>🚀 About Discuza</h4>
+                        <p>Discuza is a platform designed to facilitate online discussions in an organized and efficient way. Built with the robustness of Ruby on Rails and the interactivity of Hotwire (Turbo + Stimulus), it offers a fast and modern user experience.</p>
+
+                        <h4>✨ Key Features (Planned)</h4>
+                        <ul>
+                            <li>Discussion Topic Creation</li>
+                            <li>Nested Reply System</li>
+                            <li>Post Reactions</li>
+                            <li>User Authentication (Devise)</li>
+                            <li>User Profiles</li>
+                            <li>Real-time Notifications (Action Cable)</li>
+                            <li>Markdown Support in Messages</li>
+                            <li>Efficient Search</li>
+                        </ul>
+
+                        <h4>📸 Screenshots</h4>
+                        <p>See what Discuza looks like:</p>
+                        <h5>Login Page</h5>
+                        <img src="https://github.com/magdielcardoso/discuza/raw/develop/app/assets/images/login.png" alt="Login Page" class="screenshot">
+                        <h5>Main Dashboard</h5>
+                        <img src="https://github.com/magdielcardoso/discuza/raw/develop/app/assets/images/dashboard.png" alt="Main Dashboard" class="screenshot">
+
+                        <h4>🛠️ Running Locally (Manual Steps)</h4>
+                        <p>Follow these steps to set up the development environment manually (alternative to <code>make setup</code>):</p>
+                        <ol>
+                            <li><strong>Clone the repository:</strong> <pre><code>git clone https://github.com/magdielcardoso/discuza.git
+cd discuza</code></pre></li>
+                            <li><strong>Install dependencies:</strong>
+                                <ul>
+                                    <li>Make sure you have the correct Ruby version installed (check <code>.ruby-version</code>).</li>
+                                    <li>Install Bundler: <code>gem install bundler</code></li>
+                                    <li>Install gems and dependencies: <code>bundle install</code></li>
+                                </ul>
+                            </li>
+                            <li><strong>Configure the Database:</strong>
+                                <ul>
+                                    <li>Ensure PostgreSQL is installed and running.</li>
+                                    <li>Check <code>config/database.yml</code>.</li>
+                                    <li>Create database: <code>rails db:create</code></li>
+                                    <li>Run migrations: <code>rails db:migrate</code></li>
+                                    <li>(Optional) Seed data: <code>rails db:seed</code></li>
+                                </ul>
+                            </li>
+                            <li><strong>Configure Credentials:</strong> <pre><code>bin/rails credentials:edit</code></pre></li>
+                            <li><strong>Configure Environment Variables:</strong> Copy <code>.env.example</code> to <code>.env</code> and edit.</li>
+                            <li><strong>Start the Server:</strong> <pre><code>./bin/dev</code></pre> Access at <code>http://localhost:3000</code>.</li>
+                            <li><strong>Configure Git Hooks (Recommended):</strong> <pre><code>./bin/setup --skip-server</code></pre> or manually.</li>
+                            <li><strong>Running Tests:</strong> <pre><code>rails test</code></pre></li>
+                        </ol>
+
+                        <h4>🤖 AI Development (StanDev)</h4>
+                        <p>This project uses an AI Coding Agent (StanDev) to accelerate development.</p>
+                        <pre><code>### System Prompt Summary (StanDev)
+*   Prioritize Rails Generators: Use '''rails g''' whenever possible.
+*   Test Everything: No features without tests.
+*   Document Progress: Update '''standev/app_progress.md'''.
+*   Vanilla Rails: Avoid external gems unless necessary.
+*   ERB Partials: Use partials for views.
+*   Simplicity: Lightweight controllers, logic in models/services.</code></pre>
+                        <ul>
+                            <li>Follow Guidelines</li>
+                            <li>Review Progress</li>
+                            <li>Focus on Clear Tasks</li>
+                            <li>Atomic Commits</li>
+                        </ul>
+
+                        <h4>🤝 How to Contribute</h4>
+                        <p>We are an open-source project and would love your help!</p>
+                        <ol>
+                            <li>Fork the project.</li>
+                            <li>Create a Branch for your feature.</li>
+                            <li>Commit your changes.</li>
+                            <li>Push to the Branch.</li>
+                            <li>Open a Pull Request.</li>
+                        </ol>
+                        <p>Please make sure your tests pass and follow the project's code style.</p>
+
+                        <h4>📄 License</h4>
+                        <p>This project is licensed under the MIT License. See the <code>LICENSE</code> file for more details.</p>
+
+                        <h4>✨ Acknowledgements</h4>
+                        <ul>
+                            <li>To the Ruby on Rails community.</li>
+                            <li>To the project contributors.</li>
+                        </ul>
+
+                        <h4>🚀 Deploying with Kamal</h4>
+                        <p>This project is configured for continuous deployment using Kamal.</p>
+                        <ol>
+                            <li><strong>Configure Servers</strong></li>
+                            <li><strong>Prepare Deploy File</strong> (<code>config/deploy.yml</code> from example)</li>
+                            <li><strong>Prepare Secrets File</strong> (<code>.kamal/secrets</code> from example)</li>
+                            <li><strong>Initial Setup (First time):</strong> <pre><code>kamal setup</code></pre></li>
+                            <li><strong>Deploy:</strong> <pre><code>kamal deploy</code></pre></li>
+                            <li><strong>Useful Commands:</strong> <code>kamal details</code>, <code>kamal logs</code>, etc.</li>
+                        </ol>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow-sm lang-pt hidden">
+                        <h3>Conteúdo em Português (do README.md)</h3>
+                        <h4>🚀 Instalação Rápida (Usando Make)</h4>
+                        <pre><code># 1. Clone o repositório e entre na pasta
+git clone https://github.com/magdielcardoso/discuza.git
+cd discuza
+
+# 2. Rode o setup automatizado
+make setup
+
+# 3. Configure as credenciais (necessário na primeira vez)
+#    Siga as instruções no editor que abrir.
+make credentials
+
+# 4. Inicie o servidor
+make start</code></pre>
+                        <p>Acesse a aplicação em <code>http://localhost:3000</code>. Veja outros comandos úteis com <code>make help</code>.</p>
+
+                        <h4>🚀 Sobre o Discuza</h4>
+                        <p>Discuza é uma plataforma projetada para facilitar discussões online de forma organizada e eficiente. Construída com a robustez do Ruby on Rails e a interatividade do Hotwire (Turbo + Stimulus), oferecendo uma experiência de usuário rápida e moderna.</p>
+
+                        <h4>✨ Funcionalidades Principais (Planejadas)</h4>
+                        <ul>
+                            <li>Criação de Tópicos de Discussão</li>
+                            <li>Sistema de Respostas Aninhadas</li>
+                            <li>Reações a Posts</li>
+                            <li>Autenticação de Usuários (Devise)</li>
+                            <li>Perfis de Usuário</li>
+                            <li>Notificações em Tempo Real (Action Cable)</li>
+                            <li>Markdown Suportado nas Mensagens</li>
+                            <li>Busca Eficiente</li>
+                        </ul>
+
+                        <h4>📸 Screenshots</h4>
+                        <p>Veja como o Discuza se parece:</p>
+                        <h5>Página de Login</h5>
+                        <img src="https://github.com/magdielcardoso/discuza/raw/develop/app/assets/images/login.png" alt="Página de Login" class="screenshot">
+                        <h5>Dashboard Principal</h5>
+                        <img src="https://github.com/magdielcardoso/discuza/raw/develop/app/assets/images/dashboard.png" alt="Dashboard Principal" class="screenshot">
+
+                        <h4>🛠️ Rodando Localmente (Passos Manuais)</h4>
+                        <p>Siga estes passos para configurar o ambiente de desenvolvimento manualmente:</p>
+                         <ol>
+                            <li><strong>Clone o repositório:</strong> <pre><code>git clone https://github.com/magdielcardoso/discuza.git
+cd discuza</code></pre></li>
+                            <li><strong>Instale as dependências:</strong>
+                                <ul>
+                                    <li>Verifique a versão do Ruby (<code>.ruby-version</code>).</li>
+                                    <li>Instale Bundler: <code>gem install bundler</code></li>
+                                    <li>Instale gems e dependências: <code>bundle install</code></li>
+                                </ul>
+                            </li>
+                            <li><strong>Configure o Banco de Dados:</strong>
+                                <ul>
+                                    <li>PostgreSQL instalado e rodando.</li>
+                                    <li>Verifique <code>config/database.yml</code>.</li>
+                                    <li>Crie o banco: <code>rails db:create</code></li>
+                                    <li>Rode as migrações: <code>rails db:migrate</code></li>
+                                    <li>(Opcional) Popule dados: <code>rails db:seed</code></li>
+                                </ul>
+                            </li>
+                            <li><strong>Configure as Credenciais:</strong> <pre><code>bin/rails credentials:edit</code></pre></li>
+                            <li><strong>Configure Variáveis de Ambiente:</strong> Copie <code>.env.example</code> para <code>.env</code> e edite.</li>
+                            <li><strong>Inicie o Servidor:</strong> <pre><code>./bin/dev</code></pre> Acesse em <code>http://localhost:3000</code>.</li>
+                            <li><strong>Configure os Git Hooks (Recomendado):</strong> <pre><code>./bin/setup --skip-server</code></pre> ou manualmente.</li>
+                            <li><strong>Rodando os Testes:</strong> <pre><code>rails test</code></pre></li>
+                        </ol>
+
+                        <h4>🤖 Desenvolvimento com IA (StanDev)</h4>
+                        <p>Este projeto utiliza uma IA Agente de Codificação (StanDev) para acelerar o desenvolvimento.</p>
+                        <pre><code>### Resumo do System Prompt (StanDev)
+*   Priorize Geradores Rails: Use '''rails g''' sempre que possível.
+*   Teste Tudo: Nenhuma funcionalidade sem testes.
+*   Documente o Progresso: Atualize '''standev/app_progress.md'''.
+*   Rails Vanilla: Evite gems externas sem necessidade.
+*   Partials ERB: Use parciais para as views.
+*   Simplicidade: Controllers leves, lógica nos models/services.</code></pre>
+                         <ul>
+                            <li>Siga as Diretrizes</li>
+                            <li>Revise o Progresso</li>
+                            <li>Foco em Tarefas Claras</li>
+                            <li>Commits Atômicos</li>
+                        </ul>
+
+                        <h4>🤝 Como Contribuir</h4>
+                        <p>Somos um projeto open-source e adoraríamos sua ajuda!</p>
+                        <ol>
+                            <li>Faça um Fork do projeto.</li>
+                            <li>Crie uma Branch para sua feature.</li>
+                            <li>Faça commit de suas alterações.</li>
+                            <li>Faça push para a Branch.</li>
+                            <li>Abra um Pull Request.</li>
+                        </ol>
+                        <p>Por favor, certifique-se de que seus testes passam e siga o estilo de código do projeto.</p>
+
+                        <h4>📄 Licença</h4>
+                        <p>Este projeto está licenciado sob a Licença MIT. Veja o arquivo <code>LICENSE</code> para mais detalhes.</p>
+
+                        <h4>✨ Agradecimentos</h4>
+                        <ul>
+                            <li>À comunidade Ruby on Rails.</li>
+                            <li>Aos contribuidores do projeto.</li>
+                        </ul>
+                        
+                        <h4>🚀 Deploy com Kamal</h4>
+                        <p>Este projeto está configurado para deploy contínuo usando Kamal.</p>
+                        <ol>
+                            <li><strong>Configure os Servidores</strong></li>
+                            <li><strong>Prepare o Arquivo de Deploy</strong> (<code>config/deploy.yml</code> do exemplo)</li>
+                            <li><strong>Prepare o Arquivo de Segredos</strong> (<code>.kamal/secrets</code> do exemplo)</li>
+                            <li><strong>Setup Inicial (Primeira vez):</strong> <pre><code>kamal setup</code></pre></li>
+                            <li><strong>Deploy:</strong> <pre><code>kamal deploy</code></pre></li>
+                            <li><strong>Comandos Úteis:</strong> <code>kamal details</code>, <code>kamal logs</code>, etc.</li>
+                        </ol>
+                    </div>
+            </section>
+
+                <section id="contributing" class="content-section scroll-mt-20">
+                <h2>Contributing to Discuza</h2>
+                     <div class="bg-white p-6 rounded-lg shadow-sm mb-8 lang-en">
+                        <h3>English Contribution Guide (from CONTRIBUTING.md)</h3>
+                        <p>First off, thank you for considering contributing to Discuza! It's people like you that make Discuza such a great tool.</p>
+                        <p>We welcome contributions of all kinds, from reporting bugs and suggesting enhancements to submitting pull requests for new features or bug fixes.</p>
+
+                        <h4>How Can I Contribute?</h4>
+                        <h5>Reporting Bugs</h5>
+                        <p>If you find a bug, please ensure it wasn't already reported by searching on GitHub under Issues. If not, open a new one with a title, clear description, and a code sample or test case.</p>
+
+                        <h5>Suggesting Enhancements</h5>
+                        <p>If you have an idea, search Issues first. If not discussed, open a new issue with a clear description and why it would be valuable.</p>
+
+                        <h5>Pull Requests</h5>
+                        <p>We love pull requests! Discuss significant changes in an issue first.</p>
+                        <p><strong>Steps to contribute code:</strong></p>
+                        <ol>
+                            <li><strong>Fork the repository.</strong></li>
+                            <li><strong>Clone your fork:</strong> <pre><code>git clone https://github.com/YOUR_USERNAME/discuza.git
+cd discuza</code></pre></li>
+                            <li><strong>Set up your development environment:</strong> Follow instructions in README.md. Ensure Git pre-commit hooks are active.</li>
+                            <li><strong>Create a new branch:</strong> <pre><code>git checkout -b feature/your-descriptive-feature-name</code></pre></li>
+                            <li><strong>Make your changes:</strong> Write code and add tests. Ensure all tests pass (<code>rails test</code>).</li>
+                            <li><strong>Commit your changes:</strong> Use clear commit messages (consider Conventional Commits). <pre><code>git add .
+git commit -m "feat: Add my new feature"</code></pre></li>
+                            <li><strong>Push your branch:</strong> <pre><code>git push origin feature/your-descriptive-feature-name</code></pre></li>
+                            <li><strong>Open a Pull Request (PR):</strong> Go to the original Discuza repository and click "New Pull Request".</li>
+                        </ol>
+
+                        <p><strong>Pull Request Guidelines:</strong></p>
+                        <ul>
+                            <li>Ensure all tests pass (<code>rails test</code>).</li>
+                            <li>Follow existing code style (RuboCop via pre-commit hook should help).</li>
+                            <li>Provide a clear description of the problem and solution. Link to relevant issue.</li>
+                            <li>Keep PRs focused on a single issue or feature.</li>
+                        </ul>
+
+                        <h4>Code of Conduct</h4>
+                        <p>This project adheres to a Code of Conduct. Please review it before contributing.</p>
+
+                        <h4>Questions?</h4>
+                        <p>Reach out via email at contato@stacklab.digital or join our WhatsApp group.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm lang-pt hidden">
+                        <h3>Guia de Contribuição em Português (do CONTRIBUTING.md)</h3>
+                        <p>Primeiramente, obrigado por considerar contribuir para o Discuza! São pessoas como você que fazem do Discuza uma ótima ferramenta.</p>
+                        <p>Acolhemos contribuições de todos os tipos, desde o relato de bugs e sugestões de melhorias até o envio de pull requests.</p>
+
+                        <h4>Como Posso Contribuir?</h4>
+                        <h5>Relatando Bugs</h5>
+                        <p>Se encontrar um bug, verifique se já não foi relatado nas Issues do GitHub. Caso contrário, abra uma nova issue com título, descrição clara e, se possível, um exemplo de código ou caso de teste.</p>
+
+                        <h5>Sugerindo Melhorias</h5>
+                        <p>Se tiver uma ideia, pesquise nas Issues primeiro. Se não foi discutida, abra uma nova issue com descrição clara da proposta e sua importância.</p>
+
+                        <h5>Pull Requests</h5>
+                        <p>Adoramos pull requests! Para funcionalidades novas ou correções significativas, é bom discutir em uma issue primeiro.</p>
+                        <p><strong>Passos para contribuir com código:</strong></p>
+                        <ol>
+                            <li><strong>Faça um fork do repositório.</strong></li>
+                            <li><strong>Clone o seu fork:</strong> <pre><code>git clone https://github.com/SEU_USUARIO/discuza.git
+cd discuza</code></pre></li>
+                            <li><strong>Configure seu ambiente de desenvolvimento:</strong> Siga as instruções no README.md. Garanta que os hooks de pre-commit do Git estejam ativos.</li>
+                            <li><strong>Crie uma nova branch:</strong> <pre><code>git checkout -b feature/seu-nome-de-feature-descritivo</code></pre></li>
+                            <li><strong>Faça suas alterações:</strong> Escreva seu código e adicione testes! Garanta que todos os testes passem (<code>rails test</code>).</li>
+                            <li><strong>Faça o commit de suas alterações:</strong> Use mensagens de commit claras (considere Conventional Commits). <pre><code>git add .
+git commit -m "feat: Adiciona minha nova feature"</code></pre></li>
+                            <li><strong>Envie sua branch:</strong> <pre><code>git push origin feature/seu-nome-de-feature-descritivo</code></pre></li>
+                            <li><strong>Abra um Pull Request (PR):</strong> Vá para o repositório original do Discuza no GitHub e clique em "New Pull Request".</li>
+                        </ol>
+
+                        <p><strong>Diretrizes para Pull Requests:</strong></p>
+                        <ul>
+                            <li>Garanta que todos os testes passem (<code>rails test</code>).</li>
+                            <li>Siga o estilo de código existente (RuboCop via hook de pre-commit deve ajudar).</li>
+                            <li>Forneça uma descrição clara do problema e da solução. Link para a issue relevante.</li>
+                            <li>Mantenha os PRs focados em uma única issue ou funcionalidade.</li>
+                        </ul>
+                        
+                        <h4>Código de Conduta</h4>
+                        <p>Este projeto adere a um Código de Conduta. Por favor, revise-o antes de contribuir.</p>
+
+                        <h4>Dúvidas?</h4>
+                        <p>Entre em contato por e-mail (contato@stacklab.digital) ou junte-se ao nosso grupo no WhatsApp.</p>
+                    </div>
+            </section>
+
+                <section id="license" class="content-section scroll-mt-20">
+                <h2>License</h2>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                <p>MIT License</p>
+                <p>Copyright (c) [ano] [nome do detentor dos direitos autorais]</p>
+                <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+                <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+                <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+                    </div>
+            </section>
+
+                <section id="support" class="content-section scroll-mt-20">
+                <h2>Support</h2>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                <h3>How to Get Help</h3>
+                <p>If you need help with Discuza, have questions, or want to discuss features, here are the ways you can reach out:</p>
+                <ol>
+                    <li><strong>GitHub Issues:</strong> For bug reports and feature requests, please use the <a href="https://github.com/magdielcardoso/discuza/issues" target="_blank">GitHub Issues tracker</a>.</li>
+                    <li><strong>WhatsApp Group:</strong> For general discussion, join our <a href="https://chat.whatsapp.com/KpKcKRDUajV6t1UcjpHwyG" target="_blank">WhatsApp group: Discuza 💬 StackLab</a>.</li>
+                    <li><strong>Email:</strong> For specific inquiries, contact [contato@stacklab.digital].</li>
+                </ol>
+                <h3>Community Support</h3>
+                <p>Please remember that Discuza is an open-source project. When asking for help, provide as much detail as possible.</p>
+                <h3>Contributing</h3>
+                        <p>If you'd like to contribute, please see our <a href="#contributing">Contributing Guidelines</a>.</p>
+                    </div>
+            </section>
+
+                <section id="security" class="content-section scroll-mt-20">
+                <h2>Security Policy</h2>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                <h3>Supported Versions</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Version</th>
+                            <th>Supported</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1.x.x</td>
+                            <td>✔️</td>
+                        </tr>
+                        <tr>
+                            <td>&lt; 1.0</td>
+                            <td>❌</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>Reporting a Vulnerability</h3>
+                <p>We take security vulnerabilities seriously. <strong>Please do not report security vulnerabilities through public GitHub issues.</strong></p>
+                <p>Instead, please email the details to [contato@stacklab.digital].</p>
+                <p>Please include:</p>
+                <ul>
+                    <li>A description of the vulnerability and its potential impact.</li>
+                    <li>Steps to reproduce the vulnerability.</li>
+                    <li>Any relevant code snippets, logs, or screenshots.</li>
+                    <li>Information about the affected version(s).</li>
+                </ul>
+                <p>We will acknowledge receipt of your report within 48 hours and aim to provide a more detailed response within 72 hours.</p>
+                    </div>
+            </section>
+
+                <section id="codeofconduct" class="content-section scroll-mt-20">
+                <h2>Contributor Covenant Code of Conduct</h2>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3>Our Pledge</h3>
+                        <p>We as members, contributors, and leaders pledge to make participation in our community a harassment-free experience for everyone, regardless of age, body size, visible or invisible disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.</p>
+                        <p>We pledge to act and interact in ways that contribute to an open, welcoming, diverse, inclusive, and healthy community.</p>
+
+                        <h3>Our Standards</h3>
+                        <p>Examples of behavior that contributes to a positive environment include:</p>
+                        <ul>
+                            <li>Demonstrating empathy and kindness.</li>
+                            <li>Being respectful of differing opinions.</li>
+                            <li>Giving and gracefully accepting constructive feedback.</li>
+                            <li>Accepting responsibility and apologizing for mistakes.</li>
+                            <li>Focusing on what is best for the overall community.</li>
+                        </ul>
+                        <p>Examples of unacceptable behavior include:</p>
+                        <ul>
+                            <li>Sexualized language or imagery, and sexual attention or advances.</li>
+                            <li>Trolling, insulting comments, and personal or political attacks.</li>
+                            <li>Public or private harassment.</li>
+                            <li>Publishing others' private information without permission.</li>
+                            <li>Other conduct considered inappropriate in a professional setting.</li>
+                        </ul>
+
+                        <h3>Enforcement Responsibilities</h3>
+                        <p>Community leaders are responsible for clarifying and enforcing our standards and will take appropriate corrective action in response to any behavior they deem inappropriate, threatening, offensive, or harmful.</p>
+
+                        <h3>Scope</h3>
+                        <p>This Code of Conduct applies within all community spaces and when an individual is officially representing the community in public spaces.</p>
+
+                        <h3>Enforcement</h3>
+                        <p>Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to [contato@stacklab.digital]. All complaints will be reviewed and investigated.</p>
+
+                        <h3>Enforcement Guidelines</h3>
+                        <p>Community leaders will follow Community Impact Guidelines in determining consequences:</p>
+                        <ol>
+                            <li><strong>Correction:</strong> Private warning for unprofessional behavior.</li>
+                            <li><strong>Warning:</strong> Consequences for continued behavior, potential temporary restriction.</li>
+                            <li><strong>Temporary Ban:</strong> For serious violations or sustained inappropriate behavior.</li>
+                            <li><strong>Permanent Ban:</strong> For a pattern of violation, harassment, or aggression.</li>
+                        </ol>
+
+                        <h3>Attribution</h3>
+                        <p>This Code of Conduct is adapted from the <a href="https://www.contributor-covenant.org" target="_blank">Contributor Covenant</a>, version 2.0.</p>
+                    </div>
+            </section>
+
+                <section id="changelog" class="content-section scroll-mt-20">
+                <h2>Changelog</h2>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3>[0.1.0] - 2025-05-03</h3>
+                        <h4>Added</h4>
+                        <ul>
+                            <li>Installed and configured ActionText for rich text editing.</li>
+                            <li>Generated scaffold for <code>Discussion</code> (<code>title:string</code>, <code>content:rich_text</code>, <code>user:references</code>, <code>pinned:boolean</code>, <code>closed:boolean</code>).</li>
+                            <li>Generated scaffold for <code>Reply</code> (<code>discussion:references</code>, <code>user:references</code>, <code>content:rich_text</code>, <code>marked_as_answer:boolean</code>).</li>
+                            <li>Generated <code>Vote</code> model (<code>user:references</code>, <code>votable:references{polymorphic}</code>, <code>value:integer</code>).</li>
+                            <li>Generated <code>Reaction</code> model (<code>user:references</code>, <code>reactable:references{polymorphic}</code>, <code>emoji:string</code>).</li>
+                            <li>Executed corresponding migrations for new models/scaffolds.</li>
+                            <li>Configured basic associations and validations in models (<code>User</code>, <code>Discussion</code>, <code>Reply</code>, <code>Vote</code>, <code>Reaction</code>).</li>
+                            <li>Generated basic test files for new models/scaffolds.</li>
+                            <li>Implemented <code>before_action :authenticate_user!</code> in <code>DiscussionsController</code>.</li>
+                            <li>Generated and styled Devise views (login, sign up, password recovery, confirmation) with Tailwind, including dark mode.</li>
+                            <li>Created specific <code>auth.html.erb</code> layout for Devise, centering content and adding a side image with a quote.</li>
+                            <li>Created <code>user_initials</code> helper to generate name initials.</li>
+                            <li>Created Stimulus <code>dropdown</code> controller to manage the user menu in the navbar.</li>
+                        </ul>
+                        <h4>Changed</h4>
+                        <ul>
+                            <li>Adjusted spacing and appearance of the New Discussion page.</li>
+                            <li>Updated navbar to:
+                                <ul>
+                                    <li>Use the Stimulus <code>dropdown</code> controller.</li>
+                                    <li>Display user initials (via <code>user_initials</code> helper) when no avatar is present.</li>
+                                    <li>Show "Sign In" / "Sign Up" buttons for logged-out users.</li>
+                                </ul>
+                            </li>
+                            <li>Refactored <code>modal_controller.js</code> to fix the Devise profile edit modal:
+                                <ul>
+                                    <li>Abandoned generic modal approach.</li>
+                                    <li>Added specific <code>profileModal</code> target and <code>openProfileModal</code> action.</li>
+                                    <li>Adjusted <code>close</code> and <code>closeWithBackground</code> actions for the new target.</li>
+                                    <li>Updated <code>devise/registrations/edit.html.erb</code> view to use the new modal target and action.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <h4>Fixed</h4>
+                        <ul>
+                            <li>Fixed issue where the Devise profile edit modal did not open correctly after previous modifications to <code>modal_controller.js</code>.</li>
+                        </ul>
+                    </div>
+            </section>
+
+                <footer class="mt-12 py-8 border-t border-slate-200 text-center text-sm text-slate-500">
+                    Discuza Documentation - Generated on <span id="current-date"></span>
+                </footer>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Set current year and date
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            const currentDateEl = document.getElementById('current-date');
+            if (currentDateEl) {
+                currentDateEl.textContent = new Date().toLocaleDateString();
+            }
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.content-section');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileDocsNav = document.getElementById('mobile-docs-nav');
+            const translateButtonDesktop = document.getElementById('translate-button-desktop');
+            const translateButtonMobile = document.getElementById('translate-button-mobile');
+            let currentLang = 'en'; // 'en' or 'pt'
+
+            const translations = {
+                sidebar: {
+                    readme: { en: "README", pt: "LEIA-ME" },
+                    contributing: { en: "Contributing", pt: "Como Contribuir" },
+                    license: { en: "License", pt: "Licença" },
+                    support: { en: "Support", pt: "Suporte" },
+                    security: { en: "Security Policy", pt: "Política de Segurança" },
+                    codeofconduct: { en: "Code of Conduct", pt: "Código de Conduta" },
+                    changelog: { en: "Changelog", pt: "Registro de Mudanças" }
+                },
+                titles: {
+                    readme: { en: "README", pt: "LEIA-ME" },
+                    contributing: { en: "Contributing to Discuza", pt: "Contribuindo para o Discuza" },
+                    license: { en: "License", pt: "Licença" },
+                    support: { en: "Support", pt: "Suporte" },
+                    security: { en: "Security Policy", pt: "Política de Segurança" },
+                    codeofconduct: { en: "Contributor Covenant Code of Conduct", pt: "Código de Conduta do Contribuidor" },
+                    changelog: { en: "Changelog", pt: "Registro de Mudanças" }
+                },
+                translate_button: {
+                    en_to_pt: "🇧🇷 Mudar para Português",
+                    pt_to_en: "🇬🇧 Switch to English"
+                }
+            };
+
+            function applyTranslations(lang) {
+                // Translate sidebar and mobile nav links
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    const navTextElement = link.querySelector('.nav-text');
+                    const key = link.getAttribute('href').substring(1); // remove #
+                    if (navTextElement && translations.sidebar[key] && translations.sidebar[key][lang]) {
+                        navTextElement.textContent = translations.sidebar[key][lang];
+                    }
+                });
+
+                // Translate section titles (h2 within .content-section)
+                document.querySelectorAll('.content-section').forEach(section => {
+                    const key = section.id;
+                    const titleElement = section.querySelector('h2');
+                    if (titleElement && translations.titles[key] && translations.titles[key][lang]) {
+                        titleElement.textContent = translations.titles[key][lang];
+                    }
+                });
+
+                // Toggle content visibility for README and CONTRIBUTING
+                const elementsEn = document.querySelectorAll('.lang-en');
+                const elementsPt = document.querySelectorAll('.lang-pt');
+                if (lang === 'pt') {
+                    elementsEn.forEach(el => el.classList.add('hidden'));
+                    elementsPt.forEach(el => el.classList.remove('hidden'));
+                    if (translateButtonDesktop) translateButtonDesktop.innerHTML = translations.translate_button.pt_to_en;
+                    if (translateButtonMobile) translateButtonMobile.innerHTML = translations.translate_button.pt_to_en;
+                } else { // lang === 'en'
+                    elementsPt.forEach(el => el.classList.add('hidden'));
+                    elementsEn.forEach(el => el.classList.remove('hidden'));
+                    if (translateButtonDesktop) translateButtonDesktop.innerHTML = translations.translate_button.en_to_pt;
+                    if (translateButtonMobile) translateButtonMobile.innerHTML = translations.translate_button.en_to_pt;
+                }
+            }
+
+            // Language toggle function
+            function toggleLanguage() {
+                currentLang = (currentLang === 'en') ? 'pt' : 'en';
+                applyTranslations(currentLang);
+            }
+
+            if (translateButtonDesktop) {
+                translateButtonDesktop.addEventListener('click', toggleLanguage);
+                translateButtonDesktop.innerHTML = translations.translate_button.en_to_pt;
+            }
+            if (translateButtonMobile) {
+                translateButtonMobile.addEventListener('click', toggleLanguage);
+                translateButtonMobile.innerHTML = translations.translate_button.en_to_pt;
+            }
+
+            // Smooth scroll and close mobile menu
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                        // Calculate offset for fixed header if on mobile
+                        let offset = 0;
+                        if (window.innerWidth < 768 && document.querySelector('header.md\:hidden').offsetHeight > 0) {
+                             offset = document.querySelector('header.md\:hidden').offsetHeight;
+                        } else if (window.innerWidth >= 768) {
+                            // For desktop, a smaller fixed offset might be okay if needed, or for sticky headers
+                            // For now, the scroll-mt-20 on sections should handle it for desktop.
+                        }
+                        
+                        const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                        const offsetPosition = elementPosition - offset - 10; // 10px additional buffer
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+
+                        if (history.pushState) {
+                        history.pushState(null, null, targetId);
+                    } else {
+                        location.hash = targetId;
+                        }
+                        // Close mobile menu if open
+                        if (mobileDocsNav && !mobileDocsNav.classList.contains('hidden')) {
+                            mobileDocsNav.classList.add('hidden');
+                        }
+                    }
+                });
+            });
+            
+            // Mobile menu toggle
+            if (mobileMenuButton && mobileDocsNav) {
+                mobileMenuButton.addEventListener('click', function() {
+                    mobileDocsNav.classList.toggle('hidden');
+                });
+            }
+
+            // Active link highlighting on scroll
+            function highlightNavLink() {
+                let currentSectionId = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 120; // Adjusted offset
+                    if (window.pageYOffset >= sectionTop) {
+                        currentSectionId = '#' + section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('bg-lime-100', 'text-lime-700', 'font-semibold');
+                    link.classList.add('text-slate-700');
+                    if (link.getAttribute('href') === currentSectionId) {
+                        link.classList.add('bg-lime-100', 'text-lime-700', 'font-semibold');
+                        link.classList.remove('text-slate-700');
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', highlightNavLink);
+            highlightNavLink(); // Initial call
+        });
+    </script>
+</body>
+</html> 
