@@ -1,16 +1,28 @@
-name: Simple CI Test
+name: Rails CI
 
 on:
   push:
-    branches: [ develop ] # Or main, depending on your primary branch
+    branches: [ develop ]
   pull_request:
 
 jobs:
-  test_run:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run a simple command
-        run: echo "GitHub Actions workflow started successfully!"
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4.2'
+          bundler-cache: true # Cache gems for faster builds
+
+      - name: Setup Database
+        run: |
+          sudo apt-get -yqq install libpq-dev # Dependência para a gem pg no Ubuntu
+          cp config/database.yml.example config/database.yml # Configurar database.yml se necessário
+          bin/rails db:prepare TEST_ENV=test
+
+      - name: Run tests
+        run: bin/rails test
