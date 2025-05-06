@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_03_043136) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_06_223057) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -60,6 +60,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_03_043136) do
     t.index ["reply_id"], name: "index_answer_marks_on_reply_id"
     t.index ["user_id", "reply_id"], name: "index_answer_marks_on_user_id_and_reply_id", unique: true
     t.index ["user_id"], name: "index_answer_marks_on_user_id"
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.string "icon"
+    t.string "color_class"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "discussions", force: :cascade do |t|
