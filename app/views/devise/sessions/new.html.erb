@@ -1,0 +1,52 @@
+<div class="max-w-md mx-auto w-full">
+  <div class="bg-white rounded-xl shadow dark:bg-neutral-900">
+    <div class="p-6 sm:p-8">
+      <h2 class="text-2xl font-bold text-center text-gray-800 dark:text-white mb-6">Entrar na sua conta</h2>
+
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-5" }) do |f| %>
+        <%# Renderiza mensagens de erro/alerta do Devise %>
+        <%= render "devise/shared/error_messages", resource: resource %>
+        <%- flash.each do |name, msg| -%>
+          <% if name == "alert" %>
+            <div class="bg-red-50 text-red-700 px-4 py-3 rounded-md border border-red-200 dark:bg-red-800/10 dark:border-red-900 dark:text-red-400" role="alert">
+              <p class="text-sm"><%= msg %></p>
+            </div>
+          <% elsif name == "notice" %>
+             <div class="bg-lime-50 text-lime-700 px-4 py-3 rounded-md border border-lime-200 dark:bg-lime-800/10 dark:border-lime-900 dark:text-lime-400" role="alert">
+              <p class="text-sm"><%= msg %></p>
+            </div>
+          <% end %>
+        <%- end -%>
+
+        <div>
+          <%= f.label :email, class: "block text-sm font-medium mb-1 text-gray-700 dark:text-neutral-300" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "py-2 px-3 block w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-lime-500 focus:ring-lime-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-300 dark:focus:ring-neutral-600", placeholder: "seu@email.com" %>
+  </div>
+
+        <div>
+          <div class="flex justify-between items-center">
+             <%= f.label :password, "Senha", class: "block text-sm font-medium mb-1 text-gray-700 dark:text-neutral-300" %>
+             <%= link_to "Esqueceu a senha?", new_password_path(resource_name), class: "text-sm text-lime-600 decoration-2 hover:underline font-medium dark:text-lime-500" %>
+          </div>
+          <%= f.password_field :password, autocomplete: "current-password", class: "py-2 px-3 block w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-lime-500 focus:ring-lime-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-300 dark:focus:ring-neutral-600", placeholder: "••••••••" %>
+  </div>
+
+  <% if devise_mapping.rememberable? %>
+          <div class="flex items-center">
+            <%= f.check_box :remember_me, class: "shrink-0 mt-0.5 rounded text-lime-600 border-gray-300 focus:ring-lime-500 dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-lime-500 dark:checked:border-lime-500 dark:focus:ring-offset-neutral-900" %>
+            <%= f.label :remember_me, "Lembrar-me", class: "ms-3 text-sm text-gray-600 dark:text-neutral-400" %>
+    </div>
+  <% end %>
+
+        <div>
+          <%= f.submit "Entrar", class: "w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-lime-500 text-white hover:bg-lime-600 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-lime-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-900 transition-all" %>
+  </div>
+<% end %>
+
+       <%# Links compartilhados do Devise (ajustar o partial separadamente) %>
+       <div class="text-center mt-6">
+<%= render "devise/shared/links" %>
+       </div>
+    </div>
+  </div>
+</div>

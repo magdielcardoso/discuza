@@ -1,0 +1,70 @@
+<% content_for :title, @discussion.title %>
+
+<%# Adiciona controller Stimulus ao container principal %>
+<div class="max-w-[85rem] px-4 pb-10 sm:px-6 lg:px-8 lg:pb-14 mx-auto" data-controller="modal">
+  <%# Aviso de Notice %>
+  <% if notice.present? %>
+    <p class="mb-5 py-2 px-3 bg-lime-50 text-lime-700 font-medium rounded-md inline-block dark:bg-lime-800/10 dark:text-lime-400 border border-lime-200 dark:border-lime-900" id="notice"><%= notice %></p>
+  <% end %>
+
+  <%# Renderiza a seção superior (banner + header) SEM o controller/modal %>
+  <%= render "discussions/top_section", discussion: @discussion %>
+
+  <%# Corpo da Discussão %>
+  <div class="prose prose-lg dark:prose-invert max-w-none mb-12">
+    <%= @discussion.content %>
+  </div>
+
+  <%# Render reactions component %>
+  <%= render "reactions/reactions", 
+             reactable: @discussion, 
+             reaction_counts: @reaction_counts, 
+             current_user_reactions: @current_user_reactions %>
+
+  <hr class="my-10 border-gray-200 dark:border-neutral-700">
+
+  <%# Seção de Respostas %>
+  <div id="replies_section">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Respostas (<%= @total_replies_count %>)</h2>
+
+    <%# Formulário para Nova Resposta (só para usuários logados E se a discussão não estiver fechada) %>
+    <% if user_signed_in? %>
+      <% unless @discussion.closed? %>
+        <%= render 'replies/form', discussion: @discussion, reply: @reply %>
+      <% else %>
+        <%# Mensagem indicando que a discussão está fechada %>
+         <p class="text-sm text-gray-600 dark:text-neutral-400 bg-gray-50 dark:bg-neutral-800 p-4 rounded-md border dark:border-neutral-700 mb-8">
+           <%= lucide_icon('lock', class: "inline-block size-4 me-1") %> Esta discussão está fechada e não aceita novas respostas.
+         </p>
+      <% end %>
+    <% else %>
+      <%# Mensagem para usuários não logados %>
+      <p class="text-sm text-gray-600 dark:text-neutral-400 bg-gray-50 dark:bg-neutral-800 p-4 rounded-md border dark:border-neutral-700 mb-8">
+        <%= link_to "Faça login", new_user_session_path, class: "text-lime-600 hover:text-lime-700 font-medium" %> ou
+        <%= link_to "crie uma conta", new_user_registration_path, class: "text-lime-600 hover:text-lime-700 font-medium" %> para responder.
+      </p>
+    <% end %>
+
+    <%# Lista de Respostas %>
+    <%# Usamos um turbo_frame_tag para atualizações via Turbo Streams %>
+    <%= turbo_frame_tag "replies_list", class: "space-y-6 mt-8" do %>
+      <% if @replies.any? %>
+        <%# Passa discussion e top_reply_id explicitamente para o partial %>
+        <%= render partial: 'replies/reply', 
+                   collection: @replies, 
+                   as: :reply, 
+                   locals: { discussion: @discussion, top_reply_id: @top_reply_id } %>
+      <% else %>
+        <%# Não mostrar "Nenhuma resposta" se o form estiver visível %>
+        <%# A mensagem de login já cobre o caso sem respostas para não logados %>
+        <% unless user_signed_in? %>
+            <p class="text-center text-gray-500 dark:text-neutral-400 py-6">Nenhuma resposta ainda.</p>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+  <%# Fim Seção de Respostas %>
+
+  <%# Renderiza o Modal de Fechamento aqui no final, dentro do escopo do controller %>
+  <%= render "discussions/close_modal", discussion: @discussion %>
+</div>

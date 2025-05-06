@@ -1,0 +1,69 @@
+<%# Card de Discussão (Adaptado de home/index) %>
+<div id="<%= dom_id discussion %>" class="p-4 md:p-5 rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-neutral-900 dark:border-neutral-700">
+  <%# Header %>
+  <div class="flex items-center justify-between mb-3">
+    <div class="flex items-center gap-x-3">
+      <%# Avatar do Autor %>
+      <% if discussion.user.avatar.attached? %>
+        <img class="inline-block size-8 rounded-full object-cover" src="<%= url_for(discussion.user.avatar) %>" alt="<%= discussion.user.name %> avatar">
+      <% else %>
+        <div class="inline-flex items-center justify-center size-8 rounded-full bg-lime-500 text-white text-xs font-semibold">
+          <%= user_initials(discussion.user) %>
+        </div>
+      <% end %>
+      <span class="font-semibold text-sm text-gray-800 dark:text-neutral-200"><%= discussion.user.name %></span>
+    </div>
+    <span class="text-xs text-gray-500 dark:text-neutral-500" title="<%= discussion.created_at.strftime('%d %b %Y, %H:%M') %>">
+      <%= time_ago_in_words(discussion.created_at) %> atrás
+    </span>
+  </div>
+
+  <%# Título como Link %>
+  <%= link_to discussion_path(discussion), class: "block mb-3 focus:outline-none focus:ring-1 focus:ring-lime-400 focus:ring-offset-2 dark:focus:ring-offset-neutral-900 rounded-sm" do %>
+    <h2 class="text-xl font-bold font-geist text-gray-800 hover:text-lime-600 dark:text-white dark:hover:text-lime-400 transition-colors duration-150"><%= discussion.title %></h2>
+  <% end %>
+
+  <%# Conteúdo/Snippet %>
+  <div class="text-gray-700 dark:text-neutral-300 mb-4 text-sm prose prose-sm dark:prose-invert max-w-none">
+    <%= action_text_snippet(discussion.content) %>
+  </div>
+
+  <%# Tags (Placeholder/Exemplo - Implementar se necessário) %>
+  <%# <div class="flex flex-wrap gap-2 mb-4"> ... tags ... </div> %>
+
+  <%# Footer %>
+  <div class="flex items-center justify-between text-sm text-gray-600 dark:text-neutral-400">
+    <div class="flex items-center gap-x-4">
+      <%# Likes (Placeholder) %>
+      <span class="inline-flex items-center gap-x-1.5">
+        <%= lucide_icon('thumbs-up', class: "flex-shrink-0 size-4") %>
+        0 <%# Placeholder %>
+      </span>
+      <%# Comments %>
+      <span class="inline-flex items-center gap-x-1.5">
+        <%= lucide_icon('message-circle', class: "flex-shrink-0 size-4") %>
+        <%= discussion.replies.count %> <%# Assumindo que replies foram configurados %>
+      </span>
+      <%# Pinned/Closed Status %>
+      <% if discussion.pinned? || discussion.closed? %>
+        <div class="flex items-center gap-x-2">
+          <% if discussion.pinned? %>
+            <span class="inline-flex items-center gap-x-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full dark:bg-yellow-500/10 dark:text-yellow-500 py-0.5 px-2" title="Fixado">
+              <%= lucide_icon('pin', class: "size-3") %> Fixado
+            </span>
+          <% end %>
+          <% if discussion.closed? %>
+            <span class="inline-flex items-center gap-x-1 text-xs font-medium bg-red-100 text-red-800 rounded-full dark:bg-red-500/10 dark:text-red-500 py-0.5 px-2" title="Fechado">
+              <%= lucide_icon('lock', class: "size-3") %> Fechado
+            </span>
+          <% end %>
+        </div>
+      <% end %>
+  </div>
+    <%# Views (Placeholder) %>
+    <span class="inline-flex items-center gap-x-1.5">
+       <%= lucide_icon('eye', class: "flex-shrink-0 size-4") %>
+       0 <%# Placeholder %>
+    </span>
+  </div>
+</div>

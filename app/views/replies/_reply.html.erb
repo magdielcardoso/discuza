@@ -1,0 +1,98 @@
+<%# Verifica se esta é a resposta mais marcada %>
+<% is_top_reply = top_reply_id && reply.id == top_reply_id %>
+
+<div id="<%= dom_id reply %>" class="reply-card relative p-4 rounded-lg border bg-white shadow-sm dark:bg-neutral-900 
+     <%= is_top_reply ? 'border-lime-400 dark:border-lime-600 border-2' : 'border-gray-200 dark:border-neutral-700' %>">
+  <%# Badge/Selo de Melhor Resposta (se aplicável) %>
+  <% if is_top_reply %>
+    <div class="absolute -top-3 -right-3 transform">
+      <span class="inline-flex items-center gap-x-1.5 py-1 px-3 rounded-full text-xs font-semibold bg-gradient-to-tr from-lime-400 to-green-500 text-white shadow-md">
+        <%= lucide_icon('trophy', class: "size-4") %>
+        Melhor Resposta
+      </span>
+    </div>
+  <% end %>
+  
+  <%# Header da Resposta %>
+  <div class="flex items-center justify-between mb-3">
+    <div class="flex items-center gap-x-3">
+      <%# Avatar do Autor %>
+      <% if reply.user.avatar.attached? %>
+        <img class="inline-block size-7 rounded-full object-cover" src="<%= url_for(reply.user.avatar) %>" alt="<%= reply.user.name %> avatar">
+      <% else %>
+        <div class="inline-flex items-center justify-center size-7 rounded-full bg-gray-500 text-white text-xs font-semibold">
+          <%= user_initials(reply.user) %>
+        </div>
+      <% end %>
+      <span class="font-semibold text-sm text-gray-800 dark:text-neutral-200"><%= reply.user.name %></span>
+    </div>
+    <div class="flex items-center gap-x-3">
+      <%# Badge com Contagem de Marcas (se > 0) %>
+      <% if reply.answer_marks.size > 0 %>
+        <span class="inline-flex items-center gap-x-1 text-xs font-medium bg-lime-100 text-lime-800 rounded-full dark:bg-lime-500/10 dark:text-lime-500 py-0.5 px-2" title="<%= pluralize(reply.answer_marks.size, 'pessoa marcou', 'pessoas marcaram') %> como resposta">
+          <%= lucide_icon('check-circle', class: "size-3") %> Resposta (<%= reply.answer_marks.size %>)
+        </span>
+      <% end %>
+      <span class="text-xs text-gray-500 dark:text-neutral-500" title="<%= reply.created_at.strftime('%d %b %Y, %H:%M') %>">
+        <%= time_ago_in_words(reply.created_at) %> atrás
+      </span>
+      <%# Menu Dropdown (Placeholder/Opcional) %>
+      <%# Adicionar dropdown para ações (Editar, Excluir, Marcar como Resposta) se necessário %>
+    </div>
+  </div>
+
+  <%# Conteúdo da Resposta %>
+  <div class="prose prose-sm dark:prose-invert max-w-none">
+    <%= reply.content %>
+  </div>
+
+  <%# Footer com Ações %>
+  <div class="mt-4 flex items-center justify-between text-sm text-gray-600 dark:text-neutral-400">
+     <%# Placeholder para Votos/Reações à esquerda (Removido) %>
+     <div></div> <%# Mantém a div vazia para justificar ações à direita %>
+
+     <%# Container para botões de ação à direita %>
+     <div class="flex items-center gap-x-2">
+        <%# Botão Marcar/Desmarcar Resposta (Qualquer usuário logado) %>
+        <% if user_signed_in? %> <%# Mostra se o usuário está logado %>
+          <%# Verifica se o usuário LOGADO marcou ESTA resposta %>
+          <% has_marked = reply.answer_marks.any? { |mark| mark.user_id == current_user.id } %>
+          <% if has_marked %>
+            <%# Botão Desmarcar %>
+            <%= button_to toggle_answer_discussion_reply_path(discussion, reply), 
+                          method: :patch,
+                          class: "py-1 px-2 inline-flex items-center gap-x-1.5 text-xs font-medium rounded-md border border-gray-300 bg-white text-gray-700 shadow-sm hover:bg-gray-100 dark:bg-neutral-800 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-700" do %>
+              <%= lucide_icon('check-circle', class: "size-3 text-lime-600 dark:text-lime-500") %> 
+              Desmarcar (<%= reply.answer_marks.size %>)
+            <% end %>
+          <% else %>
+            <%# Botão Marcar %>
+             <%= button_to toggle_answer_discussion_reply_path(discussion, reply),
+                          method: :patch,
+                          class: "py-1 px-2 inline-flex items-center gap-x-1.5 text-xs font-medium rounded-md border border-transparent bg-lime-500 text-white hover:bg-lime-600 disabled:opacity-50 disabled:pointer-events-none" do %>
+              <%= lucide_icon('check-circle', class: "size-3") %>
+              Marcar (<%= reply.answer_marks.size %>)
+            <% end %>
+          <% end %>
+        <% end %>
+
+        <%# Ações Editar/Excluir (Autor da resposta) %>
+        <% if user_signed_in? && current_user == reply.user %>
+            <%# Botão Editar %>
+            <%= link_to edit_discussion_reply_path(discussion, reply),
+                        class: "py-1 px-2 inline-flex items-center gap-x-1.5 text-xs font-medium rounded-md border border-blue-200 bg-white text-blue-700 shadow-sm hover:bg-blue-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-blue-700 dark:text-blue-500 dark:hover:bg-blue-800/30" do %>
+              <%= lucide_icon('pencil', class: "size-3") %>
+              Editar
+            <% end %>
+            <%# Botão Excluir %>
+            <%= button_to discussion_reply_path(discussion, reply),
+                          method: :delete,
+                          data: { turbo_confirm: "Tem certeza que deseja excluir esta resposta?" },
+                          class: "py-1 px-2 inline-flex items-center gap-x-1.5 text-xs font-medium rounded-md border border-red-200 bg-white text-red-700 shadow-sm hover:bg-red-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-red-700 dark:text-red-500 dark:hover:bg-red-800/30" do %>
+               <%= lucide_icon('trash-2', class: "size-3") %>
+               Excluir
+            <% end %>
+        <% end %>
+     </div> <%# Fim container botões de ação %>
+  </div>
+</div>

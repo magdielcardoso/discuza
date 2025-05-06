@@ -1,0 +1,35 @@
+<%= form_with(model: discussion, id: (local_assigns[:form_id] || 'discussion_form'), class: "space-y-6") do |form| %>
+  <% if discussion.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-700 px-4 py-3 rounded-md border border-red-200 dark:bg-red-800/10 dark:border-red-900 dark:text-red-400" role="alert">
+      <h2 class="font-semibold text-sm"><%= pluralize(discussion.errors.count, "erro") %> impediu que esta discussão fosse salva:</h2>
+      <ul class="list-disc space-y-1 text-sm pl-5 mt-2">
+        <% discussion.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :title, "Título", class: "block text-sm font-medium mb-1 text-gray-700 dark:text-neutral-300" %>
+    <%= form.text_field :title, class: "py-2 px-3 block w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-lime-500 focus:ring-lime-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-300 dark:focus:ring-neutral-600", placeholder: "Qual a sua dúvida ou tópico?" %>
+     <% if discussion.errors[:title].any? %>
+       <p class="text-xs text-red-600 mt-1 dark:text-red-500"><%= discussion.errors[:title].to_sentence %></p>
+     <% end %>
+  </div>
+
+  <div>
+    <%= form.label :content, "Conteúdo", class: "block text-sm font-medium mb-1 text-gray-700 dark:text-neutral-300" %>
+    <%# Aumentando altura mínima para 600px %>
+    <div class="mt-1 p-1 border border-gray-300 rounded-md focus-within:border-lime-500 focus-within:ring-1 focus-within:ring-lime-500 dark:border-neutral-700 dark:focus-within:border-lime-600 dark:focus-within:ring-lime-600 min-h-[600px] flex flex-col">
+      <%= form.rich_text_area :content, class: "block w-full rounded-md border-0 focus:ring-0 dark:bg-neutral-800 dark:text-neutral-300 dark:placeholder:text-neutral-500 flex-grow" %>
+    </div>
+    <% if discussion.errors[:content].any? %>
+      <p class="text-xs text-red-600 mt-1 dark:text-red-500"><%= discussion.errors[:content].to_sentence %></p>
+    <% end %>
+  </div>
+
+  <%# Removidos os campos pinned e closed %>
+
+  <%# Removido o botão submit daqui para ser movido para a view principal %>
+<% end %>

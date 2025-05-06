@@ -1,0 +1,40 @@
+<div class="text-sm space-y-1">
+<%- if controller_name != 'sessions' %>
+    <p class="text-gray-600 dark:text-neutral-400">
+      Já tem uma conta?
+      <%= link_to "Entrar", new_session_path(resource_name), class: "text-lime-600 decoration-2 hover:underline font-medium dark:text-lime-500" %>
+    </p>
+<% end %>
+
+<%- if devise_mapping.registerable? && controller_name != 'registrations' %>
+    <p class="text-gray-600 dark:text-neutral-400">
+      Não tem uma conta?
+      <%= link_to "Criar conta", new_registration_path(resource_name), class: "text-lime-600 decoration-2 hover:underline font-medium dark:text-lime-500" %>
+    </p>
+<% end %>
+
+<%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+    <p>
+      <%= link_to "Esqueceu sua senha?", new_password_path(resource_name), class: "text-lime-600 decoration-2 hover:underline font-medium dark:text-lime-500" %>
+    </p>
+<% end %>
+
+<%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
+    <p>
+      <%= link_to "Não recebeu as instruções de confirmação?", new_confirmation_path(resource_name), class: "text-lime-600 decoration-2 hover:underline font-medium dark:text-lime-500" %>
+    </p>
+<% end %>
+
+<%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
+    <p>
+      <%= link_to "Não recebeu as instruções de desbloqueio?", new_unlock_path(resource_name), class: "text-lime-600 decoration-2 hover:underline font-medium dark:text-lime-500" %>
+    </p>
+<% end %>
+
+  <%-# Links OmniAuth podem ser estilizados aqui se necessário %>
+<%- if devise_mapping.omniauthable? %>
+  <%- resource_class.omniauth_providers.each do |provider| %>
+      <%= button_to "Entrar com #{OmniAuth::Utils.camelize(provider)}", omniauth_authorize_path(resource_name, provider), data: { turbo: false }, class: "mt-2 text-lime-600 decoration-2 hover:underline font-medium dark:text-lime-500" %>
+    <% end %>
+  <% end %>
+</div>

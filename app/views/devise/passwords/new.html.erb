@@ -1,0 +1,36 @@
+<div class="max-w-md mx-auto w-full">
+  <div class="bg-white rounded-xl shadow dark:bg-neutral-900">
+    <div class="p-6 sm:p-8">
+      <h2 class="text-2xl font-bold text-center text-gray-800 dark:text-white mb-6">Esqueceu sua senha?</h2>
+      <p class="text-sm text-center text-gray-600 dark:text-neutral-400 mb-6">Digite seu e-mail abaixo e enviaremos instruções para redefinir sua senha.</p>
+
+      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: "space-y-5" }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+        <%- flash.each do |name, msg| -%>
+          <% if name == "alert" %>
+            <div class="bg-red-50 text-red-700 px-4 py-3 rounded-md border border-red-200 dark:bg-red-800/10 dark:border-red-900 dark:text-red-400" role="alert">
+              <p class="text-sm"><%= msg %></p>
+            </div>
+          <% elsif name == "notice" %>
+             <div class="bg-lime-50 text-lime-700 px-4 py-3 rounded-md border border-lime-200 dark:bg-lime-800/10 dark:border-lime-900 dark:text-lime-400" role="alert">
+              <p class="text-sm"><%= msg %></p>
+            </div>
+          <% end %>
+        <%- end -%>
+
+        <div>
+          <%= f.label :email, class: "block text-sm font-medium mb-1 text-gray-700 dark:text-neutral-300" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "py-2 px-3 block w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-lime-500 focus:ring-lime-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-300 dark:focus:ring-neutral-600", placeholder: "seu@email.com" %>
+  </div>
+
+        <div>
+          <%= f.submit "Enviar Instruções", class: "w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-lime-500 text-white hover:bg-lime-600 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-lime-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-900 transition-all" %>
+  </div>
+<% end %>
+
+      <div class="text-center mt-6">
+<%= render "devise/shared/links" %>
+      </div>
+    </div>
+  </div>
+</div>

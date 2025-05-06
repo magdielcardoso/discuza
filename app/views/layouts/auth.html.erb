@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html class="h-full">
+  <head>
+    <%# Usa o título padrão ou um específico se definido pela view %>
+    <title><%= content_for(:title) || "Autenticação - Discuza" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%# Permite que views específicas adicionem conteúdo ao head %>
+    <%= yield :head %>
+
+    <%# Links para fontes e ícones %>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Carrega os assets (CSS/JS) %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <%# Body ocupa toda altura e é flex container %>
+  <body class="bg-gray-50 dark:bg-neutral-950 min-h-screen flex flex-col">
+    <%# Main agora é flex container para as colunas em telas médias+ %>
+    <main class="flex-grow md:flex">
+      <%# Coluna Esquerda: Logo e Formulário %>
+      <div class="w-full md:w-1/2 flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8">
+        <%# Logo %>
+        <div class="mb-8 w-full max-w-md">
+          <%= link_to root_path, class: "flex items-center justify-center focus:outline-none focus:opacity-80" do %>
+            <%= image_tag 'logo_light.svg', alt: 'Discuza Logo', class: "h-12 w-auto" %>
+          <% end %>
+        </div>
+
+        <%# Conteúdo do Formulário (yield) %>
+        <%= yield %>
+      </div>
+
+      <%# Coluna Direita: Imagem alinhada à direita com overlay de citação no canto inferior esquerdo %>
+      <div class="hidden md:flex md:w-1/2 bg-cover bg-right relative items-end justify-start p-12" style="background-image: url('https://github.blog/wp-content/uploads/2023/07/developers-guide-to-prompt-engineering-LLMs-1.jpg?fit=3840%2C2160');">
+        <%# Overlay com a citação %>
+        <div class="absolute inset-0 bg-gray-900 opacity-50"></div> <%# Overlay escuro para legibilidade %>
+        <div class="relative z-10 max-w-md">
+          <blockquote class="text-left">
+            <p class="text-2xl lg:text-3xl font-semibold font-geist text-white italic">
+              "Onde ideias se conectam e o código evolui."
+            </p>
+            <footer class="mt-4 text-lg text-lime-300">
+              - discuza.app
+            </footer>
+          </blockquote>
+        </div>
+      </div>
+    </main>
+  </body>
+</html> 

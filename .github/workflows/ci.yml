@@ -1,0 +1,16 @@
+name: Simple CI Test
+
+on:
+  push:
+    branches: [ develop ] # Or main, depending on your primary branch
+  pull_request:
+
+jobs:
+  test_run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run a simple command
+        run: echo "GitHub Actions workflow started successfully!"

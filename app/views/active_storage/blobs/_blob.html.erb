@@ -1,0 +1,22 @@
+<%# Este partial é usado pelo ActionText para renderizar anexos %>
+<figure class="attachment attachment--<%= blob.representable? ? "preview" : "file" %> attachment--<%= blob.filename.extension %>">
+  <% if blob.image? %>
+    <%# Força o uso da URL original para imagens %>
+    <%= image_tag url_for(blob), alt: blob.filename %>
+  <% elsif blob.representable? %>
+    <%# Para outros tipos representáveis (PDF, Vídeo), tenta usar a preview padrão %>
+    <%= image_tag blob.preview(resize_to_limit: [1024, 768]), alt: blob.filename %>
+  <% end %>
+
+  <%# Não mostrar figcaption para imagens %>
+  <% unless blob.image? %>
+    <figcaption class="attachment__caption">
+      <% if caption = blob.try(:caption) %>
+        <%= caption %>
+      <% else %>
+        <span class="attachment__name"><%= blob.filename %></span>
+        <span class="attachment__size"><%= number_to_human_size blob.byte_size %></span>
+      <% end %>
+    </figcaption>
+  <% end %>
+</figure>

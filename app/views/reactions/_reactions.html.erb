@@ -1,0 +1,55 @@
+<%# Partial to display reaction buttons for a reactable object %>
+<%# Locals: reactable, reaction_counts, current_user_reactions %>
+
+<%# Define the allowed emojis and their tooltips %>
+<% allowed_emojis = {
+     "👍" => "Like",
+     "👏🏻" => "Cheer", # Note: Skin tone might vary based on system/browser
+     "🎉" => "Celebrate",
+     "✨" => "Appreciate",
+     "🙂" => "Smile"
+   }
+%> 
+
+<%# Only show if user is signed in? Or show disabled? Let's show only if signed in for now %>
+<% if user_signed_in? %>
+  <div id="<%= dom_id(reactable, :reactions) %>" class="mt-6 mb-8 flex items-center justify-start"> 
+    <%# Remove shadow-xl, change background %>
+    <div class="relative flex items-center justify-start gap-2 rounded-full bg-gray-100 dark:bg-neutral-800 p-2 text-2xl transition-all duration-300 hover:scale-x-105 z-10 *:transition-all *:duration-300">
+      <% allowed_emojis.each do |emoji, tooltip| %>
+        <% count = reaction_counts[emoji].to_i %>
+        <% user_reacted = current_user_reactions.include?(emoji) %>
+        
+        <%# Generate dynamic path based on reactable type %>
+        <% path = case reactable
+                    when Discussion
+                      toggle_discussion_reactions_path(reactable, emoji: emoji)
+                    # when Reply
+                      # toggle_reply_reactions_path(reactable.discussion, reactable, emoji: emoji) # Example for replies
+                    else 
+                      "#" # Fallback path 
+                    end 
+        %> 
+
+        <%= button_to path, 
+                      method: :post,
+                      # Add a specific class if the user has reacted
+                      class: "group relative cursor-pointer rounded-full bg-white p-2 px-3 hover:-translate-y-1 hover:scale-125 dark:bg-[#191818] #{user_reacted ? 'border-2 border-lime-500' : ''}",
+                      # Tooltip implemented with data attributes and Tailwind peer classes 
+                      data: { tooltip: tooltip } do %>
+          <%= emoji %>
+          <%# Tooltip Bubble (hidden by default, shown on hover/focus of parent group) %>
+          <span class="absolute -top-8 left-1/2 -translate-x-1/2 hidden group-hover:flex justify-center items-center rounded-lg bg-black bg-opacity-70 px-2 py-1 text-xs text-white dark:bg-white dark:text-black">
+             <%= tooltip %>
+          </span>
+          <%# Count Badge (only if count > 0) %>
+          <% if count > 0 %>
+            <span class="absolute -bottom-1 -right-1 inline-flex items-center justify-center rounded-full bg-lime-500 px-1.5 py-0.5 text-xs font-semibold leading-none text-white">
+              <%= count %>
+            </span>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %> 

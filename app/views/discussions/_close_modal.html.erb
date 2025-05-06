@@ -1,0 +1,59 @@
+<%# Modal para Fechar Discussão %>
+<%# Usa o mesmo controller Stimulus da view de profile edit %>
+<%# Oculto por padrão, controlado por modal#open/close %>
+<div data-modal-target="closeModal"
+     class="fixed inset-0 z-50 hidden items-center justify-center bg-gray-800/10 dark:bg-neutral-900/30 p-4">
+  <%# Conteúdo do Modal %>
+  <div class="relative w-full max-w-md rounded-lg bg-white p-6 shadow-xl dark:bg-neutral-800 dark:border dark:border-neutral-700" 
+       role="dialog" aria-modal="true" aria-labelledby="modal-title"
+       data-action="click->modal#preventBackgroundClose"> <%# Previne fechar ao clicar dentro %>
+    
+    <%# Botão de Fechar (X) %>
+    <button type="button" data-action="click->modal#close" 
+            class="absolute top-3 right-3 rounded-full p-1 text-gray-500 hover:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-lime-500">
+      <%= lucide_icon('x', class: "size-5") %>
+      <span class="sr-only">Fechar modal</span>
+    </button>
+
+    <h3 id="modal-title" class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Fechar Discussão</h3>
+
+    <%= form_with(model: discussion, url: close_discussion_path(discussion), method: :patch, 
+                  html: { data: { controller: 'form-conditional-field', action: "turbo:submit-end->modal#close" } }) do |form| %>
+      <div class="space-y-4">
+        <%# Status %>
+        <div>
+          <%= form.label :closure_status, "Status", class: "block text-sm font-medium mb-1 text-gray-700 dark:text-neutral-300" %>
+          <div class="flex gap-x-6">
+            <%= form.radio_button :closure_status, 'resolved', 
+                                data: { action: 'change->form-conditional-field#toggle', 'form-conditional-field-target': 'statusRadio' },
+                                class: "shrink-0 mt-0.5 border-gray-300 rounded-full text-lime-600 focus:ring-lime-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-lime-500 dark:checked:border-lime-500 dark:focus:ring-offset-gray-800" %>
+            <%= form.label :closure_status_resolved, "Resolvida", class: "text-sm text-gray-700 dark:text-neutral-300" %>
+            
+            <%= form.radio_button :closure_status, 'not_resolved', 
+                                checked: true, # Pré-seleciona "Não Resolvida" 
+                                data: { action: 'change->form-conditional-field#toggle', 'form-conditional-field-target': 'statusRadio' },
+                                class: "shrink-0 mt-0.5 border-gray-300 rounded-full text-lime-600 focus:ring-lime-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-lime-500 dark:checked:border-lime-500 dark:focus:ring-offset-gray-800" %>
+            <%= form.label :closure_status_not_resolved, "Não Resolvida", class: "text-sm text-gray-700 dark:text-neutral-300" %>
+          </div>
+           <%# Exibir erros de status aqui, se houver %>
+           <%# TODO: Melhorar exibição de erros vindos do controller %>
+        </div>
+
+        <%# Razão (condicional) %>
+        <div data-form-conditional-field-target="conditionalElement" class="hidden"> <%# Oculto por padrão %>
+          <%= form.label :closure_reason, "Motivo (obrigatório se não resolvida)", class: "block text-sm font-medium mb-1 text-gray-700 dark:text-neutral-300" %>
+          <%= form.text_area :closure_reason, rows: 3, class: "py-2 px-3 block w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-lime-500 focus:ring-lime-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-300 dark:focus:ring-neutral-600", placeholder: "Explique por que a discussão não foi resolvida..." %>
+          <%# Exibir erros de razão aqui, se houver %>
+        </div>
+      </div>
+
+      <%# Botões do Modal %>
+      <div class="mt-6 flex justify-end gap-x-2">
+        <button type="button" data-action="click->modal#close" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+          Cancelar
+        </button>
+        <%= form.submit "Confirmar Fechamento", class: "py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-orange-600 text-white hover:bg-orange-700" %>
+      </div>
+    <% end %>
+  </div>
+</div> 

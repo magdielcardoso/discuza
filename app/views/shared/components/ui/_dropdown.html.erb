@@ -1,0 +1,15 @@
+<div class="relative inline-flex" data-controller="dropdown">
+  <%# O trigger (botão/avatar) é passado como local `trigger_content` %>
+  <div data-action="click->dropdown#toggle">
+    <%= local_assigns.fetch(:trigger_content, button_tag("Toggle", class: "inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent focus:outline-none disabled:opacity-50 disabled:pointer-events-none p-2")) %>
+  </div>
+
+  <%# O conteúdo do menu será definido aqui %>
+  <div data-dropdown-target="menu"
+       class="transition-opacity duration-300 ease-out opacity-0 hidden absolute top-full end-0 mt-2 min-w-60 bg-white shadow-md rounded-lg dark:bg-neutral-800 dark:border dark:border-neutral-700 dark:divide-neutral-700 z-50"
+       role="menu"
+       aria-orientation="vertical">
+    <%# Usa a local :menu_content_html ou mostra placeholder %>
+    <%= local_assigns.fetch(:menu_content_html, content_tag(:div, "Menu content goes here", class: "p-4 text-gray-500")) %>
+  </div>
+</div> 

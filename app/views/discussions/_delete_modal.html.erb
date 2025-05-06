@@ -1,0 +1,41 @@
+\
+<%# Modal de Confirmação de Exclusão %>
+<%# Recebe 'discussion' como local %>
+
+<%# Container principal do modal, segue a estrutura do _close_modal %>
+<div data-modal-target="deleteModal" <%# Alvo específico %>
+     class="fixed inset-0 z-50 hidden items-center justify-center bg-gray-800/10 dark:bg-neutral-900/30 p-4" 
+     aria-labelledby="modal-title-delete" role="dialog" aria-modal="true">
+  
+  <%# Conteúdo do Modal %>
+  <div class="relative w-full max-w-md rounded-lg bg-white shadow-xl dark:bg-neutral-800 dark:border dark:border-neutral-700" 
+       role="dialog" aria-modal="true" aria-labelledby="modal-title-delete"
+       data-action="click->modal#preventBackgroundClose"> <%# Previne fechar ao clicar dentro %>
+    
+    <%# Header do Modal %>
+    <div class="flex items-center justify-between border-b px-4 py-3 dark:border-neutral-700">
+      <h3 class="font-semibold text-gray-800 dark:text-white" id="modal-title-delete">
+        Confirmar Exclusão
+      </h3>
+      <button type="button" data-action="click->modal#close" class="inline-flex size-8 flex-shrink-0 items-center justify-center rounded-full text-sm text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-white dark:text-gray-400 dark:hover:bg-neutral-700 dark:hover:text-white dark:focus:ring-neutral-700 dark:focus:ring-offset-neutral-800" aria-label="Fechar">
+        <%= lucide_icon('x', class: 'size-4') %>
+      </button>
+    </div>
+
+    <%# Corpo do Modal %>
+    <div class="p-4">
+      <p class="text-sm text-gray-700 dark:text-gray-300">
+        Tem certeza que deseja excluir esta discussão? Esta ação não pode ser desfeita. Todas as respostas associadas também serão removidas.
+      </p>
+    </div>
+
+    <%# Footer do Modal %>
+    <div class="flex items-center justify-end gap-x-2 border-t px-4 py-3 dark:border-neutral-700">
+      <button type="button" data-action="click->modal#close" class="inline-flex items-center gap-x-2 rounded-md border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-neutral-600">
+        Cancelar
+      </button>
+      <%# Botão que realmente executa a exclusão %>
+      <%= button_to 'Excluir Discussão', discussion_path(discussion), method: :delete, class: "inline-flex items-center gap-x-2 rounded-md border border-transparent bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:pointer-events-none disabled:opacity-50", data: { turbo_confirm: false } %>
+    </div>
+  </div>
+</div>

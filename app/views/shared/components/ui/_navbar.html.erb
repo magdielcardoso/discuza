@@ -1,0 +1,101 @@
+<!-- ========== HEADER ========== -->
+<header class="sticky top-0 inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-48 w-full bg-gray-900 border-b border-gray-200 text-sm py-3 dark:bg-neutral-950 dark:border-neutral-700">
+  <nav class="max-w-[85rem] mx-auto w-full flex md:grid md:grid-cols-3 md:gap-x-1 basis-full items-center w-full mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="me-5 flex items-center">
+      <!-- Logo -->
+      <%= link_to root_path, class: "flex items-center focus:outline-none focus:opacity-80" do %>
+        <%= image_tag 'logo_dark.svg', alt: 'Discuza Logo', class: "h-10 w-auto" %>
+      <% end %>
+      <!-- End Logo -->
+    </div>
+
+    <div class="hidden md:block">
+      <!-- Search Input -->
+      <div class="relative">
+        <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-3.5">
+          <svg class="shrink-0 size-4 text-gray-400 dark:text-white/60" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </div>
+        <input type="text" class="py-2 ps-10 pe-16 block w-full bg-transparent border-gray-700 rounded-lg text-sm focus:outline-hidden focus:border-gray-600 focus:ring-0 disabled:opacity-50 disabled:pointer-events-none dark:border-neutral-700 dark:text-neutral-400 dark:placeholder:text-neutral-400 dark:focus:border-neutral-600" placeholder="Buscar">
+        <div class="hidden absolute inset-y-0 end-0 flex items-center pointer-events-none z-20 pe-1">
+          <button type="button" class="inline-flex shrink-0 justify-center items-center size-6 rounded-full text-gray-500 hover:text-blue-600 focus:outline-hidden focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500" aria-label="Close">
+            <span class="sr-only">Close</span>
+            <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
+          </button>
+        </div>
+        <div class="absolute inset-y-0 end-0 flex items-center pointer-events-none z-20 pe-3 text-gray-400">
+          <svg class="shrink-0 size-3 text-gray-400 dark:text-white/60" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3"/></svg>
+          <span class="mx-1">
+            <svg class="shrink-0 size-3 text-gray-400 dark:text-white/60" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          </span>
+          <span class="text-xs">/</span>
+        </div>
+      </div>
+      <!-- End Search Input -->
+    </div>
+
+    <div class="flex-1 flex flex-row justify-end items-center gap-1">
+      <!-- Collapse -->
+      <div class="md:hidden">
+        <button type="button" class="hs-collapse-toggle size-9.5 relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-white hover:bg-white/10 focus:outline-hidden focus:bg-white/10 disabled:opacity-50 disabled:pointer-events-none" id="hs-secondaru-navbar-collapse" aria-expanded="false" aria-controls="hs-secondaru-navbar" aria-label="Toggle navigation" data-hs-collapse="#hs-secondaru-navbar">
+          <svg class="hs-collapse-open:hidden size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/></svg>
+          <svg class="hs-collapse-open:block shrink-0 hidden size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          <span class="sr-only">Toggle navigation</span>
+        </button>
+      </div>
+      <!-- End Collapse -->
+
+      <button type="button" class="md:hidden size-9.5 relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-white hover:bg-white/10 focus:outline-hidden focus:bg-white/10 disabled:opacity-50 disabled:pointer-events-none">
+        <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <span class="sr-only">Search</span>
+      </button>
+
+      <button type="button" class="size-9.5 relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-white hover:bg-white/10 focus:outline-hidden focus:bg-white/10 disabled:opacity-50 disabled:pointer-events-none">
+        <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+        <span class="sr-only">Notifications</span>
+      </button>
+
+      <%# Dropdown %>
+      <% if user_signed_in? %>
+        <%# Captura o HTML do botão trigger para passar como local %>
+        <% trigger_html = capture do %>
+          <button type="button" class="size-9.5 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent focus:outline-none disabled:opacity-50 disabled:pointer-events-none">
+            <% if current_user.avatar.present? && current_user.avatar.attached? %>
+              <img class="shrink-0 size-9.5 rounded-full object-cover" src="<%= url_for(current_user.avatar) %>" alt="<%= current_user.name %> avatar">
+            <% else %>
+              <div class="shrink-0 size-9.5 rounded-full bg-lime-500 text-white flex items-center justify-center text-sm font-semibold">
+                <%= user_initials(current_user) %>
+              </div>
+            <% end %>
+      </button>
+        <% end %>
+
+        <%# Captura o HTML do conteúdo do menu para passar como local %>
+        <% menu_html = capture do %>
+          <div class="py-3 px-5 bg-gray-100 rounded-t-lg dark:bg-neutral-700">
+            <p class="text-sm text-gray-500 dark:text-neutral-500">Logado como</p>
+            <p class="text-sm font-medium text-gray-800 dark:text-neutral-200"><%= current_user.email %></p>
+          </div>
+          <div class="p-1.5 space-y-0.5">
+            <%= link_to edit_user_registration_path, class: "flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300" do %>
+              <%= lucide_icon('settings', class: "shrink-0 size-4") %>
+              Editar Perfil
+            <% end %>
+            <%= link_to destroy_user_session_path, data: { turbo_method: :delete }, class: "flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-red-600 hover:bg-red-50 focus:outline-none focus:bg-red-50 dark:text-red-500 dark:hover:bg-neutral-700 dark:hover:text-red-400 dark:focus:bg-neutral-700 dark:focus:text-red-400" do %>
+              <%= lucide_icon('log-out', class: "shrink-0 size-4") %>
+              Sair
+            <% end %>
+          </div>
+        <% end %>
+
+        <%# Renderiza o componente dropdown passando trigger e menu como locals %>
+        <%= render "shared/components/ui/dropdown", trigger_content: trigger_html, menu_content_html: menu_html %>
+      <% else %>
+        <%# Botões de Login/Registro se não estiver logado %>
+        <%= link_to "Entrar", new_user_session_path, class: "py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent text-white hover:bg-white/10 focus:outline-none focus:bg-white/10" %>
+        <%= link_to "Criar Conta", new_user_registration_path, class: "py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-lime-500 text-white hover:bg-lime-600" %>
+      <% end %>
+      <!-- End Dropdown -->
+    </div>
+  </nav>
+</header>
+<!-- ========== END HEADER ========== -->

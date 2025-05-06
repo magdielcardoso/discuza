@@ -1,0 +1,152 @@
+<div class="max-w-[85rem] px-4 pb-10 sm:px-6 lg:px-8 lg:pb-14 mx-auto mt-8" data-controller="modal">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="font-bold text-4xl">Editar Perfil</h1>
+    <%# Botão usa Stimulus para abrir %>
+    <button type="button" data-action="click->modal#openProfileModal" class="py-2 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-lime-500 text-white hover:bg-lime-600 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-lime-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-900 transition-all">
+      Atualizar Perfil
+    </button>
+  </div>
+
+  <div class="grid md:grid-cols-3 gap-8">
+    <%# Coluna Principal: Formulário %>
+    <div class="md:col-span-2 bg-white rounded-xl shadow dark:bg-neutral-900 p-6 sm:p-8">
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "space-y-5", id: "edit_user_form", multipart: true }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+        <%- flash.each do |name, msg| -%>
+          <% if name == "alert" %>
+            <div class="bg-red-50 text-red-700 px-4 py-3 rounded-md border border-red-200 dark:bg-red-800/10 dark:border-red-900 dark:text-red-400" role="alert">
+              <p class="text-sm"><%= msg %></p>
+            </div>
+          <% elsif name == "notice" %>
+             <div class="bg-lime-50 text-lime-700 px-4 py-3 rounded-md border border-lime-200 dark:bg-lime-800/10 dark:border-lime-900 dark:text-lime-400" role="alert">
+              <p class="text-sm"><%= msg %></p>
+            </div>
+          <% end %>
+        <%- end -%>
+
+        <%# --- Campo Avatar --- %>
+        <div>
+          <%= f.label :avatar, "Foto de Perfil", class: "block text-sm font-medium mb-2 text-gray-700 dark:text-neutral-300" %>
+          <div class="flex items-center gap-x-4">
+            <% if resource.avatar.attached? %>
+              <%= image_tag url_for(resource.avatar), class: "size-16 rounded-full object-cover" %>
+            <% else %>
+              <div class="size-16 rounded-full bg-lime-500 text-white flex items-center justify-center text-lg font-semibold">
+                <%= user_initials(resource) %>
+              </div>
+            <% end %>
+            <div>
+              <%= f.file_field :avatar, class: "block w-full text-sm text-gray-500 file:me-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-lime-50 file:text-lime-700 hover:file:bg-lime-100 file:disabled:opacity-50 file:disabled:pointer-events-none dark:file:bg-lime-900 dark:file:text-lime-400 dark:hover:file:bg-lime-800" %>
+              <p class="text-xs text-gray-500 mt-1">PNG, JPG ou GIF (Máx. 2MB).</p>
+            </div>
+          </div>
+        </div>
+        <%# --- Fim Campo Avatar --- %>
+
+        <div>
+          <%= f.label :name, "Nome Completo", class: "block text-sm font-medium mb-1 text-gray-700 dark:text-neutral-300" %>
+          <%= f.text_field :name, autocomplete: "name", class: "py-2 px-3 block w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-lime-500 focus:ring-lime-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-300 dark:focus:ring-neutral-600", placeholder: "Seu nome completo" %>
+        </div>
+
+        <div>
+          <%= f.label :email, class: "block text-sm font-medium mb-1 text-gray-700 dark:text-neutral-300" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "py-2 px-3 block w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-lime-500 focus:ring-lime-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-300 dark:focus:ring-neutral-600", placeholder: "seu@email.com" %>
+  </div>
+
+  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+          <div class="p-3 bg-yellow-50 border border-yellow-200 rounded-md text-sm text-yellow-700 dark:bg-yellow-800/10 dark:border-yellow-900 dark:text-yellow-400">
+            Aguardando confirmação para: <%= resource.unconfirmed_email %>
+          </div>
+  <% end %>
+
+        <hr class="border-gray-200 dark:border-neutral-700">
+
+        <p class="text-sm text-gray-600 dark:text-neutral-400">Deixe os campos de senha em branco se não quiser alterá-la.</p>
+
+        <div>
+          <%= f.label :password, "Nova Senha", class: "block text-sm font-medium mb-1 text-gray-700 dark:text-neutral-300" %>
+          <%= f.password_field :password, autocomplete: "new-password", class: "py-2 px-3 block w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-lime-500 focus:ring-lime-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-300 dark:focus:ring-neutral-600", placeholder: "Nova senha (opcional)" %>
+    <% if @minimum_password_length %>
+            <em class="text-xs text-gray-500 dark:text-neutral-400">(mínimo de <%= @minimum_password_length %> caracteres)</em>
+          <% end %>
+        </div>
+
+        <div>
+          <%= f.label :password_confirmation, "Confirme a Nova Senha", class: "block text-sm font-medium mb-1 text-gray-700 dark:text-neutral-300" %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "py-2 px-3 block w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-lime-500 focus:ring-lime-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-300 dark:focus:ring-neutral-600", placeholder: "Repita a nova senha" %>
+        </div>
+    <% end %>
+  </div>
+
+    <%# Coluna Lateral: Ações da Conta %>
+    <div class="md:col-span-1">
+      <%# Card de Ações - pode ter estilo diferente se quiser, ex: border-l border-neutral-200 dark:border-neutral-700 pl-6 %>
+      <div class="bg-white rounded-xl shadow dark:bg-neutral-900 p-6 sm:p-8 h-full"> <%# Added h-full %>
+        <div class="space-y-6"> <%# Changed text-center to space-y-6 %>
+          <div>
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Ações da Conta</h3>
+            <p class="text-sm text-gray-600 dark:text-neutral-400 mb-4">Gerencie opções relacionadas à sua conta.</p>
+  </div>
+
+          <hr class="border-gray-200 dark:border-neutral-700">
+
+          <div>
+             <h4 class="flex items-center gap-x-1.5 text-md font-semibold text-red-600 dark:text-red-500 mb-1">
+               <%# Substituído svg_icon por SVG inline Lucide %>
+               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-alert-triangle flex-shrink-0 size-4"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+               Zona de Perigo
+             </h4>
+             <p class="text-sm text-gray-600 dark:text-neutral-400 mb-3">Esta ação é permanente e não pode ser desfeita.</p>
+             <%= button_to "Cancelar minha conta", registration_path(resource_name), data: { confirm: "Tem certeza que deseja cancelar sua conta? Esta ação é irreversível.", turbo_confirm: "Tem certeza que deseja cancelar sua conta? Esta ação é irreversível." }, method: :delete, class: "w-full py-2 px-3 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-red-600 bg-transparent text-red-600 hover:bg-red-50 disabled:opacity-50 disabled:pointer-events-none dark:border-red-500 dark:text-red-500 dark:hover:bg-red-800/30" %>
+          </div>
+          <%# Adicionar outras ações aqui no futuro, se necessário %>
+          <%# Ex: Exportar Dados, Ver Atividade, etc. %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%# --- Estrutura do Modal Simples (Tailwind + Stimulus) --- %>
+  <%# Container do Modal: Fixo, tela cheia, fundo escuro, centralizado, inicialmente oculto %>
+  <div id="confirm-password-modal" 
+       data-modal-target="profileModal" 
+       class="hidden fixed inset-0 z-50 bg-gray-800/10 flex items-center justify-center p-4">
+    <%# Card do Modal: Previne fechamento ao clicar nele. Removidas classes/attrs de transição. %>
+    <div data-action="click->modal#preventBackgroundClose" 
+         class="relative w-full max-w-lg bg-white rounded-xl shadow-xl dark:bg-neutral-800 mx-auto"> 
+      <%# Cabeçalho do Modal %>
+      <div class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
+        <h3 class="font-bold text-gray-800 dark:text-white">
+          Confirmar Senha Atual
+        </h3>
+        <%# Botão Fechar (X) - Usa Stimulus %>
+        <button type="button" data-action="click->modal#close" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700">
+          <span class="sr-only">Close</span>
+          <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+      <%# Corpo do Modal %>
+      <div class="p-4 overflow-y-auto">
+        <p class="mb-4 text-sm text-gray-800 dark:text-neutral-400">
+          Para sua segurança, por favor, digite sua senha atual para confirmar as alterações.
+        </p>
+        <div>
+          <label for="modal-current-password" class="block text-sm font-medium mb-1 text-gray-700 dark:text-neutral-300">Senha Atual</label>
+          <input type="password" id="modal-current-password" data-modal-target="passwordField" class="py-2 px-3 block w-full border-gray-300 rounded-md shadow-sm text-sm focus:border-lime-500 focus:ring-lime-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-300 dark:focus:ring-neutral-600" required placeholder="Sua senha atual">
+        </div>
+      </div>
+      <%# Rodapé do Modal %>
+      <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700">
+        <%# Botão Cancelar - Usa Stimulus %>
+        <button type="button" data-action="click->modal#close" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+          Cancelar
+        </button>
+        <%# Botão Confirmar - Usa Stimulus %>
+        <button type="button" data-action="click->modal#submitForm" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-lime-500 text-white hover:bg-lime-600 disabled:opacity-50 disabled:pointer-events-none">
+          Confirmar Alterações
+        </button>
+      </div>
+    </div>
+  </div>
+  <%# --- Fim Estrutura do Modal --- %>
+</div>

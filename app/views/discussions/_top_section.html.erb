@@ -1,0 +1,85 @@
+<%# Partial para o topo da seção da discussão (banner + header) %>
+<%# Recebe `discussion` como local %>
+
+<%# O controlador modal precisa englobar tanto o botão (no header) quanto o modal em si %>
+<div id="discussion_top_section">
+  <%# Banner de Tópico Fechado %>
+  <% if discussion.closed? %>
+    <%# Define classes de cor base para o banner e ícone com base no status %>
+    <% resolved_classes = "bg-lime-100 border-lime-200 text-lime-700 dark:bg-lime-800/10 dark:text-lime-400 dark:border-lime-900" %>
+    <% not_resolved_classes = "bg-red-100 border-red-200 text-red-700 dark:bg-red-800/10 dark:text-red-400 dark:border-red-900" %>
+    <% banner_classes = discussion.closure_status_resolved? ? resolved_classes : not_resolved_classes %>
+    <% icon_classes = discussion.closure_status_resolved? ? "text-lime-700 dark:text-lime-400" : "text-red-700 dark:text-red-400" %>
+    
+    <%# Define classes e texto para o badge de status %>
+    <% if discussion.closure_status_resolved? %>
+      <% status_badge_classes = "bg-lime-100 text-lime-800 dark:bg-lime-900 dark:text-lime-200" %>
+      <% status_text = "Resolvido" %>
+    <% elsif discussion.closure_status_not_resolved? %>
+      <% status_badge_classes = "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200" %>
+      <% status_text = "Não Resolvido" %>
+    <% else %>
+      <% status_badge_classes = "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300" %>
+      <% status_text = "Indefinido" %>
+    <% end %>
+    
+    <%# Classes comuns para badges de informação (motivo, fechado por) %>
+    <% info_badge_classes = "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300" %>
+
+    <div class="mt-8 mb-5 p-4 w-full border rounded-md text-sm font-medium <%= banner_classes %>" role="alert">
+      <%# Linha 1: Ícone e Mensagem Principal %>
+      <div class="flex items-center gap-x-2">
+        <%= lucide_icon('archive', class: "flex-shrink-0 size-4 #{icon_classes}") %>
+        Este tópico foi fechado.
+      </div>
+
+      <%# Linha 2: Badges com detalhes %>
+      <div class="ps-6 mt-2 flex flex-wrap items-center gap-2">
+        <%# Badge de Status %>
+        <span class="inline-flex items-center gap-x-1.5 py-0.5 px-2 rounded-full text-xs font-medium <%= status_badge_classes %>">
+          Status: <%= status_text %>
+        </span>
+
+        <%# Badge de Motivo (condicional) %>
+        <% if discussion.closure_status_not_resolved? && discussion.closure_reason.present? %>
+          <span class="inline-flex items-center gap-x-1.5 py-0.5 px-2 rounded-full text-xs font-medium <%= info_badge_classes %>">
+            <%= lucide_icon('message-circle-warning', class: "size-3.5") %>
+            Motivo: <%= discussion.closure_reason %>
+          </span>
+        <% end %>
+
+        <%# Badge Fechado por (condicional) %>
+        <% if discussion.closed_by && discussion.closed_at %>
+          <span class="inline-flex items-center gap-x-1.5 py-0.5 px-2 rounded-full text-xs font-medium <%= info_badge_classes %>">
+             <%= lucide_icon('user', class: "size-3.5") %>
+            Fechado por:
+            <%# Avatar/Iniciais %>
+            <% if discussion.closed_by.avatar.attached? %>
+              <%= image_tag url_for(discussion.closed_by.avatar), class: "ms-1 inline-block size-4 rounded-full align-middle" %>
+            <% else %>
+              <span class="ms-1 inline-flex items-center justify-center size-4 rounded-full bg-gray-500 align-middle">
+                <span class="text-xs font-medium leading-none text-white"><%= user_initials(discussion.closed_by) %></span>
+              </span>
+            <% end %>
+            <span class="ms-1"><%= discussion.closed_by.name %></span>
+            (<%= time_ago_in_words(discussion.closed_at) %> atrás)
+          </span>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+  <%# Fim Banner %>
+
+  <%# Renderiza o header da discussão (contém o botão que abre o modal) %>
+  <%= render "discussions/header", discussion: discussion %>
+
+  <%# Renderiza o modal de fechamento APENAS se a discussão NÃO estiver fechada %>
+  <% unless discussion.closed? %>
+    <%= render "discussions/close_modal", discussion: discussion %>
+  <% end %>
+
+  <%# Renderiza o modal de exclusão APENAS se o usuário puder excluir (é o dono) %>
+  <% if user_signed_in? && current_user == discussion.user %>
+    <%= render "discussions/delete_modal", discussion: discussion %>
+  <% end %>
+</div> 

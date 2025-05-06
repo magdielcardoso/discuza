@@ -1,0 +1,33 @@
+# Definições de cores do tema baseadas no logo Discuza (logo_dark.svg)
+# Use estes valores para consistência na aplicação.
+
+theme:
+  # Cor principal vibrante, geralmente usada para ações primárias e destaques.
+  primary: '#84cc16'      # Equivalente a Tailwind lime-500
+
+  # Cor de fundo principal para modo escuro.
+  background_dark: '#111827' # Equivalente a Tailwind gray-900
+
+  # Cor de fundo principal para modo claro (se aplicável).
+  background_light: '#ffffff' # Branco padrão
+
+  # Cor de texto principal sobre fundos escuros.
+  text_on_dark: '#f3f4f6'    # Equivalente a Tailwind gray-100
+
+  # Cor de texto principal sobre fundos claros.
+  text_on_light: '#111827'   # Equivalente a Tailwind gray-900
+
+  # Cor de texto secundária ou "muted" sobre fundos escuros.
+  text_muted_on_dark: '#9ca3af' # Equivalente a Tailwind gray-400
+
+  # Cor de texto secundária ou "muted" sobre fundos claros.
+  text_muted_on_light: '#6b7280' # Equivalente a Tailwind gray-500
+
+  # Cor de acento, pode ser a primária ou uma variação.
+  accent: '#a3e635'        # Equivalente a Tailwind lime-400 (um pouco mais claro)
+
+  # Cores para estados específicos
+  success: '#22c55e'       # Equivalente a Tailwind green-500
+  warning: '#f59e0b'       # Equivalente a Tailwind amber-500
+  error: '#ef4444'         # Equivalente a Tailwind red-500
+  info: '#3b82f6'          # Equivalente a Tailwind blue-500 

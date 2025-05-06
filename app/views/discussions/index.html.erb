@@ -1,0 +1,187 @@
+<% content_for :title, "Discussões" %>
+
+<%# Layout Principal similar a home/index %>
+<div class="max-w-[85rem] px-4 pb-10 sm:px-6 lg:px-8 lg:pb-14 mx-auto">
+
+  <%# Cards de Métricas (Fictícios) %>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 mt-8">
+    <%# Card Total Discussões %>
+    <div class="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-700">
+      <div class="p-4 md:p-5">
+        <div class="flex items-center gap-x-2">
+          <p class="text-xs uppercase tracking-wide text-gray-500 dark:text-neutral-500">
+            Total
+          </p>
+        </div>
+        <div class="mt-1 flex items-center gap-x-2">
+          <h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
+            <%= @discussions.count %> <%# Contagem real %>
+          </h3>
+        </div>
+        <p class="text-sm text-gray-500 dark:text-neutral-400">
+          Discussões Criadas
+        </p>
+      </div>
+    </div>
+
+    <%# Card Total Respostas (Fictício) %>
+    <div class="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-700">
+       <div class="p-4 md:p-5">
+         <div class="flex items-center gap-x-2">
+           <p class="text-xs uppercase tracking-wide text-gray-500 dark:text-neutral-500">
+             Total
+           </p>
+         </div>
+         <div class="mt-1 flex items-center gap-x-2">
+           <h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
+             <%# Placeholder - Calcular se necessário %>
+             <%= Reply.count %> <%# Exemplo, pode ser caro %>
+           </h3>
+         </div>
+         <p class="text-sm text-gray-500 dark:text-neutral-400">
+           Respostas Recebidas
+         </p>
+       </div>
+     </div>
+
+    <%# Card Respondidas (Fictício) %>
+    <div class="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-700">
+       <div class="p-4 md:p-5">
+         <div class="flex items-center gap-x-2">
+           <p class="text-xs uppercase tracking-wide text-gray-500 dark:text-neutral-500">
+             Resolvidas
+           </p>
+         </div>
+         <div class="mt-1 flex items-center gap-x-2">
+           <h3 class="text-xl sm:text-2xl font-medium text-gray-800 dark:text-neutral-200">
+             <%# Placeholder - Adicionar lógica se necessário %>
+             0
+           </h3>
+           <%# <span class="inline-flex items-center gap-x-1 py-0.5 px-2 rounded-full bg-green-100 text-green-900 dark:bg-green-800 dark:text-green-100">
+             <svg class="inline-block size-4 self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+             <span class="inline-block text-xs font-medium"> 5% </span>
+           </span> %>
+         </div>
+         <p class="text-sm text-gray-500 dark:text-neutral-400">
+           Discussões Marcadas como Resposta
+         </p>
+       </div>
+     </div>
+  </div>
+  <%# Fim Cards de Métricas %>
+
+  <%# Aviso de Notice %>
+  <% if notice.present? %>
+    <p class="mb-5 py-2 px-3 bg-lime-50 text-lime-700 font-medium rounded-md inline-block dark:bg-lime-800/10 dark:text-lime-400 border border-lime-200 dark:border-lime-900" id="notice"><%= notice %></p>
+  <% end %>
+
+  <%# Layout de Grid (Principal + Lateral) %>
+  <div class="grid md:grid-cols-3 gap-8">
+    <%# Coluna Principal %>
+    <div class="md:col-span-2">
+      <div class="flex justify-between items-center mb-6">
+        <%# Título com Badge %>
+        <div class="flex items-center gap-x-3">
+          <h1 class="text-3xl font-bold font-geist text-black dark:text-white">Minhas Discussões</h1>
+          <span class="inline-flex items-center py-1 px-2.5 rounded-full text-xs font-medium bg-lime-500 text-white">Minhas</span>
+        </div>
+        <%# Botão Filtros %>
+        <div>
+          <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+            <%= lucide_icon('sliders-horizontal', class: "flex-shrink-0 size-4") %>
+            Filtros
+          </button>
+        </div>
+  </div>
+
+      <div class="space-y-6" id="discussions">
+    <% if @discussions.any? %>
+      <% @discussions.each do |discussion| %>
+          <%= render discussion %>
+            <%# Os botões Show/Edit/Destroy foram removidos da listagem principal %>
+            <%# Eles estarão na página de detalhes da discussão %>
+          <% end %>
+        <% else %>
+          <div class="text-center py-10 px-4 sm:px-6 lg:px-8">
+             <%= lucide_icon('folder-search', class: "size-12 mx-auto text-gray-400 dark:text-neutral-500") %>
+             <h2 class="mt-4 font-medium text-gray-800 dark:text-white">Nenhuma discussão encontrada</h2>
+             <p class="mt-2 text-sm text-gray-600 dark:text-neutral-400">Ainda não há discussões por aqui. Que tal iniciar uma?</p>
+             <div class="mt-6">
+               <%= link_to new_discussion_path, class: "py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-lime-500 text-white hover:bg-lime-600 disabled:opacity-50 disabled:pointer-events-none" do %>
+                 <%= lucide_icon('plus', class: "flex-shrink-0 size-4") %>
+                 Criar Nova Discussão
+               <% end %>
+          </div>
+        </div>
+      <% end %>
+      </div>
+
+      <%# Paginação (Placeholder - Implementar se necessário com Pagy ou Kaminari) %>
+      <%# <nav class="mt-8 flex justify-between items-center" aria-label="Pagination"> ... </nav> %>
+
+    </div>
+    <%# Fim Coluna Principal %>
+
+    <%# Coluna Lateral (Aside - Copiado de home/index) %>
+    <aside class="md:col-span-1 space-y-6">
+       <%# Card Recomendadas (Mock) %>
+       <div class="rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-neutral-900 dark:border-neutral-700">
+         <div class="py-3 px-4 border-b dark:border-neutral-700">
+           <h2 class="text-xl font-semibold font-geist text-black dark:text-white">Recomendadas</h2>
+         </div>
+         <div class="p-4">
+           <ul class="space-y-3">
+             <% [ { id: 5, title: "Melhores práticas para testes em Rails" }, { id: 6, title: "Como otimizar queries Active Record?" }, { id: 7, title: "Usando Stimulus para interatividade" }, { id: 8, title: "Gerenciamento de background jobs com Sidekiq" } ].each do |rec| %>
+               <li> <%= link_to rec[:title], "#", class: "text-sm text-gray-700 hover:text-lime-600 dark:text-neutral-300 dark:hover:text-lime-500 font-geist" %> </li>
+             <% end %>
+           </ul>
+         </div>
+       </div>
+
+       <%# Card Tags Populares (Mock) %>
+       <div class="rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-neutral-900 dark:border-neutral-700">
+         <div class="py-3 px-4 border-b dark:border-neutral-700"> <h2 class="text-xl font-semibold font-geist text-black dark:text-white">Tags Populares</h2> </div>
+         <div class="p-4">
+           <% colors = [ { light_bg: "bg-lime-100", light_text: "text-lime-800", dark_bg: "dark:bg-lime-500/10", dark_text: "dark:text-lime-500" }, { light_bg: "bg-blue-100", light_text: "text-blue-800", dark_bg: "dark:bg-blue-500/10", dark_text: "dark:text-blue-500" }, { light_bg: "bg-red-100", light_text: "text-red-800", dark_bg: "dark:bg-red-500/10", dark_text: "dark:text-red-500" }, { light_bg: "bg-purple-100", light_text: "text-purple-800", dark_bg: "dark:bg-purple-500/10", dark_text: "dark:text-purple-500" }, { light_bg: "bg-yellow-100", light_text: "text-yellow-800", dark_bg: "dark:bg-yellow-500/10", dark_text: "dark:text-yellow-500" }, { light_bg: "bg-teal-100", light_text: "text-teal-800", dark_bg: "dark:bg-teal-500/10", dark_text: "dark:text-teal-500" }, { light_bg: "bg-pink-100", light_text: "text-pink-800", dark_bg: "dark:bg-pink-500/10", dark_text: "dark:text-pink-500" }, { light_bg: "bg-indigo-100", light_text: "text-indigo-800", dark_bg: "dark:bg-indigo-500/10", dark_text: "dark:text-indigo-500" }, { light_bg: "bg-gray-100", light_text: "text-gray-800", dark_bg: "dark:bg-neutral-800", dark_text: "dark:text-neutral-300" }, { light_bg: "bg-green-100", light_text: "text-green-800", dark_bg: "dark:bg-green-500/10", dark_text: "dark:text-green-500" } ] %>
+           <div class="flex flex-wrap gap-2">
+             <% [ { name: "Rails", count: 128 }, { name: "Ruby", count: 95 }, { name: "Hotwire", count: 72 }, { name: "Stimulus", count: 65 }, { name: "TailwindCSS", count: 58 }, { name: "PostgreSQL", count: 41 }, { name: "Docker", count: 35 }, { name: "Kamal", count: 29 }, { name: "TDD", count: 21 } ].each_with_index do |tag_data, index| %>
+               <% color_set = colors[index % colors.length] %>
+               <span class="py-1 px-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium rounded-full <%= color_set[:light_bg] %> <%= color_set[:light_text] %> <%= color_set[:dark_bg] %> <%= color_set[:dark_text] %>">
+                 <%= tag_data[:name] %>
+                 <span class="py-0.5 px-1.5 rounded-full text-xs font-medium bg-white text-gray-600 dark:bg-neutral-700 dark:text-neutral-300"><%= tag_data[:count] %></span>
+               </span>
+             <% end %>
+           </div>
+         </div>
+       </div>
+
+      <%# Card: Discussões Mais Votadas (Mock) %>
+       <div class="rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-neutral-900 dark:border-neutral-700">
+         <div class="py-3 px-4 border-b dark:border-neutral-700"> <h2 class="text-xl font-semibold font-geist text-black dark:text-white">Mais Votadas 🔥</h2> </div>
+         <div class="p-4">
+           <ul class="space-y-4">
+             <% [ { id: 4, title: "Deploy de Rails com Kamal", votes: 61, voter_avatars: ["https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80", "https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80", "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80"] }, { id: 1, title: "Qual a melhor forma de aprender Rails?", votes: 42, voter_avatars: ["https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80", "https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80", "https://images.unsplash.com/photo-1607556748728-06b145313b57?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80"] }, { id: 2, title: "Hotwire vs React", votes: 29, voter_avatars: ["https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80", "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80", "https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80"] }, { id: 8, title: "Gerenciamento de background jobs", votes: 25, voter_avatars: ["https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80", "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80", "https://images.unsplash.com/photo-1607556748728-06b145313b57?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80"] } ].each_with_index do |top_discussion, index| %>
+               <li>
+                 <a href="#" class="group flex items-start gap-x-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors duration-150">
+                   <div class="text-lg font-semibold text-gray-400 dark:text-neutral-500 group-hover:text-lime-600 dark:group-hover:text-lime-500 w-6 text-center"><%= index + 1 %>º</div>
+                   <div class="flex-1">
+                     <span class="block text-sm font-medium text-gray-800 dark:text-neutral-200 group-hover:text-lime-700 dark:group-hover:text-lime-400 truncate">
+                       <%= top_discussion[:title] %>
+                       <% if index == 0 %> <span class="ms-2 inline-flex items-center gap-x-1 py-0.5 px-1.5 rounded-full text-xs font-medium bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-500"> <%= lucide_icon('flame', class: "flex-shrink-0 size-3") %> Hot </span> <% end %>
+                       <% if index == 1 %> <span class="ms-2 inline-flex items-center gap-x-1 py-0.5 px-1.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-500"> Popular </span> <% end %>
+                     </span>
+                     <span class="block text-xs text-gray-500 dark:text-neutral-500 mb-1"><%= top_discussion[:votes] %> votos</span>
+                     <div class="flex -space-x-2 rtl:space-x-reverse">
+                       <% top_discussion[:voter_avatars].each do |avatar_url| %> <img class="inline-block size-6 rounded-full ring-2 ring-white dark:ring-neutral-900" src="<%= avatar_url %>" alt="Voter avatar"> <% end %>
+                     </div>
+                   </div>
+                 </a>
+               </li>
+    <% end %>
+           </ul>
+         </div>
+       </div>
+    </aside>
+    <%# Fim Coluna Lateral %>
+  </div>
+</div>
