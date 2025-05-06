@@ -7,6 +7,6 @@ class CreateAnswerMarks < ActiveRecord::Migration[8.0]
       t.timestamps
     end
     # Garante que um usuário só pode marcar uma resposta uma vez
-    add_index :answer_marks, [:user_id, :reply_id], unique: true
+    add_index :answer_marks, [ :user_id, :reply_id ], unique: true
   end
 end

@@ -18,17 +18,17 @@ class ReactionsController < ApplicationController
 
     # Reload reactable with reactions for accurate counts/state in the partial
     @reactable.reload
-    
+
     # Calculate data needed for the partial
     reaction_data = prepare_reaction_data(@reactable)
 
     render turbo_stream: turbo_stream.replace(
       dom_id(@reactable, "reactions"), # Target ID like "discussion_1_reactions"
       partial: "reactions/reactions",
-      locals: { 
+      locals: {
         reactable: @reactable,
         reaction_counts: reaction_data[:counts],
-        current_user_reactions: reaction_data[:user_reactions] 
+        current_user_reactions: reaction_data[:user_reactions]
       }
     )
   end
@@ -46,7 +46,7 @@ class ReactionsController < ApplicationController
       head :not_found
     end
   end
-  
+
   # Helper to prepare data for the partial (can be moved to a helper module)
   def prepare_reaction_data(reactable)
     {

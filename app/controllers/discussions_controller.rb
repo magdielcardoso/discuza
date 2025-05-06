@@ -2,7 +2,7 @@ class DiscussionsController < ApplicationController
   include ActionView::RecordIdentifier # Necessário para dom_id se usado no controller
 
   # Garante que o usuário esteja logado para as ações que precisam de um usuário
-  before_action :authenticate_user!, only: [:index, :new, :create, :edit, :update, :destroy, :reopen, :close]
+  before_action :authenticate_user!, only: [ :index, :new, :create, :edit, :update, :destroy, :reopen, :close ]
   before_action :set_discussion, only: %i[ show edit update destroy reopen close ]
   # Garante que apenas o dono possa editar, atualizar, destruir ou fechar/reabrir
   before_action :authorize_discussion_owner!, only: %i[ edit update destroy reopen close ]
@@ -21,10 +21,10 @@ class DiscussionsController < ApplicationController
     # Ordena pela contagem de marcas (desc) e depois pela data de criação (asc)
     @replies = @discussion.replies
                        .left_joins(:answer_marks)
-                       .group('replies.id') # Agrupa por ID da resposta
+                       .group("replies.id") # Agrupa por ID da resposta
                        .includes(:user, :answer_marks) # Inclui user e as marcas para a view
                        .with_rich_text_content # Inclui conteúdo ActionText
-                       .order('COUNT(answer_marks.id) DESC, replies.created_at ASC') # Ordena pela contagem e data
+                       .order("COUNT(answer_marks.id) DESC, replies.created_at ASC") # Ordena pela contagem e data
 
     @reply = @discussion.replies.new # For the new reply form
 
@@ -88,9 +88,9 @@ class DiscussionsController < ApplicationController
   def reopen
     # Apenas reabre, limpando os campos relacionados ao fechamento
     @discussion.update(closed: false, closed_at: nil, closed_by: nil, closure_status: nil, closure_reason: nil)
-    
+
     respond_to do |format|
-      format.turbo_stream { 
+      format.turbo_stream {
         @discussion.reload # Recarrega para garantir estado atualizado no partial
         render turbo_stream: turbo_stream.replace("discussion_top_section", partial: "discussions/top_section", locals: { discussion: @discussion })
       }
@@ -103,7 +103,7 @@ class DiscussionsController < ApplicationController
     # Fecha a discussão com status e razão
     if @discussion.update(close_params.merge(closed: true, closed_at: Time.current, closed_by: current_user))
       respond_to do |format|
-        format.turbo_stream { 
+        format.turbo_stream {
           @discussion.reload
           render turbo_stream: turbo_stream.replace("discussion_top_section", partial: "discussions/top_section", locals: { discussion: @discussion })
         }

@@ -92,7 +92,7 @@ class RepliesController < ApplicationController
     @reply.reload
 
     respond_to do |format|
-      format.turbo_stream { 
+      format.turbo_stream {
         render turbo_stream: turbo_stream.replace(@reply, partial: "replies/reply", locals: { reply: @reply, discussion: @discussion })
       }
       format.html { redirect_to discussion_path(@discussion, anchor: dom_id(@reply)), notice: "Marcação da resposta atualizada." } # Fallback

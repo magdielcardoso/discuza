@@ -14,7 +14,7 @@ Rails.application.routes.draw do
       patch :reopen
       patch :close
     end
-    resources :replies, only: [:create, :edit, :update, :destroy] do
+    resources :replies, only: [ :create, :edit, :update, :destroy ] do
       member do
         patch :toggle_answer
       end

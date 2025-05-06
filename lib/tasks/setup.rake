@@ -5,4 +5,4 @@ namespace :dev do
     system("./script/setup")
     puts "Task de setup concluída."
   end
-end 
+end

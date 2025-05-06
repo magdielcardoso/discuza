@@ -1,6 +1,6 @@
 class Discussion < ApplicationRecord
   belongs_to :user
-  belongs_to :closed_by, class_name: 'User', optional: true
+  belongs_to :closed_by, class_name: "User", optional: true
   has_rich_text :content
 
   has_many :replies, dependent: :destroy
@@ -11,7 +11,7 @@ class Discussion < ApplicationRecord
   # enum closure_status: { resolved: 'resolved', not_resolved: 'not_resolved' }, _prefix: true
 
   # Define as constantes manualmente
-  CLOSURE_STATUSES = { resolved: 'resolved', not_resolved: 'not_resolved' }.freeze
+  CLOSURE_STATUSES = { resolved: "resolved", not_resolved: "not_resolved" }.freeze
   RESOLVED = CLOSURE_STATUSES[:resolved]
   NOT_RESOLVED = CLOSURE_STATUSES[:not_resolved]
 
@@ -41,5 +41,4 @@ class Discussion < ApplicationRecord
   def requires_closure_reason?
     closed? && closure_status_not_resolved?
   end
-
 end
