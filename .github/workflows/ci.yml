@@ -8,6 +8,20 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14.1 # Você pode escolher uma versão específica
+        env:
+          POSTGRES_USER: rails
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: rails_test
+        ports:
+          - 5432:5432
+        options: >- # Garante que o serviço esteja pronto antes de prosseguir
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -22,7 +36,17 @@ jobs:
         run: |
           sudo apt-get -yqq install libpq-dev # Dependência para a gem pg no Ubuntu
           cp config/database.yml.example config/database.yml # Configurar database.yml se necessário
+          # Modificar database.yml para usar as credenciais do serviço PostgreSQL
+          sed -i "s/database: discuza_test/database: rails_test/" config/database.yml
+          sed -i "/database: rails_test/a \\  username: rails\\n  password: password\\n  host: localhost" config/database.yml
           bin/rails db:prepare TEST_ENV=test
+        env:
+          RAILS_ENV: test
+          # As variáveis abaixo não são estritamente necessárias aqui por causa do sed,
+          # mas é uma boa prática defini-las se o database.yml as usasse com ERB
+          PGHOST: localhost 
+          PGUSER: rails
+          PGPASSWORD: password
 
       - name: Run tests
         run: bin/rails test
