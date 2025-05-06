@@ -33,6 +33,8 @@
 !/tmp/storage/
 !/tmp/storage/.keep
 
+/.cursor
+
 /public/assets
 
 # Ignore master key for decrypting credentials and more.
