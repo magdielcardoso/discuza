@@ -1,0 +1,51 @@
+# PostgreSQL. Versions 9.3 and up are supported.
+#
+# Install the pg driver:
+#   gem install pg
+#
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  # For details on connection pooling, see Rails configuration guide
+  # https://guides.rubyonrails.org/configuring.html#database-pooling
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: discuza_development
+  # The specified database role being used to connect to postgres.
+  # To create additional roles in postgres see `$ createuser --help`.
+  # When running `bin/rails db:setup` creates a database role and uses it.
+  # username: discuza
+  # password:
+
+  # The password supplied to connect to the PostgreSQL server.
+  #
+  # Instead of storing the password in this file, consider finding it in
+  # an environment variable.
+  #
+  # Assuming you use Un*x:
+  #
+  # export DISCUZA_DATABASE_PASSWORD=your_password
+  #
+  # Read the documentation for Heroku or Render if you deploy there or use
+  # other environment variables instead such as DATABASE_URL.
+  #
+  # Note: The password below is deprecated to avoid sharing sensitive data with the
+  # world. If you are not using a cloud provider supply your own password here.
+  # password: <%= ENV["DISCUZA_DATABASE_PASSWORD"] %>
+
+test:
+  <<: *default
+  database: discuza_test
+  # As development / test database connection is local the password is not required.
+  # username: postgres
+  # password:
+
+production:
+  <<: *default
+  database: discuza_production
+  username: postgres # Ou o usuário que você configurou no deploy.yml
+  password: <%= ENV["DATABASE_PASSWORD"] %>
+  host: <%= ENV["DATABASE_HOST"] %>
+  port: <%= ENV["DATABASE_PORT"] %> 
