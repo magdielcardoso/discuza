@@ -4,6 +4,7 @@
 
 *   Criação da funcionalidade de Discussões.
 *   Refinamentos de UI/UX (Navbar, Views Devise)
+*   Adicionar RuboCop ao workflow de CI.
 
 ## Task: Correção Modal Devise Edit
 
@@ -243,5 +244,18 @@
 
 *   O usuário deve testar o novo comando `make dev_with_pg_docker` para garantir que o PostgreSQL inicie corretamente via Docker e que a aplicação Rails também inicie.
 *   Lembrar o usuário de configurar o `config/database.yml` para usar as credenciais e o host do PostgreSQL em Docker (host: `localhost`, port: `5432`, usuário/senha/banco conforme `docker-compose.yml`).
+
+## Task: Adicionar RuboCop ao Workflow de CI
+
+**Data:** $(date +%Y-%m-%d)
+
+### O que foi feito:
+
+*   Adicionada uma nova etapa ao arquivo `.github/workflows/ci.yml` para executar o RuboCop.
+*   A etapa `Run RuboCop` com o comando `bundle exec rubocop` foi inserida após a configuração do banco de dados e antes da execução dos testes no job `test`.
+
+### O que falta:
+
+*   Monitorar a próxima execução do workflow no GitHub Actions para verificar se a etapa do RuboCop é executada com sucesso.
 
 --- 
