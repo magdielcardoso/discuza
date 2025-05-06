@@ -4,7 +4,14 @@ require "fileutils"
 APP_ROOT = File.expand_path("..", __dir__)
 
 def system!(*args)
+  # Adiciona um output do comando para debug
+  # puts "Executing: #{args.join(' ')}"
   system(*args, exception: true)
+end
+
+def system_quietly(*args)
+  # puts "Executing quietly: #{args.join(' ')}"
+  system(*args, out: File::NULL, err: File::NULL)
 end
 
 FileUtils.chdir APP_ROOT do
@@ -12,22 +19,56 @@ FileUtils.chdir APP_ROOT do
   # This script is idempotent, so that you can run it at any time and get an expectable outcome.
   # Add necessary setup steps to this file.
 
-  puts "== Installing dependencies =="
-  system("bundle check") || system!("bundle install")
+  puts "== Ensuring Bundler is installed =="
+  if system_quietly("gem", "list", "-i", "^bundler$")
+    puts "Bundler is already installed."
+  else
+    puts "Bundler not found. Installing Bundler..."
+    system! "gem", "install", "bundler"
+    puts "Bundler installed successfully."
+  end
 
-  # puts "\n== Copying sample files =="
+  puts "\n== Installing dependencies (bundle install) =="
+  system("bundle", "check") || system!("bundle", "install")
+
+  puts "\n== Copying .env file (if needed) =="
+  if File.exist?(".env.example")
+    if File.exist?(".env")
+      puts ".env file already exists. Skipping copy."
+    else
+      FileUtils.cp ".env.example", ".env"
+      puts "Copied .env.example to .env. Please review and fill in .env as needed."
+    end
+  else
+    puts ".env.example not found. Skipping .env copy. Create .env manually if needed."
+  end
+
+  # puts "\n== Copying sample database configuration (if needed) =="
   # unless File.exist?("config/database.yml")
-  #   FileUtils.cp "config/database.yml.sample", "config/database.yml"
+  #   if File.exist?("config/database.yml.example")
+  #     FileUtils.cp "config/database.yml.example", "config/database.yml"
+  #     puts "Copied config/database.yml.example to config/database.yml."
+  #   else
+  #     puts "Warning: config/database.yml not found and no config/database.yml.example to copy."
+  #   end
   # end
 
-  puts "\n== Preparing database =="
-  system! "bin/rails db:prepare"
+  puts "\n== Preparing database (db:prepare) =="
+  puts "Ensure PostgreSQL is installed and running before this step."
+  system! "bin/rails", "db:prepare"
 
-  puts "\n== Configuring Git hooks =="
+  puts "\n== Attempting to configure Git hooks =="
   if File.exist?("script/git-hooks/pre-commit")
+    puts "Found pre-commit hook script: script/git-hooks/pre-commit"
     system! "chmod +x script/git-hooks/pre-commit"
-    system! "git config core.hooksPath script/git-hooks"
-    puts "Git pre-commit hook configured successfully."
+    puts "Set script/git-hooks/pre-commit as executable."
+    begin
+      system! "git config --local core.hooksPath script/git-hooks"
+      puts "Successfully configured Git core.hooksPath to script/git-hooks."
+    rescue StandardError => e
+      puts "Error configuring Git core.hooksPath: #{e.message}"
+      puts "Please try configuring it manually: git config core.hooksPath script/git-hooks"
+    end
   else
     puts "Pre-commit hook script not found at script/git-hooks/pre-commit. Skipping Git hook configuration."
   end

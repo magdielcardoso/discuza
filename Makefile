@@ -22,12 +22,13 @@ help:
 	@echo "  make dev_with_pg_docker - Inicia o PostgreSQL (Docker) e o servidor de desenvolvimento"
 
 setup:
-	@echo "Configurando ambiente..."
-	@./script/setup
-	@echo "\nLembrete: Se for a primeira vez, rode 'make credentials' para configurar segredos."
+	@echo "Setting up environment with bin/setup (without starting the server)..."
+	@./bin/setup --skip-server
+	@echo "\nEnvironment configured. To start the server, use: make start"
+	@echo "Reminder: If it's your first time, run 'make credentials' to set up development secrets."
 
 credentials:
-	@echo "Abrindo editor para config/credentials.yml.enc..."
+	@echo "Opening editor for config/credentials.yml.enc..."
 	@bin/rails credentials:edit
 
 start: dev

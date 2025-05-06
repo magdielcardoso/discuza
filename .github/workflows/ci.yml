@@ -1,4 +1,4 @@
-name: Rails CI
+name: Discuza CI
 
 on:
   push:
