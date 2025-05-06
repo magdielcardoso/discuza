@@ -1,0 +1,34 @@
+#!/bin/sh
+
+echo "Running RuboCop (pre-commit hook)..."
+
+# Get list of staged Ruby files
+# We only want to lint files that are part of the commit
+# and exclude deleted files.
+STAGED_RUBY_FILES=$(git diff --cached --name-only --diff-filter=d | grep -E '\.rb$|\.rake$|Gemfile$|Rakefile$')
+
+if [ -z "$STAGED_RUBY_FILES" ]; then
+  echo "No Ruby files staged, skipping RuboCop."
+  exit 0
+fi
+
+# Run RuboCop with auto-correct on the staged files
+# The output will go to stderr if there are offenses
+bundle exec rubocop -A --force-exclusion $STAGED_RUBY_FILES
+RUBOCOP_EXIT_CODE=$?
+
+if [ $RUBOCOP_EXIT_CODE -eq 0 ]; then
+  echo "RuboCop found no issues or auto-corrected them."
+  # Re-add any files that RuboCop auto-corrected
+  # This ensures the corrected versions are part of the commit
+  echo "$STAGED_RUBY_FILES" | while read -r file; do
+    if [ -f "$file" ]; then # Check if file exists (it might have been deleted and then re-staged)
+      git add "$file"
+    fi
+  done
+  exit 0
+else
+  echo "RuboCop found issues that could not be auto-corrected."
+  echo "Please fix them and try committing again."
+  exit 1 # Abort the commit
+fi 

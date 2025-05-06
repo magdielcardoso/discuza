@@ -115,7 +115,19 @@ Follow these steps to set up the development environment manually (alternative t
     ```
     Access the application at `http://localhost:3000`.
 
-7.  **Running Tests:**
+7.  **Configure Git Hooks (Recommended):**
+    *   The project includes a pre-commit hook to run RuboCop automatically.
+    *   Ensure it's configured by running the setup script (if you haven't already via `make setup` or manual full setup):
+    ```bash
+    ./bin/setup --skip-server
+    ```
+    *   Or, configure it manually:
+    ```bash
+    chmod +x script/git-hooks/pre-commit
+    git config core.hooksPath script/git-hooks
+    ```
+
+8.  **Running Tests:**
     ```bash
     # Run all tests
     rails test
@@ -305,7 +317,19 @@ Siga estes passos para configurar o ambiente de desenvolvimento manualmente (alt
     ```
     Acesse a aplicação em `http://localhost:3000`.
 
-7.  **Rodando os Testes:**
+7.  **Configure os Git Hooks (Recomendado):**
+    *   O projeto inclui um hook de pre-commit para rodar o RuboCop automaticamente.
+    *   Garanta que esteja configurado executando o script de setup (se ainda não o fez via `make setup` ou setup manual completo):
+    ```bash
+    ./bin/setup --skip-server
+    ```
+    *   Ou configure manualmente:
+    ```bash
+    chmod +x script/git-hooks/pre-commit
+    git config core.hooksPath script/git-hooks
+    ```
+
+8.  **Rodando os Testes:**
     ```bash
     # Rode todos os testes
     rails test

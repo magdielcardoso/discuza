@@ -38,6 +38,7 @@ We love pull requests! If you're planning to work on a new feature or a signific
     cd discuza
     ```
 3.  **Set up your development environment:** Follow the instructions in the [README.md](README.md#️-running-locally-manual-steps) (either using `make setup` or the manual steps).
+    *   Ensure that the Git pre-commit hooks are active after setup, as they help maintain code style by running RuboCop.
 4.  **Create a new branch:** Choose a descriptive name for your branch.
     ```bash
     git checkout -b feature/your-descriptive-feature-name
@@ -67,6 +68,7 @@ We love pull requests! If you're planning to work on a new feature or a signific
 
 *   Ensure all tests pass (`rails test`).
 *   Follow the existing code style (consider running linters if configured, e.g., RuboCop).
+    *   The pre-commit hook should help with this automatically by running RuboCop.
 *   Provide a clear description of the problem and solution in the PR. Link to the relevant issue if applicable.
 *   Keep PRs focused on a single issue or feature.
 
@@ -119,6 +121,7 @@ Adoramos pull requests! Se você está planejando trabalhar em uma nova funciona
     cd discuza
     ```
 3.  **Configure seu ambiente de desenvolvimento:** Siga as instruções no [README.md](README.md#️-rodando-localmente-passos-manuais) (usando `make setup` ou os passos manuais).
+    *   Certifique-se de que os hooks de pre-commit do Git estejam ativos após o setup, pois eles ajudam a manter o estilo do código executando o RuboCop.
 4.  **Crie uma nova branch:** Escolha um nome descritivo para sua branch.
     ```bash
     git checkout -b feature/seu-nome-de-feature-descritivo
@@ -148,6 +151,7 @@ Adoramos pull requests! Se você está planejando trabalhar em uma nova funciona
 
 *   Garanta que todos os testes passem (`rails test`).
 *   Siga o estilo de código existente (considere rodar linters se configurados, ex: RuboCop).
+    *   O hook de pre-commit deve ajudar com isso automaticamente, executando o RuboCop.
 *   Forneça uma descrição clara do problema e da solução no PR. Link para a issue relevante, se aplicável.
 *   Mantenha os PRs focados em uma única issue ou funcionalidade.
 

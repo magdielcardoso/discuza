@@ -5,6 +5,7 @@
 *   Criação da funcionalidade de Discussões.
 *   Refinamentos de UI/UX (Navbar, Views Devise)
 *   Adicionar RuboCop ao workflow de CI.
+*   Configurar Git hook pre-commit para RuboCop e integrá-lo ao setup do projeto.
 
 ## Task: Correção Modal Devise Edit
 
@@ -257,5 +258,25 @@
 ### O que falta:
 
 *   Monitorar a próxima execução do workflow no GitHub Actions para verificar se a etapa do RuboCop é executada com sucesso.
+
+## Task: Configurar Git Hook Pre-Commit para RuboCop
+
+**Data:** $(date +%Y-%m-%d)
+
+### O que foi feito:
+
+*   Criado o script `script/git-hooks/pre-commit` para executar `bundle exec rubocop -A` nos arquivos Ruby preparados para o commit.
+    *   O script adiciona automaticamente os arquivos corrigidos pelo RuboCop ao commit.
+    *   Se houver erros não corrigíveis, o commit é abortado.
+*   Modificado o script `bin/setup` para:
+    *   Tornar `script/git-hooks/pre-commit` executável (`chmod +x`).
+    *   Configurar o Git para usar o diretório `script/git-hooks` como caminho para os hooks (`git config core.hooksPath script/git-hooks`).
+*   Verificado que o `Makefile` já possui um comando `setup` que executa `script/setup` (que por sua vez chama `bin/setup`), então a configuração dos hooks será aplicada ao rodar `make setup`.
+
+### O que falta:
+
+*   Remover a flag de autocorreção (`-A`) do RuboCop no workflow de CI (`.github/workflows/ci.yml`), pois a correção agora é prioritariamente local.
+*   Garantir que todos os desenvolvedores executem `make setup` (ou `bin/setup` diretamente) uma vez para configurar os hooks localmente.
+*   Testar o hook pre-commit para garantir que ele funciona conforme esperado.
 
 --- 
