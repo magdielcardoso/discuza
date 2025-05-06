@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:15 # Você pode alterar a versão do Postgres se necessário
+    restart: always
+    environment:
+      POSTGRES_USER: postgres # Usuário padrão, mude se desejar
+      POSTGRES_PASSWORD: password # Senha padrão, MUDE PARA ALGO SEGURO
+      POSTGRES_DB: devconnect_development # Nome do banco de dados para desenvolvimento
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data: {} 

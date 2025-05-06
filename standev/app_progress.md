@@ -202,4 +202,46 @@
 
 *   O usuário precisa executar o comando `git config commit.template standev/commit_message_template.md` no seu ambiente local, se desejar usar o template automaticamente ao commitar.
 
+## Task: Criar Docker Compose para PostgreSQL
+
+**Data:** $(date +%Y-%m-%d)
+
+### O que foi feito:
+
+*   Verificada a inexistência da pasta `docker`.
+*   Criada a pasta `docker` na raiz do projeto.
+*   Criado o arquivo `docker/docker-compose.yml` com a configuração para um serviço PostgreSQL (versão 15).
+    *   O serviço está configurado para reiniciar sempre (`restart: always`).
+    *   Variáveis de ambiente para usuário, senha e nome do banco de dados foram definidas.
+    *   A porta `5432` do contêiner está mapeada para a porta `5432` do host.
+    *   Um volume nomeado `postgres_data` foi configurado para persistir os dados do banco.
+
+### O que falta:
+
+*   O usuário deve revisar e, se necessário, alterar a senha padrão do PostgreSQL no arquivo `docker-compose.yml` para uma senha segura.
+*   Instruir o usuário sobre como conectar a aplicação Rails a este banco de dados PostgreSQL (atualizando `config/database.yml`).
+*   Testar a configuração (rodar `docker-compose up -d` e verificar a conexão da aplicação).
+
+## Task: Script e Comando Makefile para Docker PostgreSQL
+
+**Data:** $(date +%Y-%m-%d)
+
+### O que foi feito:
+
+*   Criado o script `script/start_postgres_docker.sh` para iniciar o serviço `postgres` do arquivo `docker/docker-compose.yml`.
+    *   O script verifica a existência do arquivo `docker-compose.yml`.
+    *   Inicia o serviço `postgres` em modo detached (`-d`).
+    *   Fornece feedback sobre o sucesso ou falha da operação.
+*   O script `script/start_postgres_docker.sh` foi tornado executável (`chmod +x`).
+*   Adicionado um novo comando `dev_with_pg_docker` ao `Makefile`.
+    *   Este comando primeiro executa `script/start_postgres_docker.sh`.
+    *   Em seguida, inicia o servidor de desenvolvimento padrão com `./bin/dev`.
+*   Atualizada a seção de ajuda (`help`) no `Makefile` para incluir o novo comando.
+*   Atualizada a diretiva `.PHONY` no `Makefile` para incluir `dev_with_pg_docker`.
+
+### O que falta:
+
+*   O usuário deve testar o novo comando `make dev_with_pg_docker` para garantir que o PostgreSQL inicie corretamente via Docker e que a aplicação Rails também inicie.
+*   Lembrar o usuário de configurar o `config/database.yml` para usar as credenciais e o host do PostgreSQL em Docker (host: `localhost`, port: `5432`, usuário/senha/banco conforme `docker-compose.yml`).
+
 --- 

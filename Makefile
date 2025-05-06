@@ -3,7 +3,7 @@
 # Nome da imagem Docker (baseado no deploy.yml.example)
 IMAGE_NAME ?= seu-usuario/discuza
 
-.PHONY: help setup start dev test console c db_create db_migrate db_seed build
+.PHONY: help setup start dev test console c db_create db_migrate db_seed build dev_with_pg_docker
 
 help:
 	@echo "Comandos disponíveis:"
@@ -19,6 +19,7 @@ help:
 	@echo "  make db_migrate    - Roda as migrações do banco (rails db:migrate)"
 	@echo "  make db_seed       - Popula o banco de dados (rails db:seed)"
 	@echo "  make build         - Constrói a imagem Docker localmente (docker build)"
+	@echo "  make dev_with_pg_docker - Inicia o PostgreSQL (Docker) e o servidor de desenvolvimento"
 
 setup:
 	@echo "Configurando ambiente..."
@@ -31,6 +32,12 @@ credentials:
 
 start: dev
 dev:
+	@echo "Iniciando servidor de desenvolvimento..."
+	@./bin/dev
+
+dev_with_pg_docker:
+	@echo "Garantindo que o PostgreSQL (Docker) esteja em execução..."
+	@./script/start_postgres_docker.sh
 	@echo "Iniciando servidor de desenvolvimento..."
 	@./bin/dev
 
