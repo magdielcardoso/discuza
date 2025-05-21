@@ -3,7 +3,7 @@
 # Nome da imagem Docker (baseado no deploy.yml.example)
 IMAGE_NAME ?= magdielcardoso/discuza
 
-.PHONY: help setup start dev test console c db_create db_migrate db_seed build dev_with_pg_docker
+.PHONY: help setup start dev test console c db_create db_migrate db_seed build dev_with_pg_docker docker
 
 help:
 	@echo "Comandos disponíveis:"
@@ -20,6 +20,7 @@ help:
 	@echo "  make db_seed       - Popula o banco de dados (rails db:seed)"
 	@echo "  make build         - Constrói a imagem Docker localmente (docker build)"
 	@echo "  make dev_with_pg_docker - Inicia o PostgreSQL (Docker) e o servidor de desenvolvimento"
+	@echo "  make docker        - Constroi e empurra a imagem Docker para o Docker Hub"
 
 setup:
 	@echo "Setting up environment with bin/setup (without starting the server)..."
@@ -66,3 +67,10 @@ db_seed:
 build:
 	@echo "Construindo imagem Docker $(IMAGE_NAME)..."
 	@docker build . -t $(IMAGE_NAME) 
+
+# Build and push Docker image to Docker Hub
+docker:
+	@echo "Building Docker image magdielcardoso/space:latest..."
+	@docker build -t magdielcardoso/space:latest .
+	@echo "Pushing Docker image to Docker Hub..."
+	@docker push magdielcardoso/space:latest 

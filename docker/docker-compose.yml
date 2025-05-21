@@ -1,16 +1,85 @@
-version: '3.8'
+version: "3.7"
+
 services:
-  postgres:
-    image: postgres:15 # Você pode alterar a versão do Postgres se necessário
-    restart: always
-    environment:
-      POSTGRES_USER: postgres # Usuário padrão, mude se desejar
-      POSTGRES_PASSWORD: password # Senha padrão, MUDE PARA ALGO SEGURO
-      POSTGRES_DB: devconnect_development # Nome do banco de dados para desenvolvimento
-    ports:
-      - "5432:5432"
+  space_app:
+    image: discuza:latest
+    command: bundle exec rails s -p 3000 -b 0.0.0.0
+    entrypoint: /app/bin/docker-entrypoint
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - space_storage:/app/storage
+      - space_log:/app/log
+      - space_tmp:/app/tmp
+    networks:
+      - pedetudo
+    environment:
+      - RAILS_MASTER_KEY=your_rails_master_key
+      - RAILS_ENV=production
+      - RAILS_LOG_TO_STDOUT=true
+      - RAILS_FORCE_SSL=false
+      - RAILS_MAX_THREADS=5
+      - RAILS_MIN_THREADS=2
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=your_postgres_password
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - REDIS_URL=redis://redis:6379
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1024M
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.space_app.rule=Host(`space.stacklab.digital`)
+        - traefik.http.routers.space_app.entrypoints=websecure
+        - traefik.http.routers.space_app.tls.certresolver=letsencryptresolver
+        - traefik.http.routers.space_app.priority=1
+        - traefik.http.routers.space_app.service=space_app
+        - traefik.http.services.space_app.loadbalancer.server.port=3000
+        - traefik.http.services.space_app.loadbalancer.passhostheader=true
+        - traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https
+        - traefik.http.routers.space_app.middlewares=sslheader@docker
+
+  space_sidekiq:
+    image: discuza:latest
+    command: bundle exec sidekiq
+    entrypoint: /app/bin/docker-entrypoint
+    volumes:
+      - space_storage:/app/storage
+      - space_log:/app/log
+      - space_tmp:/app/tmp
+    networks:
+      - pedetudo
+    environment:
+      - RAILS_MASTER_KEY=your_rails_master_key
+      - RAILS_ENV=production
+      - RAILS_LOG_TO_STDOUT=true
+      - RAILS_FORCE_SSL=false
+      - RAILS_MAX_THREADS=5
+      - RAILS_MIN_THREADS=2
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=your_postgres_password
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - REDIS_URL=redis://redis:6379
 
 volumes:
-  postgres_data: {} 
+  space_storage:
+    external: true
+    name: space_storage
+  space_log:
+    external: true
+    name: space_log
+  space_tmp:
+    external: true
+    name: space_tmp
+
+networks:
+  pedetudo:
+    external: true
+    name: pedetudo 
