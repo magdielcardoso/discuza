@@ -1,7 +1,7 @@
 # Makefile para facilitar tarefas comuns de desenvolvimento no Discuza
 
 # Nome da imagem Docker (baseado no deploy.yml.example)
-IMAGE_NAME ?= seu-usuario/discuza
+IMAGE_NAME ?= magdielcardoso/discuza
 
 .PHONY: help setup start dev test console c db_create db_migrate db_seed build dev_with_pg_docker
 
