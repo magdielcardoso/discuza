@@ -14,4 +14,9 @@ class User < ApplicationRecord
   has_many :answer_marks, dependent: :destroy
 
   validates :name, presence: true
+
+  # Returns true if the user is an admin
+  def is_admin?
+    is_admin == true
+  end
 end
