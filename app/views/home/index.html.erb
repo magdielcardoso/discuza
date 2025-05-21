@@ -9,7 +9,20 @@
           <%= lucide_icon(category.icon, class: "size-6 mb-2 #{category.color_class || 'stroke-gray-800 dark:stroke-white'}") %>
           <h3 class="text-lg font-semibold font-geist text-gray-800 dark:text-white"><%= category.name %></h3>
           <div class="mb-1">
-            <span class="inline-flex items-center gap-x-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-opacity-20 <%= category.color_class || 'bg-gray-200 text-gray-800 dark:bg-neutral-800 dark:text-neutral-200' %>" style="background-color:unset;">
+            <%# Badge colorido com cor de fundo clara baseada em color_class %>
+            <% bg_class = case category.color_class
+              when /lime/ then 'bg-lime-100 text-lime-800 dark:bg-lime-500/10 dark:text-lime-500'
+              when /blue/ then 'bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-500'
+              when /red/ then 'bg-red-100 text-red-800 dark:bg-red-500/10 dark:text-red-500'
+              when /purple/ then 'bg-purple-100 text-purple-800 dark:bg-purple-500/10 dark:text-purple-500'
+              when /yellow/ then 'bg-yellow-100 text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500'
+              when /teal/ then 'bg-teal-100 text-teal-800 dark:bg-teal-500/10 dark:text-teal-500'
+              when /pink/ then 'bg-pink-100 text-pink-800 dark:bg-pink-500/10 dark:text-pink-500'
+              when /indigo/ then 'bg-indigo-100 text-indigo-800 dark:bg-indigo-500/10 dark:text-indigo-500'
+              when /green/ then 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500'
+              else 'bg-gray-100 text-gray-800 dark:bg-neutral-800 dark:text-neutral-300'
+            end %>
+            <span class="inline-flex items-center gap-x-1.5 px-2 py-0.5 rounded-full text-xs font-medium <%= bg_class %>">
               <span class="font-semibold"><%= category.discussions.count %></span> <span>post<%= 's' if category.discussions.count != 1 %></span>
             </span>
           </div>
@@ -134,33 +147,26 @@
            <h2 class="text-xl font-semibold font-geist text-black dark:text-white">Tags Populares</h2>
          </div>
          <div class="p-4">
-           <%# Lista de cores para os badges %>
-           <% colors = [
-             { light_bg: "bg-lime-100", light_text: "text-lime-800", dark_bg: "dark:bg-lime-500/10", dark_text: "dark:text-lime-500" },
-             { light_bg: "bg-blue-100", light_text: "text-blue-800", dark_bg: "dark:bg-blue-500/10", dark_text: "dark:text-blue-500" },
-             { light_bg: "bg-red-100", light_text: "text-red-800", dark_bg: "dark:bg-red-500/10", dark_text: "dark:text-red-500" },
-             { light_bg: "bg-purple-100", light_text: "text-purple-800", dark_bg: "dark:bg-purple-500/10", dark_text: "dark:text-purple-500" },
-             { light_bg: "bg-yellow-100", light_text: "text-yellow-800", dark_bg: "dark:bg-yellow-500/10", dark_text: "dark:text-yellow-500" },
-             { light_bg: "bg-teal-100", light_text: "text-teal-800", dark_bg: "dark:bg-teal-500/10", dark_text: "dark:text-teal-500" },
-             { light_bg: "bg-pink-100", light_text: "text-pink-800", dark_bg: "dark:bg-pink-500/10", dark_text: "dark:text-pink-500" },
-             { light_bg: "bg-indigo-100", light_text: "text-indigo-800", dark_bg: "dark:bg-indigo-500/10", dark_text: "dark:text-indigo-500" },
-             { light_bg: "bg-gray-100", light_text: "text-gray-800", dark_bg: "dark:bg-neutral-800", dark_text: "dark:text-neutral-300" },
-             { light_bg: "bg-green-100", light_text: "text-green-800", dark_bg: "dark:bg-green-500/10", dark_text: "dark:text-green-500" }
-           ] %>
-
            <div class="flex flex-wrap gap-2">
-            <%# Mock Data - Tags com Contagem %>
-            <% [
-              { name: "Rails", count: 128 }, { name: "Ruby", count: 95 }, { name: "Hotwire", count: 72 },
-              { name: "Stimulus", count: 65 }, { name: "TailwindCSS", count: 58 }, { name: "PostgreSQL", count: 41 },
-              { name: "Docker", count: 35 }, { name: "Kamal", count: 29 }, { name: "TDD", count: 21 }
-            ].each_with_index do |tag_data, index| %>
-              <% color_set = colors[index % colors.length] %>
-              <span class="py-1 px-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium rounded-full <%= color_set[:light_bg] %> <%= color_set[:light_text] %> <%= color_set[:dark_bg] %> <%= color_set[:dark_text] %>">
-                <%= tag_data[:name] %>
-                <span class="py-0.5 px-1.5 rounded-full text-xs font-medium bg-white text-gray-600 dark:bg-neutral-700 dark:text-neutral-300"><%= tag_data[:count] %></span>
-              </span>
-            <% end %>
+             <% @categories.each do |category| %>
+               <%# Badge colorido com cor de fundo clara baseada em color_class %>
+               <% bg_class = case category.color_class
+                 when /lime/ then 'bg-lime-100 text-lime-800 dark:bg-lime-500/10 dark:text-lime-500'
+                 when /blue/ then 'bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-500'
+                 when /red/ then 'bg-red-100 text-red-800 dark:bg-red-500/10 dark:text-red-500'
+                 when /purple/ then 'bg-purple-100 text-purple-800 dark:bg-purple-500/10 dark:text-purple-500'
+                 when /yellow/ then 'bg-yellow-100 text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500'
+                 when /teal/ then 'bg-teal-100 text-teal-800 dark:bg-teal-500/10 dark:text-teal-500'
+                 when /pink/ then 'bg-pink-100 text-pink-800 dark:bg-pink-500/10 dark:text-pink-500'
+                 when /indigo/ then 'bg-indigo-100 text-indigo-800 dark:bg-indigo-500/10 dark:text-indigo-500'
+                 when /green/ then 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500'
+                 else 'bg-gray-100 text-gray-800 dark:bg-neutral-800 dark:text-neutral-300'
+               end %>
+               <span class="py-1 px-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium rounded-full <%= bg_class %>">
+                 <%= category.name %>
+                 <span class="py-0.5 px-1.5 rounded-full text-xs font-medium bg-white text-gray-600 dark:bg-neutral-700 dark:text-neutral-300"><%= category.discussions.count %></span>
+               </span>
+             <% end %>
            </div>
          </div>
       </div>
