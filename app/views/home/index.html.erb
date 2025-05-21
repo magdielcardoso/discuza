@@ -101,15 +101,15 @@
         </div>
         <div class="p-4">
           <ul class="space-y-3">
-            <%# Mock Data - Discussões Recomendadas %>
-            <% [
-              { id: 5, title: "Melhores práticas para testes em Rails" },
-              { id: 6, title: "Como otimizar queries Active Record?" },
-              { id: 7, title: "Usando Stimulus para interatividade" },
-              { id: 8, title: "Gerenciamento de background jobs com Sidekiq" }
-            ].each do |rec| %>
+            <%# Loop pelas discussões recomendadas do banco de dados %>
+            <% @recommended_discussions.each do |rec| %>
               <li>
-                <%= link_to rec[:title], "#", class: "text-sm text-gray-700 hover:text-lime-600 dark:text-neutral-300 dark:hover:text-lime-500 font-geist" %>
+                <%= link_to rec.title, discussion_path(rec), class: "text-sm text-gray-700 hover:text-lime-600 dark:text-neutral-300 dark:hover:text-lime-500 font-geist" %>
+              </li>
+            <% end %>
+            <% if @recommended_discussions.none? %>
+              <li>
+                <p class="text-sm text-gray-500 dark:text-neutral-400">Nenhuma discussão recomendada por enquanto.</p>
               </li>
             <% end %>
           </ul>
