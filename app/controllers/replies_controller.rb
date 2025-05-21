@@ -31,13 +31,23 @@ class RepliesController < ApplicationController
     @reply = @discussion.replies.new(reply_params)
     @reply.user = current_user
 
+    # Calcula o top_reply_id (mesma lógica da DiscussionsController)
+    replies_with_marks = @discussion.replies
+      .left_joins(:answer_marks)
+      .group("replies.id")
+      .includes(:user, :answer_marks)
+      .with_rich_text_content
+      .order("COUNT(answer_marks.id) DESC, replies.created_at ASC")
+    top_reply = replies_with_marks.to_a.first
+    top_reply_id = (top_reply && top_reply.answer_marks.size > 0) ? top_reply.id : nil
+
     respond_to do |format|
       if @reply.save
         format.turbo_stream do
           # Renderiza o Turbo Stream para adicionar a nova resposta à lista
           # e limpar/resetar o formulário
           render turbo_stream: [
-            turbo_stream.append("replies_list", partial: "replies/reply", locals: { reply: @reply }),
+            turbo_stream.append("replies_list", partial: "replies/reply", locals: { reply: @reply, discussion: @discussion, top_reply_id: top_reply_id }),
             turbo_stream.replace(dom_id(@discussion, :new_reply), partial: "replies/form", locals: { discussion: @discussion, reply: Reply.new })
           ]
         end
@@ -91,9 +101,19 @@ class RepliesController < ApplicationController
     # Recarrega a resposta com as marcas para o partial
     @reply.reload
 
+    # Calcula o top_reply_id (mesma lógica da DiscussionsController)
+    replies_with_marks = @discussion.replies
+      .left_joins(:answer_marks)
+      .group("replies.id")
+      .includes(:user, :answer_marks)
+      .with_rich_text_content
+      .order("COUNT(answer_marks.id) DESC, replies.created_at ASC")
+    top_reply = replies_with_marks.to_a.first
+    top_reply_id = (top_reply && top_reply.answer_marks.size > 0) ? top_reply.id : nil
+
     respond_to do |format|
       format.turbo_stream {
-        render turbo_stream: turbo_stream.replace(@reply, partial: "replies/reply", locals: { reply: @reply, discussion: @discussion })
+        render turbo_stream: turbo_stream.replace(@reply, partial: "replies/reply", locals: { reply: @reply, discussion: @discussion, top_reply_id: top_reply_id })
       }
       format.html { redirect_to discussion_path(@discussion, anchor: dom_id(@reply)), notice: "Marcação da resposta atualizada." } # Fallback
     end
