@@ -33,6 +33,9 @@
       <span>Por <%= discussion.user.name %></span>
       <span>•</span>
       <span title="<%= discussion.created_at.strftime('%d %b %Y, %H:%M') %>"><%= time_ago_in_words(discussion.created_at) %> atrás</span>
+      <span class="ml-2">
+        <%= render partial: 'discussions/votes', locals: { discussion: discussion, compact: true } %>
+      </span>
     </div>
   </div> <%# Fim Coluna Esquerda %>
 
