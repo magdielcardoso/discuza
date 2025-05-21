@@ -48,30 +48,6 @@ services:
         - traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https
         - traefik.http.routers.space_app.middlewares=sslheader@docker
 
-  space_sidekiq:
-    image: magdielcardoso/space:latest
-    command: bundle exec sidekiq
-    entrypoint: /rails/bin/docker-entrypoint
-    volumes:
-      - space_storage:/rails/storage
-      - space_log:/rails/log
-      - space_tmp:/rails/tmp
-    networks:
-      - pedetudo
-    environment:
-      - RAILS_MASTER_KEY=74a7a6a9d8652272efa4af482975f526
-      - RAILS_ENV=production
-      - RAILS_LOG_TO_STDOUT=true
-      - RAILS_FORCE_SSL=false
-      - RAILS_MAX_THREADS=5
-      - RAILS_MIN_THREADS=2
-      - DATABASE_USERNAME=postgres
-      - DATABASE_PASSWORD=PT99874166
-      - DATABASE_HOST=postgres
-      - DATABASE_NAME=space
-      - DATABASE_PORT=5432
-      - REDIS_URL=redis://redis:6379
-
 volumes:
   space_storage:
     external: true
