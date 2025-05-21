@@ -2,26 +2,29 @@ version: "3.7"
 
 services:
   space_app:
-    image: discuza:latest
-    command: bundle exec rails s -p 3000 -b 0.0.0.0
-    entrypoint: /app/bin/docker-entrypoint
+    image: magdielcardoso/space:latest
+    command: bundle exec rails s -p 4032 -b 0.0.0.0
+    entrypoint: /rails/bin/docker-entrypoint
+    ports:
+      - "4032:4032"
     volumes:
-      - space_storage:/app/storage
-      - space_log:/app/log
-      - space_tmp:/app/tmp
+      - space_storage:/rails/storage
+      - space_log:/rails/log
+      - space_tmp:/rails/tmp
     networks:
       - pedetudo
     environment:
-      - RAILS_MASTER_KEY=your_rails_master_key
+      - RAILS_MASTER_KEY=74a7a6a9d8652272efa4af482975f526
       - RAILS_ENV=production
       - RAILS_LOG_TO_STDOUT=true
       - RAILS_FORCE_SSL=false
       - RAILS_MAX_THREADS=5
       - RAILS_MIN_THREADS=2
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=your_postgres_password
-      - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=PT99874166
+      - DATABASE_HOST=postgres
+      - DATABASE_NAME=space
+      - DATABASE_PORT=5432
       - REDIS_URL=redis://redis:6379
     deploy:
       mode: replicated
@@ -40,32 +43,33 @@ services:
         - traefik.http.routers.space_app.tls.certresolver=letsencryptresolver
         - traefik.http.routers.space_app.priority=1
         - traefik.http.routers.space_app.service=space_app
-        - traefik.http.services.space_app.loadbalancer.server.port=3000
+        - traefik.http.services.space_app.loadbalancer.server.port=4032
         - traefik.http.services.space_app.loadbalancer.passhostheader=true
         - traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https
         - traefik.http.routers.space_app.middlewares=sslheader@docker
 
   space_sidekiq:
-    image: discuza:latest
+    image: magdielcardoso/space:latest
     command: bundle exec sidekiq
-    entrypoint: /app/bin/docker-entrypoint
+    entrypoint: /rails/bin/docker-entrypoint
     volumes:
-      - space_storage:/app/storage
-      - space_log:/app/log
-      - space_tmp:/app/tmp
+      - space_storage:/rails/storage
+      - space_log:/rails/log
+      - space_tmp:/rails/tmp
     networks:
       - pedetudo
     environment:
-      - RAILS_MASTER_KEY=your_rails_master_key
+      - RAILS_MASTER_KEY=74a7a6a9d8652272efa4af482975f526
       - RAILS_ENV=production
       - RAILS_LOG_TO_STDOUT=true
       - RAILS_FORCE_SSL=false
       - RAILS_MAX_THREADS=5
       - RAILS_MIN_THREADS=2
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=your_postgres_password
-      - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=PT99874166
+      - DATABASE_HOST=postgres
+      - DATABASE_NAME=space
+      - DATABASE_PORT=5432
       - REDIS_URL=redis://redis:6379
 
 volumes:

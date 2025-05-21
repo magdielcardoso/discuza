@@ -52,3 +52,15 @@
 # Ignore Docker-related files
 /.dockerignore
 /Dockerfile*
+
+# StanDev files
+/standev
+
+# Github Files
+/CONTRIBUTING.md
+/CODE_OF_CONDUCT.md
+/SECURITY.md
+/README.md
+/CHANGELOG.md
+/LICENSE
+/CONTRIBUTING.md

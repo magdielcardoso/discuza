@@ -70,7 +70,7 @@ build:
 
 # Build and push Docker image to Docker Hub
 docker:
-	@echo "Building Docker image magdielcardoso/space:latest..."
-	@docker build -t magdielcardoso/space:latest .
+	@echo "Building Docker image magdielcardoso/space:latest using docker/Dockerfile..."
+	@docker build -f docker/Dockerfile -t magdielcardoso/space:latest .
 	@echo "Pushing Docker image to Docker Hub..."
 	@docker push magdielcardoso/space:latest 
