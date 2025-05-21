@@ -1,4 +1,58 @@
-<div>
-  <h1 class="font-bold text-4xl">Categories#show</h1>
-  <p>Find me in app/views/categories/show.html.erb</p>
+<div class="max-w-[85rem] px-4 pb-10 sm:px-6 lg:px-8 lg:pb-14 mx-auto">
+  <div class="w-full">
+    <div class="mb-8">
+      <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 p-6 bg-white border border-gray-200 rounded-2xl shadow-md dark:bg-neutral-900 dark:border-neutral-700 mb-6 mt-8">
+        <div class="flex-shrink-0 flex items-center justify-center w-16 h-16 rounded-full"
+          style="background-color:rgba(0,0,0,0.03);">
+          <%= lucide_icon(@category.icon, class: "size-9 #{ @category.color_class || 'stroke-gray-800 dark:stroke-white'}") %>
+        </div>
+        <div class="flex-1 flex flex-col items-center sm:items-start text-center sm:text-left">
+          <h1 class="text-3xl font-extrabold font-geist text-gray-900 dark:text-white mb-1"><%= @category.name %></h1>
+          <% bg_class = case @category.color_class
+            when /lime/ then 'bg-lime-100 text-lime-800 dark:bg-lime-500/10 dark:text-lime-500'
+            when /blue/ then 'bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-500'
+            when /red/ then 'bg-red-100 text-red-800 dark:bg-red-500/10 dark:text-red-500'
+            when /purple/ then 'bg-purple-100 text-purple-800 dark:bg-purple-500/10 dark:text-purple-500'
+            when /yellow/ then 'bg-yellow-100 text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500'
+            when /teal/ then 'bg-teal-100 text-teal-800 dark:bg-teal-500/10 dark:text-teal-500'
+            when /pink/ then 'bg-pink-100 text-pink-800 dark:bg-pink-500/10 dark:text-pink-500'
+            when /indigo/ then 'bg-indigo-100 text-indigo-800 dark:bg-indigo-500/10 dark:text-indigo-500'
+            when /green/ then 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500'
+            else 'bg-gray-100 text-gray-800 dark:bg-neutral-800 dark:text-neutral-300'
+          end %>
+          <span class="inline-flex items-center gap-x-1.5 px-3 py-1 rounded-full text-sm font-medium mt-2 <%= bg_class %>">
+            <span class="font-semibold"><%= @category.discussions.count %></span> <span>post<%= 's' if @category.discussions.count != 1 %></span>
+          </span>
+        </div>
+      </div>
+      <h2 class="text-2xl font-semibold mb-4">Discussions in this category</h2>
+      <% if @category.discussions.any? %>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <% @category.discussions.each do |discussion| %>
+            <div class="p-4 md:p-5 rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-neutral-900 dark:border-neutral-700 flex flex-col justify-between">
+              <div>
+                <h3 class="text-lg font-semibold text-black dark:text-white mb-2">
+                  <%= link_to discussion.title, discussion_path(discussion), class: "hover:text-lime-600 dark:hover:text-lime-500 transition-colors" %>
+                </h3>
+                <div class="text-gray-700 dark:text-neutral-300 mb-4 text-sm prose prose-sm dark:prose-invert max-w-none">
+                  <%= action_text_snippet(discussion.content, length: 120) if discussion.respond_to?(:content) %>
+                </div>
+              </div>
+              <div class="flex items-center justify-between text-sm text-gray-600 dark:text-neutral-400 mt-2">
+                <span class="inline-flex items-center gap-x-1.5">
+                  <%= lucide_icon('message-circle', class: "flex-shrink-0 size-4") %>
+                  <%= discussion.replies.count %>
+                </span>
+                <span class="text-xs text-gray-500 dark:text-neutral-500" title="<%= discussion.created_at.strftime('%d %b %Y, %H:%M') %>">
+                  <%= time_ago_in_words(discussion.created_at) %> ago
+                </span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="text-gray-500 dark:text-neutral-400">No discussions in this category yet.</div>
+      <% end %>
+    </div>
+  </div>
 </div>
