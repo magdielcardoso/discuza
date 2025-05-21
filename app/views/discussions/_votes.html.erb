@@ -1,0 +1,31 @@
+<turbo-frame id="<%= dom_id(discussion, :votes) %>">
+  <div class="inline-flex items-center gap-x-2">
+    <% user_vote = current_user && discussion.votes.find_by(user: current_user) %>
+    <span class="inline-flex items-center">
+      <% if user_vote&.value == 1 %>
+        <%= button_to discussion_vote_path(discussion, user_vote), method: :delete, form: { data: { turbo_stream: true } }, class: "p-1 rounded bg-lime-100 dark:bg-lime-900 flex items-center", title: "Remover upvote" do %>
+          <%= lucide_icon('arrow-up', class: "flex-shrink-0 size-4 text-lime-600 dark:text-lime-500") %>
+          <span class="ml-1 font-semibold text-gray-800 dark:text-neutral-200"><%= discussion.votes.where(value: 1).count %></span>
+        <% end %>
+      <% else %>
+        <%= button_to discussion_votes_path(discussion, value: 1), method: :post, form: { data: { turbo_stream: true } }, class: "p-1 rounded hover:bg-lime-100 dark:hover:bg-lime-900 flex items-center", title: "Upvote" do %>
+          <%= lucide_icon('arrow-up', class: "flex-shrink-0 size-4 text-lime-600 dark:text-lime-500") %>
+          <span class="ml-1 font-semibold text-gray-800 dark:text-neutral-200"><%= discussion.votes.where(value: 1).count %></span>
+        <% end %>
+      <% end %>
+    </span>
+    <span class="inline-flex items-center">
+      <% if user_vote&.value == -1 %>
+        <%= button_to discussion_vote_path(discussion, user_vote), method: :delete, form: { data: { turbo_stream: true } }, class: "p-1 rounded bg-red-100 dark:bg-red-900 flex items-center", title: "Remover downvote" do %>
+          <%= lucide_icon('arrow-down', class: "flex-shrink-0 size-4 text-red-500 dark:text-red-400") %>
+          <span class="ml-1 font-semibold text-gray-800 dark:text-neutral-200"><%= discussion.votes.where(value: -1).count %></span>
+        <% end %>
+      <% else %>
+        <%= button_to discussion_votes_path(discussion, value: -1), method: :post, form: { data: { turbo_stream: true } }, class: "p-1 rounded hover:bg-red-100 dark:hover:bg-red-900 flex items-center", title: "Downvote" do %>
+          <%= lucide_icon('arrow-down', class: "flex-shrink-0 size-4 text-red-500 dark:text-red-400") %>
+          <span class="ml-1 font-semibold text-gray-800 dark:text-neutral-200"><%= discussion.votes.where(value: -1).count %></span>
+        <% end %>
+      <% end %>
+    </span>
+  </div>
+</turbo-frame> 

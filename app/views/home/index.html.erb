@@ -68,6 +68,8 @@
             <%# Footer %>
             <div class="flex items-center justify-between text-sm text-gray-600 dark:text-neutral-400">
               <div class="flex items-center gap-x-4">
+                <%# Votação: Up/Down + contagem %>
+                <%= render partial: 'discussions/votes', locals: { discussion: discussion } %>
                 <%# Replies %>
                 <span class="inline-flex items-center gap-x-1.5">
                   <%= lucide_icon('message-circle', class: "flex-shrink-0 size-4") %>

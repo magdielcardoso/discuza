@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "votes/create"
+  get "votes/destroy"
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -25,6 +27,7 @@ Rails.application.routes.draw do
         post :toggle
       end
     end
+    resources :votes, only: [ :create, :destroy ]
   end
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
