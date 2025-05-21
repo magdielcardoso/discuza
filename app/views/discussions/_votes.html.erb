@@ -1,3 +1,4 @@
+<% compact = local_assigns[:compact] || false %>
 <turbo-frame id="<%= dom_id(discussion, :votes) %>">
   <div class="inline-flex items-center <%= compact ? 'gap-x-1 text-xs' : 'gap-x-2' %>">
     <% user_vote = current_user && discussion.votes.find_by(user: current_user) %>
