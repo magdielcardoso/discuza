@@ -1,6 +1,7 @@
 class Discussion < ApplicationRecord
   belongs_to :user
   belongs_to :closed_by, class_name: "User", optional: true
+  belongs_to :category
   has_rich_text :content
 
   has_many :replies, dependent: :destroy

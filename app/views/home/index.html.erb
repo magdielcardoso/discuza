@@ -8,6 +8,11 @@
         <a href="#" class="block p-4 sm:p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md focus:shadow-md focus:outline-none focus:ring-2 focus:ring-lime-500 focus:ring-offset-2 transition-all duration-200 ease-in-out transform hover:-translate-y-1 dark:bg-neutral-900 dark:border-neutral-700 dark:hover:bg-neutral-800 dark:focus:ring-offset-neutral-900">
           <%= lucide_icon(category.icon, class: "size-6 mb-2 #{category.color_class || 'stroke-gray-800 dark:stroke-white'}") %>
           <h3 class="text-lg font-semibold font-geist text-gray-800 dark:text-white"><%= category.name %></h3>
+          <div class="mb-1">
+            <span class="inline-flex items-center gap-x-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-opacity-20 <%= category.color_class || 'bg-gray-200 text-gray-800 dark:bg-neutral-800 dark:text-neutral-200' %>" style="background-color:unset;">
+              <span class="font-semibold"><%= category.discussions.count %></span> <span>post<%= 's' if category.discussions.count != 1 %></span>
+            </span>
+          </div>
         </a>
       <% end %>
     </div>
@@ -47,8 +52,13 @@
                 <span class="font-semibold text-sm text-gray-800 dark:text-neutral-200"><%= discussion.user.name %></span>
               </div>
               <%# Timestamp %>
-              <span class="text-xs text-gray-500 dark:text-neutral-500" title="<%= discussion.created_at.strftime('%d %b %Y, %H:%M') %>">
+              <span class="text-xs text-gray-500 dark:text-neutral-500 flex items-center gap-x-2" title="<%= discussion.created_at.strftime('%d %b %Y, %H:%M') %>">
                 <%= time_ago_in_words(discussion.created_at) %> atrás
+                <% if current_user&.is_admin? %>
+                  <%= button_to toggle_pin_discussion_path(discussion), method: :patch, class: 'ml-2', form: { data: { turbo: false } }, title: (discussion.pinned? ? 'Unpin discussion' : 'Pin discussion') do %>
+                    <%= lucide_icon(discussion.pinned? ? 'pin' : 'pin', class: "size-4 #{discussion.pinned? ? 'text-lime-600 fill-lime-600' : 'text-gray-400'}") %>
+                  <% end %>
+                <% end %>
               </span>
             </div>
 
@@ -163,54 +173,13 @@
         <div class="p-4">
           <ul class="space-y-4">
             <%# Mock Data - Discussões Mais Votadas com Avatares %>
-            <% [
-              {
-                id: 4,
-                title: "Deploy de Rails com Kamal",
-                votes: 61,
-                voter_avatars: [
-                  "https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80",
-                  "https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80",
-                  "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80"
-                ]
-              },
-              {
-                id: 1,
-                title: "Qual a melhor forma de aprender Rails?",
-                votes: 42,
-                voter_avatars: [
-                  "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80",
-                  "https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80",
-                  "https://images.unsplash.com/photo-1607556748728-06b145313b57?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80"
-                ]
-              },
-              {
-                id: 2,
-                title: "Hotwire vs React",
-                votes: 29,
-                voter_avatars: [
-                  "https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80",
-                  "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80",
-                  "https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80"
-                ]
-              },
-              {
-                id: 8,
-                title: "Gerenciamento de background jobs",
-                votes: 25,
-                 voter_avatars: [
-                  "https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80",
-                  "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80",
-                  "https://images.unsplash.com/photo-1607556748728-06b145313b57?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80"
-                ]
-              }
-            ].each_with_index do |top_discussion, index| %>
+            <% @top_discussions.each_with_index do |discussion, index| %>
               <li>
-                <a href="#" class="group flex items-start gap-x-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors duration-150">
+                <a href="<%= discussion_path(discussion) %>" class="group flex items-start gap-x-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors duration-150">
                   <div class="text-lg font-semibold text-gray-400 dark:text-neutral-500 group-hover:text-lime-600 dark:group-hover:text-lime-500 w-6 text-center"><%= index + 1 %>º</div>
                   <div class="flex-1">
                     <span class="block text-sm font-medium text-gray-800 dark:text-neutral-200 group-hover:text-lime-700 dark:group-hover:text-lime-400 truncate">
-                      <%= top_discussion[:title] %>
+                      <%= discussion.title %>
                       <%# Badge Hot para o primeiro item %>
                       <% if index == 0 %>
                         <span class="ms-2 inline-flex items-center gap-x-1 py-0.5 px-1.5 rounded-full text-xs font-medium bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-500">
@@ -224,16 +193,18 @@
                         </span>
                       <% end %>
                     </span>
-                    <span class="block text-xs text-gray-500 dark:text-neutral-500 mb-1"><%= top_discussion[:votes] %> votos</span>
-                    <%# Avatares Empilhados %>
+                    <span class="block text-xs text-gray-500 dark:text-neutral-500 mb-1"><%= discussion.upvotes_count %> votos</span>
+                    <%# Avatares Empilhados dos usuários que deram upvote %>
                     <div class="flex -space-x-2 rtl:space-x-reverse">
-                      <% top_discussion[:voter_avatars].each do |avatar_url| %>
-                        <img class="inline-block size-6 rounded-full ring-2 ring-white dark:ring-neutral-900" src="<%= avatar_url %>" alt="Voter avatar">
+                      <% discussion.votes.select { |v| v.value == 1 }.first(5).each do |vote| %>
+                        <% if vote.user&.avatar&.attached? %>
+                          <img class="inline-block size-6 rounded-full ring-2 ring-white dark:ring-neutral-900" src="<%= url_for(vote.user.avatar) %>" alt="Voter avatar">
+                        <% else %>
+                          <div class="inline-flex items-center justify-center size-6 rounded-full bg-gray-500 text-white text-xs font-semibold ring-2 ring-white dark:ring-neutral-900">
+                            <%= user_initials(vote.user) %>
+                          </div>
+                        <% end %>
                       <% end %>
-                      <%# Placeholder para indicar mais avatares, se houver %>
-                      <%# <a class="inline-flex items-center justify-center size-6 rounded-full bg-gray-200 border-2 border-white font-medium text-gray-700 shadow-sm align-middle hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-xs dark:bg-neutral-700 dark:hover:bg-neutral-600 dark:border-neutral-800 dark:text-neutral-400 dark:focus:ring-offset-neutral-900" href="#">
-                        +...
-                      </a> %>
                     </div>
                   </div>
                 </a>

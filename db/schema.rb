@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_21_190138) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_21_191426) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -81,6 +81,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_21_190138) do
     t.bigint "closed_by_id"
     t.string "closure_status"
     t.text "closure_reason"
+    t.bigint "category_id", null: false
+    t.index ["category_id"], name: "index_discussions_on_category_id"
     t.index ["closed_by_id"], name: "index_discussions_on_closed_by_id"
     t.index ["user_id"], name: "index_discussions_on_user_id"
   end
@@ -135,6 +137,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_21_190138) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "answer_marks", "replies"
   add_foreign_key "answer_marks", "users"
+  add_foreign_key "discussions", "categories"
   add_foreign_key "discussions", "users"
   add_foreign_key "discussions", "users", column: "closed_by_id"
   add_foreign_key "reactions", "users"

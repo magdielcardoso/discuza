@@ -2,10 +2,11 @@ class DiscussionsController < ApplicationController
   include ActionView::RecordIdentifier # Necessário para dom_id se usado no controller
 
   # Garante que o usuário esteja logado para as ações que precisam de um usuário
-  before_action :authenticate_user!, only: [ :index, :new, :create, :edit, :update, :destroy, :reopen, :close ]
-  before_action :set_discussion, only: %i[ show edit update destroy reopen close ]
+  before_action :authenticate_user!, only: [ :index, :new, :create, :edit, :update, :destroy, :reopen, :close, :toggle_pin ]
+  before_action :set_discussion, only: %i[ show edit update destroy reopen close toggle_pin ]
   # Garante que apenas o dono possa editar, atualizar, destruir ou fechar/reabrir
   before_action :authorize_discussion_owner!, only: %i[ edit update destroy reopen close ]
+  before_action :authorize_admin!, only: [ :toggle_pin ]
 
   # GET /discussions or /discussions.json
   def index
@@ -119,6 +120,12 @@ class DiscussionsController < ApplicationController
     end
   end
 
+  # PATCH /discussions/:id/toggle_pin
+  def toggle_pin
+    @discussion.update(pinned: !@discussion.pinned)
+    redirect_back fallback_location: root_path, notice: (@discussion.pinned ? "Discuss\u00E3o fixada." : "Discuss\u00E3o desafixada.")
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_discussion
@@ -128,7 +135,7 @@ class DiscussionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def discussion_params
-      params.require(:discussion).permit(:title, :content)
+      params.require(:discussion).permit(:title, :content, :category_id)
     end
 
     # Novos parâmetros permitidos para fechar
@@ -139,5 +146,10 @@ class DiscussionsController < ApplicationController
     # Helper de autorização para o dono da discussão
     def authorize_discussion_owner!
       head :forbidden unless @discussion.user == current_user
+    end
+
+    # Permite apenas admins para certas ações
+    def authorize_admin!
+      head :forbidden unless current_user&.is_admin?
     end
 end
