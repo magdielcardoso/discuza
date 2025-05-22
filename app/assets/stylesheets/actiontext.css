@@ -3,7 +3,7 @@
 */
 
 trix-editor {
-  border: 1px solid #bbb;
+  border: 1px solid #bbbbbb00;
   border-radius: 3px;
   margin: 0;
   padding: 0.4em 0.6em;
@@ -22,9 +22,9 @@ trix-toolbar .trix-button-row {
 trix-toolbar .trix-button-group {
   display: flex;
   margin-bottom: 10px;
-  border: 1px solid #bbb;
-  border-top-color: #ccc;
-  border-bottom-color: #888;
+  border: 1px solid #bbbbbb00;
+  border-top-color: #cccccc00;
+  border-bottom-color: #88888800;
   border-radius: 3px; }
   trix-toolbar .trix-button-group:not(:first-child) {
     margin-left: 1.5vw; }
@@ -49,11 +49,11 @@ trix-toolbar .trix-button {
   margin: 0;
   outline: none;
   border: none;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #dddddd00;
   border-radius: 0;
   background: transparent; }
   trix-toolbar .trix-button:not(:first-child) {
-    border-left: 1px solid #ccc; }
+    border-left: 1px solid #cccccc00; }
   trix-toolbar .trix-button.trix-active {
     background: #cbeefa;
     color: black; }

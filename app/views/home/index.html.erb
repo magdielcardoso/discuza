@@ -349,6 +349,89 @@
       </div>
       <%# Fim Card: Discussões Mais Votadas %>
 
+      <%# Card: Usuários Mais Ativos %>
+      <div class="rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-neutral-800 dark:border-neutral-600">
+        <div class="py-3 px-4 border-b dark:border-neutral-600">
+          <h2 class="text-xl font-semibold font-geist text-black dark:text-white">Usuários Mais Ativos 👥</h2>
+        </div>
+        <div class="p-4">
+          <ul class="space-y-4">
+            <%# Busca usuários mais ativos com base em discussões + respostas %>
+            <% 
+              # Query para encontrar usuários mais ativos
+              active_users = User.joins("LEFT JOIN discussions ON discussions.user_id = users.id")
+                                .joins("LEFT JOIN replies ON replies.user_id = users.id")
+                                .group("users.id")
+                                .select("users.*, 
+                                        COUNT(DISTINCT discussions.id) as discussions_count,
+                                        COUNT(DISTINCT replies.id) as replies_count,
+                                        (COUNT(DISTINCT discussions.id) + COUNT(DISTINCT replies.id)) as total_activity")
+                                .order("total_activity DESC")
+                                .limit(5)
+            %>
+            <% active_users.each_with_index do |user, index| %>
+              <li>
+                <div class="group flex items-center gap-x-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 transition-colors duration-150">
+                  <div class="text-lg font-semibold text-gray-400 dark:text-neutral-500 group-hover:text-lime-600 dark:group-hover:text-lime-500 w-6 text-center"><%= index + 1 %>º</div>
+                  <%# Avatar do usuário %>
+                  <div class="flex-shrink-0">
+                    <% if user.avatar.attached? %>
+                      <img class="inline-block size-10 rounded-full object-cover ring-2 ring-gray-200 dark:ring-neutral-700" src="<%= url_for(user.avatar) %>" alt="<%= user.name %> avatar">
+                    <% else %>
+                      <div class="inline-flex items-center justify-center size-10 rounded-full text-white text-sm font-semibold ring-2 ring-gray-200 dark:ring-neutral-700" style="background-color: var(--color-primary);">
+                        <%= user_initials(user) %>
+                      </div>
+                    <% end %>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-x-2">
+                      <span class="block text-sm font-medium text-gray-800 dark:text-neutral-200 truncate">
+                        <%= user.name %>
+                        <%# Badge MVP para o primeiro colocado %>
+                        <% if index == 0 %>
+                          <span class="ms-2 inline-flex items-center gap-x-1 py-0.5 px-1.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700 dark:bg-yellow-500/10 dark:text-yellow-500">
+                            <%= lucide_icon('crown', class: "flex-shrink-0 size-3") %>
+                            MVP
+                          </span>
+                        <% end %>
+                      </span>
+                    </div>
+                    <div class="flex items-center gap-x-4 text-xs text-gray-500 dark:text-neutral-500">
+                      <span class="flex items-center gap-x-1">
+                        <%= lucide_icon('message-square', class: "flex-shrink-0 size-3") %>
+                        <%= user.discussions_count %> discussões
+                      </span>
+                      <span class="flex items-center gap-x-1">
+                        <%= lucide_icon('reply', class: "flex-shrink-0 size-3") %>
+                        <%= user.replies_count %> respostas
+                      </span>
+                    </div>
+                    <%# Barra de atividade visual %>
+                    <div class="mt-1">
+                      <% 
+                        # Calcula porcentagem baseada no usuário mais ativo
+                        max_activity = active_users.first.total_activity.to_f
+                        activity_percentage = max_activity > 0 ? (user.total_activity.to_f / max_activity * 100).round : 0
+                      %>
+                      <div class="w-full bg-gray-200 rounded-full h-1.5 dark:bg-neutral-700">
+                        <div class="h-1.5 rounded-full transition-all duration-300" style="width: <%= activity_percentage %>%; background-color: var(--color-primary);"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            <% end %>
+            <%# Mensagem se não houver usuários ativos %>
+            <% if active_users.none? %>
+              <li>
+                <p class="text-sm text-gray-500 dark:text-neutral-400 text-center py-4">Nenhum usuário ativo por enquanto.</p>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+      <%# Fim Card: Usuários Mais Ativos %>
+
     </aside>
     <%# Fim Coluna Lateral %>
   </div>
