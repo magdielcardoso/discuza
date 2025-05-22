@@ -150,7 +150,12 @@
             <%# Loop pelas discussões recomendadas do banco de dados %>
             <% @recommended_discussions.each do |rec| %>
               <li>
-                <%= link_to rec.title, discussion_path(rec), class: "text-sm text-gray-700 hover:text-lime-600 dark:text-neutral-300 dark:hover:text-lime-500 font-geist" %>
+                <div class="space-y-1">
+                  <%= link_to rec.title, discussion_path(rec), class: "block text-sm text-gray-700 hover:text-lime-600 dark:text-neutral-300 dark:hover:text-lime-500 font-geist leading-tight" %>
+                  <span class="text-xs text-gray-500 dark:text-neutral-500" title="<%= rec.created_at.strftime('%d %b %Y, %H:%M') %>">
+                    <%= time_ago_in_words(rec.created_at) %> atrás
+                  </span>
+                </div>
               </li>
             <% end %>
             <% if @recommended_discussions.none? %>
