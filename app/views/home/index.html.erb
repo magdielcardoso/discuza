@@ -5,7 +5,7 @@
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
       <%# Loop pelas categorias do banco de dados %>
       <% @categories.each do |category| %>
-        <a href="#" class="block p-4 sm:p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md focus:shadow-md focus:outline-none focus:ring-2 focus:ring-lime-500 focus:ring-offset-2 transition-all duration-200 ease-in-out transform hover:-translate-y-1 dark:bg-neutral-900 dark:border-neutral-700 dark:hover:bg-neutral-800 dark:focus:ring-offset-neutral-900">
+        <a href="#" class="block p-4 sm:p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md focus:shadow-md focus:outline-none focus:ring-2 focus:ring-lime-500 focus:ring-offset-2 transition-all duration-200 ease-in-out transform hover:-translate-y-1 dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700 dark:focus:ring-offset-neutral-800">
           <%= lucide_icon(category.icon, class: "size-6 mb-2 #{category.color_class || 'stroke-gray-800 dark:stroke-white'}") %>
           <h3 class="text-lg font-semibold font-geist text-gray-800 dark:text-white"><%= category.name %></h3>
           <div class="mb-1">
@@ -36,7 +36,7 @@
     <h1 class="text-3xl font-bold font-geist text-black">Discussões Recentes</h1>
     <%# Botão Filtros %>
     <div>
-      <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+      <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:text-white dark:hover:bg-neutral-700">
         <%= lucide_icon('sliders-horizontal', class: "flex-shrink-0 size-4") %>
         Filtros
       </button>
@@ -50,7 +50,7 @@
         <%# Itera sobre as discussões reais %>
         <% @discussions.each do |discussion| %>
           <%# Card de Discussão Redesenhado %>
-          <div class="p-4 md:p-5 rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-neutral-900 dark:border-neutral-700">
+          <div class="p-4 md:p-5 rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-neutral-800 dark:border-neutral-600">
             <%# Header %>
             <div class="flex items-center justify-between mb-3">
               <div class="flex items-center gap-x-3">
@@ -79,6 +79,26 @@
             <h2 class="text-lg font-semibold text-black dark:text-white mb-2">
               <%= link_to discussion.title, discussion_path(discussion), class: "hover:text-lime-600 dark:hover:text-lime-500 transition-colors" %>
             </h2>
+
+            <%# Badge da Categoria %>
+            <div class="mb-3">
+              <% bg_class = case discussion.category.color_class
+                when /lime/ then 'bg-lime-100 text-lime-800 dark:bg-lime-500/10 dark:text-lime-500'
+                when /blue/ then 'bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-500'
+                when /red/ then 'bg-red-100 text-red-800 dark:bg-red-500/10 dark:text-red-500'
+                when /purple/ then 'bg-purple-100 text-purple-800 dark:bg-purple-500/10 dark:text-purple-500'
+                when /yellow/ then 'bg-yellow-100 text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500'
+                when /teal/ then 'bg-teal-100 text-teal-800 dark:bg-teal-500/10 dark:text-teal-500'
+                when /pink/ then 'bg-pink-100 text-pink-800 dark:bg-pink-500/10 dark:text-pink-500'
+                when /indigo/ then 'bg-indigo-100 text-indigo-800 dark:bg-indigo-500/10 dark:text-indigo-500'
+                when /green/ then 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500'
+                else 'bg-gray-100 text-gray-800 dark:bg-neutral-800 dark:text-neutral-300'
+              end %>
+              <span class="inline-flex items-center gap-x-1.5 px-2.5 py-1 rounded-full text-xs font-medium <%= bg_class %>">
+                <%= lucide_icon(discussion.category.icon, class: "flex-shrink-0 size-3") %>
+                <%= discussion.category.name %>
+              </span>
+            </div>
 
             <%# Conteúdo/Snippet (Truncado) %>
             <div class="text-gray-700 dark:text-neutral-300 mb-4 text-sm prose prose-sm dark:prose-invert max-w-none">
@@ -120,8 +140,8 @@
     <%# Coluna Lateral (Aside) - Mantida com Mock Data por enquanto %>
     <aside class="md:col-span-1 space-y-6">
       <%# Card Recomendadas %>
-      <div class="rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-neutral-900 dark:border-neutral-700">
-        <div class="py-3 px-4 border-b dark:border-neutral-700">
+      <div class="rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-neutral-800 dark:border-neutral-600">
+        <div class="py-3 px-4 border-b dark:border-neutral-600">
           <h2 class="text-xl font-semibold font-geist text-black dark:text-white">Recomendadas</h2>
         </div>
         <div class="p-4">
@@ -142,8 +162,8 @@
       </div>
 
       <%# Card Tags Populares %>
-      <div class="rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-neutral-900 dark:border-neutral-700">
-         <div class="py-3 px-4 border-b dark:border-neutral-700">
+      <div class="rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-neutral-800 dark:border-neutral-600">
+         <div class="py-3 px-4 border-b dark:border-neutral-600">
            <h2 class="text-xl font-semibold font-geist text-black dark:text-white">Tags Populares</h2>
          </div>
          <div class="p-4">
@@ -172,8 +192,8 @@
       </div>
 
       <%# Card: Discussões Mais Votadas %>
-      <div class="rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-neutral-900 dark:border-neutral-700">
-        <div class="py-3 px-4 border-b dark:border-neutral-700">
+      <div class="rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-neutral-800 dark:border-neutral-600">
+        <div class="py-3 px-4 border-b dark:border-neutral-600">
           <h2 class="text-xl font-semibold font-geist text-black dark:text-white">Mais Votadas 🔥</h2>
         </div>
         <div class="p-4">
@@ -181,7 +201,7 @@
             <%# Mock Data - Discussões Mais Votadas com Avatares %>
             <% @top_discussions.each_with_index do |discussion, index| %>
               <li>
-                <a href="<%= discussion_path(discussion) %>" class="group flex items-start gap-x-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors duration-150">
+                <a href="<%= discussion_path(discussion) %>" class="group flex items-start gap-x-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 transition-colors duration-150">
                   <div class="text-lg font-semibold text-gray-400 dark:text-neutral-500 group-hover:text-lime-600 dark:group-hover:text-lime-500 w-6 text-center"><%= index + 1 %>º</div>
                   <div class="flex-1">
                     <span class="block text-sm font-medium text-gray-800 dark:text-neutral-200 group-hover:text-lime-700 dark:group-hover:text-lime-400 truncate">
