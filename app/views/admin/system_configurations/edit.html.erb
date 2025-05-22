@@ -1,0 +1,133 @@
+<% content_for :title, "Editar Configurações do Sistema" %>
+
+<div class="max-w-[85rem] px-4 pb-10 sm:px-6 lg:px-8 lg:pb-14 mx-auto mt-8">
+  <div>
+    <%# Header with title and save button %>
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h1 class="text-3xl font-bold font-geist text-black dark:text-white">Editar Configurações do Sistema</h1>
+        <p class="mt-1 text-sm text-gray-600 dark:text-neutral-400">Atualize as configurações gerais da plataforma</p>
+      </div>
+      <%= button_tag "Salvar Alterações", type: :submit, form: "system_config_form", class: "btn btn-primary inline-flex items-center gap-x-2" %>
+    </div>
+
+    <%# Configuration Form %>
+    <%= form_with(model: [@system_configuration], url: admin_system_configuration_path, local: true, html: { id: "system_config_form", class: "space-y-6", multipart: true }) do |form| %>
+      <% if @system_configuration.errors.any? %>
+        <div class="rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-900/20">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <%= lucide_icon('alert-circle', class: "size-5 text-red-400") %>
+            </div>
+            <div class="ml-3">
+              <h3 class="text-sm font-medium text-red-800 dark:text-red-200">
+                <%= pluralize(@system_configuration.errors.count, "erro") %> impediu que as configurações fossem salvas:
+              </h3>
+              <div class="mt-2 text-sm text-red-700 dark:text-red-300">
+                <ul role="list" class="list-disc space-y-1 pl-5">
+                  <% @system_configuration.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <%# Logo Upload Section %>
+      <div class="bg-white border border-gray-200 rounded-lg p-6 dark:bg-neutral-800 dark:border-neutral-600">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Logo do Sistema</h3>
+        
+        <%# Current Logo Display %>
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-2">Logo Atual</label>
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0">
+              <% if @system_configuration.logo.attached? %>
+                <div class="w-24 h-24 border border-gray-200 rounded-lg p-2 bg-gray-50 dark:border-neutral-600 dark:bg-neutral-700 flex items-center justify-center">
+                  <%= image_tag @system_configuration.logo, 
+                      class: "max-w-full max-h-full object-contain", 
+                      alt: "Logo Atual" %>
+                </div>
+              <% else %>
+                <div class="w-24 h-24 border border-gray-200 rounded-lg p-2 bg-gray-50 dark:border-neutral-600 dark:bg-neutral-700 flex items-center justify-center">
+                  <%= image_tag 'logo_dark.svg', 
+                      class: "max-w-full max-h-full object-contain", 
+                      alt: "Logo Padrão" %>
+                </div>
+              <% end %>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600 dark:text-neutral-400">
+                <% if @system_configuration.logo.attached? %>
+                  <span class="font-medium text-green-600 dark:text-green-500">Logo personalizado carregado</span><br>
+                  Arquivo: <%= @system_configuration.logo.filename %><br>
+                  Tamanho: <%= number_to_human_size(@system_configuration.logo.byte_size) %>
+                <% else %>
+                  <span class="font-medium text-gray-500 dark:text-neutral-400">Usando logo padrão</span><br>
+                  Nenhum logo personalizado carregado
+                <% end %>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <%# Logo Upload Field %>
+        <div>
+          <%= form.label :logo, "Novo Logo", class: "block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-2" %>
+          <%= form.file_field :logo, 
+              accept: "image/*",
+              class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-lime-50 file:text-lime-700 hover:file:bg-lime-100 dark:text-neutral-400 dark:file:bg-lime-500/10 dark:file:text-lime-500 dark:hover:file:bg-lime-500/20" %>
+          <p class="mt-1 text-xs text-gray-500 dark:text-neutral-400">
+            Formatos aceitos: JPEG, PNG, GIF, SVG, WebP. Tamanho máximo: 2MB.
+          </p>
+        </div>
+      </div>
+
+      <%# Basic Information Section %>
+      <div class="bg-white border border-gray-200 rounded-lg p-6 dark:bg-neutral-800 dark:border-neutral-600">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Informações Básicas</h3>
+        
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <%# Site Name %>
+          <div class="sm:col-span-2">
+            <%= form.label :site_name, "Nome do Site", class: "block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-2" %>
+            <%= form.text_field :site_name, 
+                class: "block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-lime-500 focus:outline-none focus:ring-1 focus:ring-lime-500 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:focus:border-lime-500",
+                placeholder: "Ex: DevConnect, MeuSite..." %>
+          </div>
+
+          <%# Contact Email %>
+          <div class="sm:col-span-2">
+            <%= form.label :contact_email, "Email de Contato", class: "block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-2" %>
+            <%= form.email_field :contact_email, 
+                class: "block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-lime-500 focus:outline-none focus:ring-1 focus:ring-lime-500 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:focus:border-lime-500",
+                placeholder: "admin@seudominio.com" %>
+          </div>
+
+          <%# Site Description %>
+          <div class="sm:col-span-2">
+            <%= form.label :site_description, "Descrição do Site", class: "block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-2" %>
+            <%= form.text_area :site_description, 
+                rows: 4,
+                class: "block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-lime-500 focus:outline-none focus:ring-1 focus:ring-lime-500 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:focus:border-lime-500",
+                placeholder: "Descreva o propósito e objetivo da sua plataforma..." %>
+            <p class="mt-1 text-xs text-gray-500 dark:text-neutral-400">
+              Máximo de 500 caracteres
+            </p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <%# Action Links %>
+    <div class="flex items-center justify-between mt-6">
+      <%= link_to "← Voltar", admin_system_configuration_path, class: "text-sm text-gray-600 hover:text-gray-900 dark:text-neutral-400 dark:hover:text-neutral-200 transition-colors" %>
+      
+      <div class="text-xs text-gray-500 dark:text-neutral-400">
+        As alterações serão aplicadas imediatamente após salvar
+      </div>
+    </div>
+  </div>
+</div>

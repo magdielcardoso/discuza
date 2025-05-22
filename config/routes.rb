@@ -32,6 +32,11 @@ Rails.application.routes.draw do
 
   patch "discussions/:id/toggle_pin", to: "discussions#toggle_pin", as: "toggle_pin_discussion"
 
+  # Admin routes (protected by authentication and admin check)
+  namespace :admin do
+    resource :system_configuration, only: [ :show, :edit, :update ]
+  end
+
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker

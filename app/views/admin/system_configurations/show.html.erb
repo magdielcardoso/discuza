@@ -1,0 +1,95 @@
+<% content_for :title, "Configurações do Sistema" %>
+
+<div class="max-w-[85rem] px-4 pb-10 sm:px-6 lg:px-8 lg:pb-14 mx-auto mt-8">
+  <div>
+    <%# Header with title and edit button %>
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h1 class="text-3xl font-bold font-geist text-black dark:text-white">Configurações do Sistema</h1>
+        <p class="mt-1 text-sm text-gray-600 dark:text-neutral-400">Gerencie as configurações gerais da plataforma</p>
+      </div>
+      <%= link_to edit_admin_system_configuration_path, class: "btn btn-primary inline-flex items-center gap-x-2" do %>
+        <%= lucide_icon('settings', class: "flex-shrink-0 size-4") %>
+        Editar Configurações
+      <% end %>
+    </div>
+
+    <%# Current Configuration Display %>
+    <div class="grid gap-6">
+      <%# Logo Section %>
+      <div class="bg-white border border-gray-200 rounded-lg p-6 dark:bg-neutral-800 dark:border-neutral-600">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Logo do Sistema</h3>
+        <div class="flex items-start gap-4">
+          <div class="flex-shrink-0">
+            <% if @system_configuration.logo.attached? %>
+              <div class="w-24 h-24 border border-gray-200 rounded-lg p-2 bg-gray-50 dark:border-neutral-600 dark:bg-neutral-700 flex items-center justify-center">
+                <%= image_tag @system_configuration.logo, 
+                    class: "max-w-full max-h-full object-contain", 
+                    alt: "Logo do Sistema" %>
+              </div>
+            <% else %>
+              <div class="w-24 h-24 border border-gray-200 rounded-lg p-2 bg-gray-50 dark:border-neutral-600 dark:bg-neutral-700 flex items-center justify-center">
+                <%= image_tag 'logo_dark.svg', 
+                    class: "max-w-full max-h-full object-contain", 
+                    alt: "Logo Padrão" %>
+              </div>
+            <% end %>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600 dark:text-neutral-400">
+              <% if @system_configuration.logo.attached? %>
+                <span class="font-medium text-green-600 dark:text-green-500">Logo personalizado carregado</span><br>
+                Arquivo: <%= @system_configuration.logo.filename %><br>
+                Tamanho: <%= number_to_human_size(@system_configuration.logo.byte_size) %>
+              <% else %>
+                <span class="font-medium text-gray-500 dark:text-neutral-400">Usando logo padrão</span><br>
+                Faça upload de um logo personalizado para substituir o padrão
+              <% end %>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <%# Basic Information %>
+      <div class="bg-white border border-gray-200 rounded-lg p-6 dark:bg-neutral-800 dark:border-neutral-600">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Informações Básicas</h3>
+        <dl class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <dt class="text-sm font-medium text-gray-500 dark:text-neutral-400">Nome do Site</dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-white font-medium"><%= @system_configuration.site_name %></dd>
+          </div>
+          <div>
+            <dt class="text-sm font-medium text-gray-500 dark:text-neutral-400">Email de Contato</dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-white font-medium"><%= @system_configuration.contact_email %></dd>
+          </div>
+          <div class="sm:col-span-2">
+            <dt class="text-sm font-medium text-gray-500 dark:text-neutral-400">Descrição do Site</dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-white"><%= @system_configuration.site_description %></dd>
+          </div>
+        </dl>
+      </div>
+
+      <%# System Information %>
+      <div class="bg-white border border-gray-200 rounded-lg p-6 dark:bg-neutral-800 dark:border-neutral-600">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Informações do Sistema</h3>
+        <dl class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <dt class="text-sm font-medium text-gray-500 dark:text-neutral-400">Última Atualização</dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-white">
+              <%= @system_configuration.updated_at.strftime('%d/%m/%Y às %H:%M') %>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-sm font-medium text-gray-500 dark:text-neutral-400">ID da Configuração</dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-white font-mono">#<%= @system_configuration.id %></dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <%# Back link %>
+    <div class="mt-6">
+      <%= link_to "← Voltar ao Dashboard", root_path, class: "text-sm text-gray-600 hover:text-gray-900 dark:text-neutral-400 dark:hover:text-neutral-200 transition-colors" %>
+    </div>
+  </div>
+</div>

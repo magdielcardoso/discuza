@@ -4,7 +4,15 @@
     <div class="me-5 flex items-center">
       <!-- Logo -->
       <%= link_to root_path, class: "flex items-center focus:outline-none focus:opacity-80" do %>
-        <%= image_tag 'logo_dark.svg', alt: 'Discuza Logo', class: "h-10 w-auto" %>
+        <% 
+          # Get system configuration and check for custom logo
+          system_config = SystemConfiguration.instance
+          if system_config.logo.attached?
+        %>
+          <%= image_tag system_config.logo, alt: system_config.site_name, class: "h-10 w-auto object-contain" %>
+        <% else %>
+          <%= image_tag 'logo_dark.svg', alt: 'Discuza Logo', class: "h-10 w-auto" %>
+        <% end %>
       <% end %>
       <!-- End Logo -->
     </div>
@@ -80,6 +88,14 @@
               <%= lucide_icon('settings', class: "shrink-0 size-4") %>
               Editar Perfil
             <% end %>
+            <% if current_user.is_admin? %>
+              <div class="border-t border-gray-200 dark:border-neutral-600 my-1"></div>
+              <%= link_to admin_system_configuration_path, class: "flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300" do %>
+                <%= lucide_icon('shield-check', class: "shrink-0 size-4") %>
+                Configurações do Sistema
+              <% end %>
+            <% end %>
+            <div class="border-t border-gray-200 dark:border-neutral-600 my-1"></div>
             <%= link_to destroy_user_session_path, data: { turbo_method: :delete }, class: "flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-red-600 hover:bg-red-50 focus:outline-none focus:bg-red-50 dark:text-red-500 dark:hover:bg-neutral-700 dark:hover:text-red-400 dark:focus:bg-neutral-700 dark:focus:text-red-400" do %>
               <%= lucide_icon('log-out', class: "shrink-0 size-4") %>
               Sair
