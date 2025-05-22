@@ -8,7 +8,7 @@
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
       <%# Loop pelas categorias do banco de dados %>
       <% @categories.each do |category| %>
-        <a href="#" class="block p-4 sm:p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md focus:shadow-md focus:outline-none focus:ring-2 focus:ring-lime-500 focus:ring-offset-2 transition-all duration-200 ease-in-out transform hover:-translate-y-1 dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700 dark:focus:ring-offset-neutral-800">
+        <%= link_to category_path(category), class: "block p-4 sm:p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md focus:shadow-md focus:outline-none focus:ring-2 focus:ring-lime-500 focus:ring-offset-2 transition-all duration-200 ease-in-out transform hover:-translate-y-1 dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700 dark:focus:ring-offset-neutral-800" do %>
           <%= lucide_icon(category.icon, class: "size-6 mb-2 #{category.color_class || 'stroke-gray-800 dark:stroke-white'}") %>
           <h3 class="text-lg font-semibold font-geist text-gray-800 dark:text-white"><%= category.name %></h3>
           <div class="mb-1">
@@ -29,7 +29,7 @@
               <span class="font-semibold"><%= category.discussions.count %></span> <span>post<%= 's' if category.discussions.count != 1 %></span>
             </span>
           </div>
-        </a>
+        <% end %>
       <% end %>
     </div>
   </div>
