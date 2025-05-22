@@ -1,7 +1,10 @@
 <div class="max-w-[85rem] px-4 pb-10 sm:px-6 lg:px-8 lg:pb-14 mx-auto">
   <%# Seção de Categorias %>
   <div class="mb-8">
-    <h2 class="text-2xl font-semibold font-geist text-gray-800 dark:text-white mb-5 mt-8">Navegar por Categoria</h2>
+    <div class="flex justify-between items-center mb-5 mt-8">
+      <h2 class="text-2xl font-semibold font-geist text-gray-800 dark:text-white">Navegar por Categoria</h2>
+      <%= link_to "Ver todas", categories_path, class: "text-sm font-medium text-lime-600 hover:text-lime-700 dark:text-lime-500 dark:hover:text-lime-400 transition-colors" %>
+    </div>
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
       <%# Loop pelas categorias do banco de dados %>
       <% @categories.each do |category| %>
