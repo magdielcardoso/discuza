@@ -1,7 +1,12 @@
 class HomeController < ApplicationController
     def index
         # Busca discussões recentes, incluindo autor e conteúdo rich_text para eficiência
-        @discussions = Discussion.includes(:user).with_rich_text_content.order(pinned: :desc, updated_at: :desc)
+        # Implementa paginação com 10 discussões por página
+        @discussions = Discussion.includes(:user, :category, :votes)
+                                .with_rich_text_content
+                                .order(pinned: :desc, updated_at: :desc)
+                                .page(params[:page])
+
         @categories = Category.all
         @recommended_discussions = Discussion.order(created_at: :desc).limit(4)
         # Busca as discussões mais votadas (upvotes)
