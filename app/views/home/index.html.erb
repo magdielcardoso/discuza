@@ -1,7 +1,7 @@
 <div class="max-w-[85rem] px-4 pb-10 sm:px-6 lg:px-8 lg:pb-14 mx-auto">
   <%# Seção de Categorias %>
   <div class="mb-8">
-    <h2 class="text-2xl font-semibold font-geist text-gray-800 dark:text-black mb-5 mt-8">Navegar por Categoria</h2>
+    <h2 class="text-2xl font-semibold font-geist text-gray-800 dark:text-white mb-5 mt-8">Navegar por Categoria</h2>
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
       <%# Loop pelas categorias do banco de dados %>
       <% @categories.each do |category| %>
@@ -32,8 +32,8 @@
   </div>
   <%# Fim Seção de Categorias %>
 
-  <div class="flex justify-between items-center mb-6">
-    <h1 class="text-3xl font-bold font-geist text-black">Discussões Recentes</h1>
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-3xl font-bold font-geist text-black dark:text-white">Discussões Recentes</h1>
     <%# Botão Filtros %>
     <div>
       <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:text-white dark:hover:bg-neutral-700">
@@ -51,53 +51,44 @@
         <% @discussions.each do |discussion| %>
           <%# Card de Discussão Redesenhado %>
           <div class="p-4 md:p-5 rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-neutral-800 dark:border-neutral-600">
-            <%# Header %>
-            <div class="flex items-center justify-between mb-3">
-              <div class="flex items-center gap-x-3">
-                <%# Avatar/Iniciais do Autor %>
-                <% if discussion.user.avatar.attached? %>
-                  <img class="inline-block size-8 rounded-full object-cover" src="<%= url_for(discussion.user.avatar) %>" alt="<%= discussion.user.name %> avatar">
-                <% else %>
-                  <div class="inline-flex items-center justify-center size-8 rounded-full bg-gray-500 text-white text-xs font-semibold">
-                    <%= user_initials(discussion.user) %>
-                  </div>
-                <% end %>
-                <span class="font-semibold text-sm text-gray-800 dark:text-neutral-200"><%= discussion.user.name %></span>
+            <%# Header com Título e Badge %>
+            <div class="flex items-start justify-between mb-3">
+              <div class="flex-1">
+                <%# Título e Badge na mesma linha %>
+                <div class="flex items-center gap-x-3 mb-2">
+                  <h2 class="text-lg font-semibold text-black dark:text-white">
+                    <%= link_to discussion.title, discussion_path(discussion), class: "hover:text-lime-600 dark:hover:text-lime-500 transition-colors" %>
+                  </h2>
+                  <%# Badge da Categoria %>
+                  <% bg_class = case discussion.category.color_class
+                    when /lime/ then 'bg-lime-100 text-lime-800 dark:bg-lime-500/10 dark:text-lime-500'
+                    when /blue/ then 'bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-500'
+                    when /red/ then 'bg-red-100 text-red-800 dark:bg-red-500/10 dark:text-red-500'
+                    when /purple/ then 'bg-purple-100 text-purple-800 dark:bg-purple-500/10 dark:text-purple-500'
+                    when /yellow/ then 'bg-yellow-100 text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500'
+                    when /teal/ then 'bg-teal-100 text-teal-800 dark:bg-teal-500/10 dark:text-teal-500'
+                    when /pink/ then 'bg-pink-100 text-pink-800 dark:bg-pink-500/10 dark:text-pink-500'
+                    when /indigo/ then 'bg-indigo-100 text-indigo-800 dark:bg-indigo-500/10 dark:text-indigo-500'
+                    when /green/ then 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500'
+                    else 'bg-gray-100 text-gray-800 dark:bg-neutral-800 dark:text-neutral-300'
+                  end %>
+                  <span class="inline-flex items-center gap-x-1.5 px-2.5 py-1 rounded-full text-xs font-medium <%= bg_class %>">
+                    <%= lucide_icon(discussion.category.icon, class: "flex-shrink-0 size-3") %>
+                    <%= discussion.category.name %>
+                  </span>
+                </div>
               </div>
-              <%# Timestamp %>
-              <span class="text-xs text-gray-500 dark:text-neutral-500 flex items-center gap-x-2" title="<%= discussion.created_at.strftime('%d %b %Y, %H:%M') %>">
-                <%= time_ago_in_words(discussion.created_at) %> atrás
+              <%# Timestamp e Pin (se admin) %>
+              <div class="flex items-center gap-x-2">
+                <span class="text-xs text-gray-500 dark:text-neutral-500" title="<%= discussion.created_at.strftime('%d %b %Y, %H:%M') %>">
+                  <%= time_ago_in_words(discussion.created_at) %> atrás
+                </span>
                 <% if current_user&.is_admin? %>
-                  <%= button_to toggle_pin_discussion_path(discussion), method: :patch, class: 'ml-2', form: { data: { turbo: false } }, title: (discussion.pinned? ? 'Unpin discussion' : 'Pin discussion') do %>
+                  <%= button_to toggle_pin_discussion_path(discussion), method: :patch, class: 'ml-1', form: { data: { turbo: false } }, title: (discussion.pinned? ? 'Unpin discussion' : 'Pin discussion') do %>
                     <%= lucide_icon(discussion.pinned? ? 'pin' : 'pin', class: "size-4 #{discussion.pinned? ? 'text-lime-600 fill-lime-600' : 'text-gray-400'}") %>
                   <% end %>
                 <% end %>
-              </span>
-            </div>
-
-            <%# Título Linkado %>
-            <h2 class="text-lg font-semibold text-black dark:text-white mb-2">
-              <%= link_to discussion.title, discussion_path(discussion), class: "hover:text-lime-600 dark:hover:text-lime-500 transition-colors" %>
-            </h2>
-
-            <%# Badge da Categoria %>
-            <div class="mb-3">
-              <% bg_class = case discussion.category.color_class
-                when /lime/ then 'bg-lime-100 text-lime-800 dark:bg-lime-500/10 dark:text-lime-500'
-                when /blue/ then 'bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-500'
-                when /red/ then 'bg-red-100 text-red-800 dark:bg-red-500/10 dark:text-red-500'
-                when /purple/ then 'bg-purple-100 text-purple-800 dark:bg-purple-500/10 dark:text-purple-500'
-                when /yellow/ then 'bg-yellow-100 text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500'
-                when /teal/ then 'bg-teal-100 text-teal-800 dark:bg-teal-500/10 dark:text-teal-500'
-                when /pink/ then 'bg-pink-100 text-pink-800 dark:bg-pink-500/10 dark:text-pink-500'
-                when /indigo/ then 'bg-indigo-100 text-indigo-800 dark:bg-indigo-500/10 dark:text-indigo-500'
-                when /green/ then 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500'
-                else 'bg-gray-100 text-gray-800 dark:bg-neutral-800 dark:text-neutral-300'
-              end %>
-              <span class="inline-flex items-center gap-x-1.5 px-2.5 py-1 rounded-full text-xs font-medium <%= bg_class %>">
-                <%= lucide_icon(discussion.category.icon, class: "flex-shrink-0 size-3") %>
-                <%= discussion.category.name %>
-              </span>
+              </div>
             </div>
 
             <%# Conteúdo/Snippet (Truncado) %>
@@ -118,9 +109,19 @@
                   <%= lucide_icon('message-circle', class: "flex-shrink-0 size-4") %>
                   <%= discussion.replies.count %> <%# Contagem real de respostas %>
                 </span>
-                <%# Likes (Placeholder Removido) %>
               </div>
-              <%# Views (Placeholder Removido) %>
+              <%# Autor no canto direito %>
+              <div class="flex items-center gap-x-2">
+                <%# Avatar/Iniciais do Autor %>
+                <% if discussion.user.avatar.attached? %>
+                  <img class="inline-block size-6 rounded-full object-cover" src="<%= url_for(discussion.user.avatar) %>" alt="<%= discussion.user.name %> avatar">
+                <% else %>
+                  <div class="inline-flex items-center justify-center size-6 rounded-full bg-gray-500 text-white text-xs font-semibold">
+                    <%= user_initials(discussion.user) %>
+                  </div>
+                <% end %>
+                <span class="font-medium text-xs text-gray-700 dark:text-neutral-300"><%= discussion.user.name %></span>
+              </div>
             </div>
           </div>
           <%# Fim Card Redesenhado %>

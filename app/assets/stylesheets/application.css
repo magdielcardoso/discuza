@@ -124,3 +124,31 @@ a:hover {
 .btn-danger:hover svg {
   transform: scale(1.1); /* Efeito de crescimento para perigo */
 }
+
+/* Dark Mode Styles */
+@media (prefers-color-scheme: dark) {
+  html, body {
+    background-color: #212121; /* neutral-800 equivalent - dark but not 100% black */
+    color: #f3f4f6; /* neutral-100 equivalent for text */
+  }
+}
+
+/* Dark mode when dark class is applied to html */
+html.dark, html.dark body {
+  background-color: #1f2937; /* neutral-800 equivalent - dark but not 100% black */
+  color: #f3f4f6; /* neutral-100 equivalent for text */
+}
+
+/* Ensure proper text contrast in dark mode */
+html.dark h1, html.dark h2, html.dark h3, html.dark h4, html.dark h5, html.dark h6 {
+  color: #ffffff; /* white text for headings in dark mode */
+}
+
+/* Dark mode link adjustments */
+html.dark a {
+  color: #84cc16; /* lime-500 for better visibility in dark mode */
+}
+
+html.dark a:hover {
+  color: #a3e635; /* lime-400 - lighter on hover in dark mode */
+}
