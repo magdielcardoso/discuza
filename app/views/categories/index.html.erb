@@ -1,13 +1,44 @@
 <div class="max-w-[85rem] px-4 pb-10 sm:px-6 lg:px-8 lg:pb-14 mx-auto">
-  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 w-full mt-8">
-    <% @categories.each do |category| %>
-      <%= link_to category_path(category), class: "block p-4 sm:p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md focus:shadow-md focus:outline-none focus:ring-2 focus:ring-lime-500 focus:ring-offset-2 transition-all duration-200 ease-in-out transform hover:-translate-y-1 dark:bg-neutral-900 dark:border-neutral-700 dark:hover:bg-neutral-800 dark:focus:ring-offset-neutral-900" do %>
-        <%= lucide_icon(category.icon, class: "size-7 mb-2 #{category.color_class || 'stroke-gray-800 dark:stroke-white'}") %>
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-1"><%= category.name %></h3>
-        <div class="text-sm text-gray-500 dark:text-neutral-400 mb-1">
-          <%= pluralize(category.discussions.count, 'post') %>
-        </div>
+  <%# Header with admin controls %>
+  <div class="flex justify-between items-center mb-6 mt-8">
+    <h1 class="text-3xl font-bold font-geist text-black dark:text-white">Todas as Categorias</h1>
+    <% if current_user&.is_admin? %>
+      <%= link_to new_category_path, class: "btn btn-primary inline-flex items-center gap-x-2" do %>
+        <%= lucide_icon('plus', class: "flex-shrink-0 size-4") %>
+        Nova Categoria
       <% end %>
+    <% end %>
+  </div>
+
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 w-full">
+    <% @categories.each do |category| %>
+      <div class="relative block p-4 sm:p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md focus:shadow-md focus:outline-none focus:ring-2 focus:ring-lime-500 focus:ring-offset-2 transition-all duration-200 ease-in-out transform hover:-translate-y-1 dark:bg-neutral-900 dark:border-neutral-700 dark:hover:bg-neutral-800 dark:focus:ring-offset-neutral-900">
+        <%# Admin controls %>
+        <% if current_user&.is_admin? %>
+          <div class="absolute top-2 right-2 flex gap-1">
+            <%= link_to edit_category_path(category), class: "p-1 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors", title: "Editar categoria" do %>
+              <%= lucide_icon('edit-3', class: "size-4") %>
+            <% end %>
+            <%= link_to category_path(category), method: :delete, 
+                data: { 
+                  confirm: "Tem certeza que deseja excluir a categoria '#{category.name}'?",
+                  turbo_method: :delete
+                }, 
+                class: "p-1 text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors", 
+                title: "Excluir categoria" do %>
+              <%= lucide_icon('trash-2', class: "size-4") %>
+            <% end %>
+          </div>
+        <% end %>
+        
+        <%= link_to category_path(category), class: "block" do %>
+          <%= lucide_icon(category.icon, class: "size-7 mb-2 #{category.color_class || 'stroke-gray-800 dark:stroke-white'}") %>
+          <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-1"><%= category.name %></h3>
+          <div class="text-sm text-gray-500 dark:text-neutral-400 mb-1">
+            <%= pluralize(category.discussions.count, 'post') %>
+          </div>
+        <% end %>
+      </div>
     <% end %>
     <% if @categories.none? %>
       <div class="col-span-full text-center text-gray-500 dark:text-neutral-400 py-10">Nenhuma categoria cadastrada ainda.</div>

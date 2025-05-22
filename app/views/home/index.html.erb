@@ -3,11 +3,11 @@
   <div class="mb-8">
     <div class="flex justify-between items-center mb-2 mt-8">
       <h2 class="text-2xl font-semibold font-geist text-gray-800 dark:text-white">Navegar por Categoria</h2>
-      <%= link_to "Ver todas", categories_path, class: "text-sm font-medium text-lime-600 hover:text-lime-700 dark:text-lime-500 dark:hover:text-lime-400 transition-colors" %>
+      <%= link_to "Ver todas (#{@categories.count})", categories_path, class: "text-sm font-medium text-lime-600 hover:text-lime-700 dark:text-lime-500 dark:hover:text-lime-400 transition-colors" %>
     </div>
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-      <%# Loop pelas categorias do banco de dados %>
-      <% @categories.each do |category| %>
+      <%# Loop pelas top 4 categorias com mais posts %>
+      <% @categories.joins(:discussions).group('categories.id').order('COUNT(discussions.id) DESC').limit(4).each do |category| %>
         <%= link_to category_path(category), class: "block p-4 sm:p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md focus:shadow-md focus:outline-none focus:ring-2 focus:ring-lime-500 focus:ring-offset-2 transition-all duration-200 ease-in-out transform hover:-translate-y-1 dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700 dark:focus:ring-offset-neutral-800" do %>
           <%= lucide_icon(category.icon, class: "size-6 mb-2 #{category.color_class || 'stroke-gray-800 dark:stroke-white'}") %>
           <h3 class="text-lg font-semibold font-geist text-gray-800 dark:text-white"><%= category.name %></h3>
@@ -309,7 +309,7 @@
                   <div class="text-lg font-semibold text-gray-400 dark:text-neutral-500 group-hover:text-lime-600 dark:group-hover:text-lime-500 w-6 text-center"><%= index + 1 %>º</div>
                   <div class="flex-1">
                     <span class="block text-sm font-medium text-gray-800 dark:text-neutral-200 group-hover:text-lime-700 dark:group-hover:text-lime-400 truncate">
-                      <%= discussion.title %>
+                      <%= truncate(discussion.title, length: 40) %>
                       <%# Badge Hot para o primeiro item %>
                       <% if index == 0 %>
                         <span class="ms-2 inline-flex items-center gap-x-1 py-0.5 px-1.5 rounded-full text-xs font-medium bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-500">

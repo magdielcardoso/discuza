@@ -1,0 +1,110 @@
+<%= form_with(model: category, local: true, html: { id: form_id, class: "space-y-6" }) do |form| %>
+  <% if category.errors.any? %>
+    <div class="rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-900/20">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <%= lucide_icon('alert-circle', class: "size-5 text-red-400") %>
+        </div>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-red-800 dark:text-red-200">
+            <%= pluralize(category.errors.count, "erro") %> impediu que esta categoria fosse salva:
+          </h3>
+          <div class="mt-2 text-sm text-red-700 dark:text-red-300">
+            <ul role="list" class="list-disc space-y-1 pl-5">
+              <% category.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+    <%# Campo Nome %>
+    <div class="sm:col-span-2">
+      <%= form.label :name, "Nome da Categoria", class: "block text-sm font-medium text-gray-900 dark:text-white mb-2" %>
+      <%= form.text_field :name, 
+          class: "block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-lime-500 focus:outline-none focus:ring-1 focus:ring-lime-500 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:focus:border-lime-500",
+          placeholder: "Ex: Desenvolvimento Web, Design, Marketing..." %>
+    </div>
+
+    <%# Campo Ícone %>
+    <div>
+      <%= form.label :icon, "Ícone (Lucide)", class: "block text-sm font-medium text-gray-900 dark:text-white mb-2" %>
+      <%= form.text_field :icon, 
+          class: "block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-lime-500 focus:outline-none focus:ring-1 focus:ring-lime-500 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:focus:border-lime-500",
+          placeholder: "Ex: code, palette, megaphone..." %>
+      <p class="mt-1 text-xs text-gray-500 dark:text-neutral-400">
+        Consulte os ícones disponíveis em <a href="https://lucide.dev/icons/" target="_blank" class="text-lime-600 hover:text-lime-700 dark:text-lime-500 dark:hover:text-lime-400">lucide.dev</a>
+      </p>
+    </div>
+
+    <%# Campo Classe de Cor %>
+    <div>
+      <%= form.label :color_class, "Classe de Cor", class: "block text-sm font-medium text-gray-900 dark:text-white mb-2" %>
+      <%= form.select :color_class, 
+          options_for_select([
+            ['Verde Lima', 'stroke-lime-600 dark:stroke-lime-500'],
+            ['Azul', 'stroke-blue-600 dark:stroke-blue-500'],
+            ['Vermelho', 'stroke-red-600 dark:stroke-red-500'],
+            ['Roxo', 'stroke-purple-600 dark:stroke-purple-500'],
+            ['Amarelo', 'stroke-yellow-600 dark:stroke-yellow-500'],
+            ['Verde-azulado', 'stroke-teal-600 dark:stroke-teal-500'],
+            ['Rosa', 'stroke-pink-600 dark:stroke-pink-500'],
+            ['Índigo', 'stroke-indigo-600 dark:stroke-indigo-500'],
+            ['Verde', 'stroke-green-600 dark:stroke-green-500'],
+            ['Cinza', 'stroke-gray-600 dark:stroke-gray-400']
+          ], category.color_class),
+          { prompt: 'Selecione uma cor...' },
+          { class: "block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-lime-500 focus:outline-none focus:ring-1 focus:ring-lime-500 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:focus:border-lime-500" } %>
+    </div>
+  </div>
+
+  <%# Preview da Categoria %>
+  <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-neutral-600 dark:bg-neutral-800">
+    <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-3">Preview da Categoria:</h4>
+    <div class="inline-block p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-neutral-900 dark:border-neutral-700">
+      <div id="preview-icon" class="size-6 mb-2">
+        <% if category.icon.present? && category.color_class.present? %>
+          <%= lucide_icon(category.icon, class: "size-6 #{category.color_class}") %>
+        <% else %>
+          <%= lucide_icon('folder', class: "size-6 stroke-gray-400") %>
+        <% end %>
+      </div>
+      <h3 id="preview-name" class="text-lg font-semibold text-gray-800 dark:text-white">
+        <%= category.name.presence || "Nome da Categoria" %>
+      </h3>
+    </div>
+  </div>
+<% end %>
+
+<script>
+  // JavaScript para atualizar o preview em tempo real
+  document.addEventListener('DOMContentLoaded', function() {
+    const nameField = document.getElementById('<%= "#{form_id}_name" %>');
+    const iconField = document.getElementById('<%= "#{form_id}_icon" %>');
+    const colorField = document.getElementById('<%= "#{form_id}_color_class" %>');
+    
+    const previewName = document.getElementById('preview-name');
+    const previewIcon = document.getElementById('preview-icon');
+    
+    function updatePreview() {
+      // Atualiza nome
+      const name = nameField.value || 'Nome da Categoria';
+      previewName.textContent = name;
+      
+      // Atualiza ícone
+      const icon = iconField.value || 'folder';
+      const colorClass = colorField.value || 'stroke-gray-400';
+      
+      previewIcon.innerHTML = `<svg class="size-6 ${colorClass}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><use href="#lucide-${icon}"></use></svg>`;
+    }
+    
+    // Adiciona listeners
+    if (nameField) nameField.addEventListener('input', updatePreview);
+    if (iconField) iconField.addEventListener('input', updatePreview);
+    if (colorField) colorField.addEventListener('change', updatePreview);
+  });
+</script> 
