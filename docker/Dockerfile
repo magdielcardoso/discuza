@@ -55,11 +55,18 @@ FROM base
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /rails /rails
 
-# Run and own only the runtime files as a non-root user for security
-RUN groupadd --system --gid 1000 rails && \
-    useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp
-USER 1000:1000
+# Ensure storage directories exist with proper permissions
+RUN mkdir -p storage tmp/cache tmp/pids tmp/sockets tmp/storage log && \
+    mkdir -p public/uploads public/assets
+
+# Set full permissions for all directories (running as root)
+RUN chmod -R 755 /rails && \
+    chmod -R 777 storage tmp log && \
+    chmod -R 755 app config public bin && \
+    chmod +x bin/*
+
+# Create volume mount points for persistent storage
+VOLUME ["/rails/storage", "/rails/tmp", "/rails/log"]
 
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
