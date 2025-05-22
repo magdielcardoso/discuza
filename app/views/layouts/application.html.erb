@@ -23,6 +23,24 @@
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    
+    <%# Dynamic theme color variables %>
+    <% 
+      begin
+        system_config = SystemConfiguration.instance
+        color_vars = system_config.primary_color_variables
+    %>
+    <style>
+      :root {
+        --color-primary: <%= color_vars[:primary] %>;
+        --color-primary-dark: <%= color_vars[:primary_dark] %>;
+        --color-primary-light: <%= color_vars[:primary_light] %>;
+      }
+    </style>
+    <% rescue => e %>
+      <!-- System configuration not available, using defaults -->
+    <% end %>
+    
     <%= javascript_importmap_tags %>
   </head>
 

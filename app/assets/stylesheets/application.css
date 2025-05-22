@@ -9,6 +9,13 @@
  * Consider organizing styles into separate files for maintainability.
  */
 
+/* CSS Custom Properties for Dynamic Theming */
+:root {
+  --color-primary: #84cc16;      /* Default lime-500 */
+  --color-primary-dark: #65a30d; /* Default lime-600 */
+  --color-primary-light: #a3e635; /* Default lime-400 */
+}
+
 /* Apply Geist font to headings */
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Space Grotesk', sans-serif;
@@ -21,13 +28,13 @@ h3 { font-size: 1.25rem; font-weight: 600; }   /* Era 1.5rem */
 
 /* Links */
 a {
-  color: #65a30d; /* Tom de lime mais escuro (equivalente a lime-600) */
+  color: var(--color-primary-dark); /* Dynamic primary dark color */
   text-decoration: none; /* Remover sublinhado padrão */
   transition: color 0.2s ease-in-out;
 }
 
 a:hover {
-  color: #84cc16; /* primary (lime-500) - clareia no hover */
+  color: var(--color-primary); /* Dynamic primary color - clareia no hover */
   text-decoration: underline;
 }
 
@@ -47,14 +54,14 @@ a:hover {
 }
 
 .btn-primary {
-  background-color: #84cc16; /* primary */
+  background-color: var(--color-primary); /* Dynamic primary color */
   color: #ffffff; /* white para contraste */
-  border-color: #84cc16;
+  border-color: var(--color-primary);
 }
 
 .btn-primary:hover {
-  background-color: #a3e635; /* accent */
-  border-color: #a3e635;
+  background-color: var(--color-primary-light); /* Dynamic primary light color */
+  border-color: var(--color-primary-light);
   color: #111827; /* Cor do texto mais escura (text_on_light) para contraste */
 }
 
@@ -146,9 +153,9 @@ html.dark h1, html.dark h2, html.dark h3, html.dark h4, html.dark h5, html.dark 
 
 /* Dark mode link adjustments */
 html.dark a {
-  color: #84cc16; /* lime-500 for better visibility in dark mode */
+  color: var(--color-primary); /* Dynamic primary color for better visibility in dark mode */
 }
 
 html.dark a:hover {
-  color: #a3e635; /* lime-400 - lighter on hover in dark mode */
+  color: var(--color-primary-light); /* Dynamic primary light color - lighter on hover in dark mode */
 }

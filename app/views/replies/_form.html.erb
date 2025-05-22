@@ -26,6 +26,6 @@
   <%# Botão de Envio - Texto condicional %>
   <div class="mt-4 flex justify-end mb-8">
     <%= form.submit (reply.persisted? ? "Atualizar Resposta" : "Publicar Resposta"), 
-                    class: "py-2 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-lime-500 text-white hover:bg-lime-600 disabled:opacity-50 disabled:pointer-events-none" %>
+                    class: "btn btn-primary py-2 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent disabled:opacity-50 disabled:pointer-events-none" %>
   </div>
 <% end %>

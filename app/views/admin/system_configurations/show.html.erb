@@ -69,6 +69,29 @@
         </dl>
       </div>
 
+      <%# Theme Color Information %>
+      <div class="bg-white border border-gray-200 rounded-lg p-6 dark:bg-neutral-800 dark:border-neutral-600">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Configuração de Tema</h3>
+        <dl class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <dt class="text-sm font-medium text-gray-500 dark:text-neutral-400">Cor Primária</dt>
+            <dd class="mt-1 flex items-center gap-3">
+              <% 
+                color_vars = @system_configuration.primary_color_variables 
+                current_color = @system_configuration.primary_color || 'lime'
+                color_name = SystemConfiguration.color_options.find { |option| option[1] == current_color }&.first || 'Verde Lima (Padrão)'
+              %>
+              <div class="w-6 h-6 rounded border border-gray-200 dark:border-neutral-600" style="background-color: <%= color_vars[:primary] %>;"></div>
+              <span class="text-sm text-gray-900 dark:text-white font-medium"><%= color_name %></span>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-sm font-medium text-gray-500 dark:text-neutral-400">Código da Cor</dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-white font-mono"><%= color_vars[:primary] %></dd>
+          </div>
+        </dl>
+      </div>
+
       <%# System Information %>
       <div class="bg-white border border-gray-200 rounded-lg p-6 dark:bg-neutral-800 dark:border-neutral-600">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Informações do Sistema</h3>

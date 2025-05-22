@@ -119,6 +119,47 @@
           </div>
         </div>
       </div>
+
+      <%# Theme Color Section %>
+      <div class="bg-white border border-gray-200 rounded-lg p-6 dark:bg-neutral-800 dark:border-neutral-600">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Cor do Tema</h3>
+        
+        <div class="grid grid-cols-1 gap-6">
+          <%# Primary Color %>
+          <div>
+            <%= form.label :primary_color, "Cor Primária", class: "block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-2" %>
+            <%= form.select :primary_color, 
+                SystemConfiguration.color_options,
+                { selected: @system_configuration.primary_color || 'lime' },
+                { 
+                  class: "block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-lime-500 focus:outline-none focus:ring-1 focus:ring-lime-500 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:focus:border-lime-500",
+                  id: "primary_color_select"
+                } %>
+            <p class="mt-1 text-xs text-gray-500 dark:text-neutral-400">
+              A cor primária define o tema visual da plataforma (botões, links, etc.)
+            </p>
+          </div>
+
+          <%# Color Preview %>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-2">Preview da Cor</label>
+            <div class="flex items-center gap-4 p-4 border border-gray-200 rounded-lg dark:border-neutral-600">
+              <div id="color_preview_swatch" class="w-12 h-12 rounded-lg border border-gray-200 dark:border-neutral-600" style="background-color: var(--color-primary);"></div>
+              <div class="flex-1">
+                <p class="text-sm text-gray-600 dark:text-neutral-400 mb-2">Como ficará:</p>
+                <div class="space-y-2">
+                  <a href="#" id="color_preview_link" class="text-sm font-medium">Link de exemplo</a>
+                  <div>
+                    <button type="button" id="color_preview_button" class="btn btn-primary text-sm">
+                      Botão de exemplo
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     <% end %>
 
     <%# Action Links %>
@@ -131,3 +172,84 @@
     </div>
   </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const colorSelect = document.getElementById('primary_color_select');
+  const colorSwatch = document.getElementById('color_preview_swatch');
+  const previewLink = document.getElementById('color_preview_link');
+  const previewButton = document.getElementById('color_preview_button');
+
+  // Color mappings
+  const colorMappings = {
+    'lime': { primary: '#84cc16', dark: '#65a30d', light: '#a3e635' },
+    'green': { primary: '#22c55e', dark: '#16a34a', light: '#4ade80' },
+    'blue': { primary: '#3b82f6', dark: '#2563eb', light: '#60a5fa' },
+    'indigo': { primary: '#6366f1', dark: '#4f46e5', light: '#818cf8' },
+    'purple': { primary: '#a855f7', dark: '#9333ea', light: '#c084fc' },
+    'pink': { primary: '#ec4899', dark: '#db2777', light: '#f472b6' },
+    'red': { primary: '#ef4444', dark: '#dc2626', light: '#f87171' },
+    'orange': { primary: '#f97316', dark: '#ea580c', light: '#fb923c' },
+    'amber': { primary: '#f59e0b', dark: '#d97706', light: '#fbbf24' },
+    'yellow': { primary: '#eab308', dark: '#ca8a04', light: '#facc15' },
+    'emerald': { primary: '#10b981', dark: '#059669', light: '#34d399' },
+    'teal': { primary: '#14b8a6', dark: '#0d9488', light: '#2dd4bf' },
+    'cyan': { primary: '#06b6d4', dark: '#0891b2', light: '#22d3ee' },
+    'sky': { primary: '#0ea5e9', dark: '#0284c7', light: '#38bdf8' },
+    'violet': { primary: '#8b5cf6', dark: '#7c3aed', light: '#a78bfa' },
+    'rose': { primary: '#f43f5e', dark: '#e11d48', light: '#fb7185' }
+  };
+
+  function updateColorPreview(colorName) {
+    const colors = colorMappings[colorName] || colorMappings['lime'];
+    
+    // Update swatch
+    colorSwatch.style.backgroundColor = colors.primary;
+    
+    // Update link color
+    previewLink.style.color = colors.dark;
+    
+    // Update button colors
+    previewButton.style.backgroundColor = colors.primary;
+    previewButton.style.borderColor = colors.primary;
+    
+    // Add hover effects via CSS custom properties for this preview
+    document.documentElement.style.setProperty('--preview-color-primary', colors.primary);
+    document.documentElement.style.setProperty('--preview-color-primary-dark', colors.dark);
+    document.documentElement.style.setProperty('--preview-color-primary-light', colors.light);
+  }
+
+  // Initialize with current selection
+  if (colorSelect) {
+    updateColorPreview(colorSelect.value);
+    
+    // Update on change
+    colorSelect.addEventListener('change', function() {
+      updateColorPreview(this.value);
+    });
+  }
+
+  // Add hover effects for preview elements
+  if (previewLink) {
+    previewLink.addEventListener('mouseenter', function() {
+      this.style.color = getComputedStyle(document.documentElement).getPropertyValue('--preview-color-primary');
+    });
+    
+    previewLink.addEventListener('mouseleave', function() {
+      this.style.color = getComputedStyle(document.documentElement).getPropertyValue('--preview-color-primary-dark');
+    });
+  }
+
+  if (previewButton) {
+    previewButton.addEventListener('mouseenter', function() {
+      this.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--preview-color-primary-light');
+      this.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--preview-color-primary-light');
+    });
+    
+    previewButton.addEventListener('mouseleave', function() {
+      this.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--preview-color-primary');
+      this.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--preview-color-primary');
+    });
+  }
+});
+</script>

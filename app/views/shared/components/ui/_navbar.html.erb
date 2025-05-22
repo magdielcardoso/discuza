@@ -70,7 +70,7 @@
             <% if current_user.avatar.present? && current_user.avatar.attached? %>
               <img class="shrink-0 size-9.5 rounded-full object-cover" src="<%= url_for(current_user.avatar) %>" alt="<%= current_user.name %> avatar">
             <% else %>
-              <div class="shrink-0 size-9.5 rounded-full bg-lime-500 text-white flex items-center justify-center text-sm font-semibold">
+              <div class="shrink-0 size-9.5 rounded-full text-white flex items-center justify-center text-sm font-semibold" style="background-color: var(--color-primary);">
                 <%= user_initials(current_user) %>
               </div>
             <% end %>
@@ -108,7 +108,7 @@
       <% else %>
         <%# Botões de Login/Registro se não estiver logado %>
         <%= link_to "Entrar", new_user_session_path, class: "py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent text-white hover:bg-white/10 focus:outline-none focus:bg-white/10" %>
-        <%= link_to "Criar Conta", new_user_registration_path, class: "py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-lime-500 text-white hover:bg-lime-600" %>
+        <%= link_to "Criar Conta", new_user_registration_path, class: "btn btn-primary py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent" %>
       <% end %>
       <!-- End Dropdown -->
     </div>

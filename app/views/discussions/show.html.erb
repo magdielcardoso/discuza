@@ -40,8 +40,8 @@
     <% else %>
       <%# Mensagem para usuários não logados %>
       <p class="text-sm text-gray-600 dark:text-neutral-400 bg-gray-50 dark:bg-neutral-800 p-4 rounded-md border dark:border-neutral-700 mb-8">
-        <%= link_to "Faça login", new_user_session_path, class: "text-lime-600 hover:text-lime-700 font-medium" %> ou
-        <%= link_to "crie uma conta", new_user_registration_path, class: "text-lime-600 hover:text-lime-700 font-medium" %> para responder.
+        <%= link_to "Faça login", new_user_session_path, class: "font-medium", style: "color: var(--color-primary);" %> ou
+        <%= link_to "crie uma conta", new_user_registration_path, class: "font-medium", style: "color: var(--color-primary);" %> para responder.
       </p>
     <% end %>
 
