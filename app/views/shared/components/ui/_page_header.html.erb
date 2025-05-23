@@ -31,11 +31,9 @@
         Minhas Discussões
       <% end %>
 
-      <%# Ícone de Configurações mudado para Estrela %>
-      <%= link_to "#", class: "py-2 px-2 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-500 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-800" do %>
-        <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.32 1.011l-4.2 4.24a.563.563 0 00-.162.601l1.08 5.392a.563.563 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.08-5.392a.563.563 0 00-.162-.601l-4.2-4.24c-.38-.348-.179-.971.32-1.011l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
-        </svg>
+      <%# Ícone de Favoritos mudado de estrela para bookmark %>
+      <%= link_to discussions_path(favorites: true), class: "py-2 px-2 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-500 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-800" do %>
+        <%= lucide_icon('bookmark', class: "flex-shrink-0 size-4") %>
       <% end %>
     </div>
   </div>

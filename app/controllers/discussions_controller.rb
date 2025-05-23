@@ -10,7 +10,19 @@ class DiscussionsController < ApplicationController
 
   # GET /discussions or /discussions.json
   def index
-    @discussions = current_user.discussions.order(created_at: :desc)
+    if params[:favorites] == "true"
+      # Mostra discussões favoritadas pelo usuário atual
+      @discussions = current_user.favorited_discussions.includes(:user, :category).order(created_at: :desc)
+      @page_title = "Minhas Discussões Favoritas"
+      @page_badge_text = "Favoritas"
+      @page_badge_color = "bg-yellow-500"
+    else
+      # Mostra discussões criadas pelo usuário atual
+      @discussions = current_user.discussions.includes(:category).order(created_at: :desc)
+      @page_title = "Minhas Discussões"
+      @page_badge_text = "Minhas"
+      @page_badge_color = "bg-lime-500"
+    end
   end
 
   # GET /discussions/1 or /discussions/1.json

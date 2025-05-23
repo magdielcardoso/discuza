@@ -82,17 +82,30 @@
       <div class="flex justify-between items-center mb-6">
         <%# Título com Badge %>
         <div class="flex items-center gap-x-3">
-          <h1 class="text-3xl font-bold font-geist text-black dark:text-white">Minhas Discussões</h1>
-          <span class="inline-flex items-center py-1 px-2.5 rounded-full text-xs font-medium bg-lime-500 text-white">Minhas</span>
+          <h1 class="text-3xl font-bold font-geist text-black dark:text-white"><%= @page_title %></h1>
+          <span class="inline-flex items-center py-1 px-2.5 rounded-full text-xs font-medium <%= @page_badge_color %> text-white"><%= @page_badge_text %></span>
         </div>
         <%# Botão Filtros %>
-        <div>
+        <div class="flex items-center gap-x-2">
+          <%# Toggle entre Minhas/Favoritas %>
+          <div class="flex border border-gray-200 rounded-lg overflow-hidden dark:border-neutral-700">
+            <%= link_to discussions_path, 
+                class: "py-2 px-3 text-xs font-medium #{params[:favorites] != 'true' ? 'bg-gray-100 text-gray-900 dark:bg-neutral-700 dark:text-white' : 'bg-white text-gray-800 hover:bg-gray-50 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800'}" do %>
+              Minhas
+            <% end %>
+            <%= link_to discussions_path(favorites: true), 
+                class: "py-2 px-3 text-xs font-medium #{params[:favorites] == 'true' ? 'bg-gray-100 text-gray-900 dark:bg-neutral-700 dark:text-white' : 'bg-white text-gray-800 hover:bg-gray-50 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800'}" do %>
+              Favoritas
+            <% end %>
+          </div>
+          
+          <%# Botão Filtros original %>
           <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
             <%= lucide_icon('sliders-horizontal', class: "flex-shrink-0 size-4") %>
             Filtros
           </button>
         </div>
-  </div>
+      </div>
 
       <div class="space-y-6" id="discussions">
     <% if @discussions.any? %>
@@ -104,16 +117,27 @@
         <% else %>
           <div class="text-center py-10 px-4 sm:px-6 lg:px-8">
              <%= lucide_icon('folder-search', class: "size-12 mx-auto text-gray-400 dark:text-neutral-500") %>
-             <h2 class="mt-4 font-medium text-gray-800 dark:text-white">Nenhuma discussão encontrada</h2>
-             <p class="mt-2 text-sm text-gray-600 dark:text-neutral-400">Ainda não há discussões por aqui. Que tal iniciar uma?</p>
-             <div class="mt-6">
-               <%= link_to new_discussion_path, class: "py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-lime-500 text-white hover:bg-lime-600 disabled:opacity-50 disabled:pointer-events-none" do %>
-                 <%= lucide_icon('plus', class: "flex-shrink-0 size-4") %>
-                 Criar Nova Discussão
-               <% end %>
+             <% if params[:favorites] == "true" %>
+               <h2 class="mt-4 font-medium text-gray-800 dark:text-white">Nenhuma discussão favorita</h2>
+               <p class="mt-2 text-sm text-gray-600 dark:text-neutral-400">Você ainda não favoritou nenhuma discussão. Explore e favorite as que mais gosta!</p>
+               <div class="mt-6">
+                 <%= link_to root_path, class: "py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-yellow-500 text-white hover:bg-yellow-600 disabled:opacity-50 disabled:pointer-events-none" do %>
+                   <%= lucide_icon('search', class: "flex-shrink-0 size-4") %>
+                   Explorar Discussões
+                 <% end %>
+               </div>
+             <% else %>
+               <h2 class="mt-4 font-medium text-gray-800 dark:text-white">Nenhuma discussão encontrada</h2>
+               <p class="mt-2 text-sm text-gray-600 dark:text-neutral-400">Ainda não há discussões por aqui. Que tal iniciar uma?</p>
+               <div class="mt-6">
+                 <%= link_to new_discussion_path, class: "py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-lime-500 text-white hover:bg-lime-600 disabled:opacity-50 disabled:pointer-events-none" do %>
+                   <%= lucide_icon('plus', class: "flex-shrink-0 size-4") %>
+                   Criar Nova Discussão
+                 <% end %>
+               </div>
+             <% end %>
           </div>
-        </div>
-      <% end %>
+        <% end %>
       </div>
 
       <%# Paginação (Placeholder - Implementar se necessário com Pagy ou Kaminari) %>
