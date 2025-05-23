@@ -10,7 +10,17 @@ class Reply < ApplicationRecord
   validates :content, presence: true
 
   # Define default value for boolean
-  attribute :marked_as_answer, :boolean, default: false
+  attribute :ai_generated, :boolean, default: false
 
-  scope :marked_as_answer, -> { where(marked_as_answer: true) }
+  scope :ai_generated, -> { where(ai_generated: true) }
+  scope :human_generated, -> { where(ai_generated: false) }
+  scope :marked_as_answer, -> { joins(:answer_marks) }
+
+  def ai_generated?
+    ai_generated
+  end
+
+  def marked_as_answer?
+    answer_marks.any?
+  end
 end

@@ -27,6 +27,9 @@ class Discussion < ApplicationRecord
   attribute :pinned, :boolean, default: false
   attribute :closed, :boolean, default: false
 
+  # AI Analysis callback - analyze discussion after creation
+  after_create :schedule_ai_analysis
+
   # Search scope for discussions
   scope :search_by_term, ->(term) {
     return all if term.blank?
@@ -60,5 +63,11 @@ class Discussion < ApplicationRecord
   # Método para a condição da validação
   def requires_closure_reason?
     closed? && closure_status_not_resolved?
+  end
+
+  # Schedule AI analysis job for new discussions
+  def schedule_ai_analysis
+    # Delay the job slightly to ensure transaction is committed
+    AnalyzeDiscussionJob.set(wait: 30.seconds).perform_later(id)
   end
 end
