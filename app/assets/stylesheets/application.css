@@ -19,11 +19,45 @@
 /* Apply Geist font to headings */
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Inter', sans-serif;
+  line-height: 1.2; /* Tighter line spacing for all headings */
 }
 
-h1 { font-size: 1.875rem; font-weight: 600; } /* Era 2.25rem */
-h2 { font-size: 1.5rem; font-weight: 600; }   /* Era 1.875rem */
-h3 { font-size: 1.25rem; font-weight: 600; }   /* Era 1.5rem */
+/* Base mobile-first sizes */
+h1 { 
+  font-size: 1.25rem; /* 20px - reduced further for mobile */
+  font-weight: 600;
+  line-height: 1.1; /* Even tighter for large headings */
+}
+
+h2 { 
+  font-size: 1.125rem; /* 18px - reduced further for mobile */
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+h3 { 
+  font-size: 1rem; /* 16px - reduced further for mobile */
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* Desktop sizes - responsive scaling */
+@media (min-width: 768px) {
+  h1 { 
+    font-size: 1.75rem; /* 28px - reduced from 1.875rem (30px) */
+    line-height: 1.1;
+  }
+  
+  h2 { 
+    font-size: 1.375rem; /* 22px - reduced from 1.5rem (24px) */
+    line-height: 1.15;
+  }
+  
+  h3 { 
+    font-size: 1.2rem; /* 19.2px - slightly reduced from 1.25rem (20px) */
+    line-height: 1.2;
+  }
+}
 
 /* Links */
 a {

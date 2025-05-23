@@ -1,11 +1,11 @@
-<div class="max-w-[85rem] px-4 pb-10 sm:px-6 lg:px-8 lg:pb-14 mx-auto">
+<div class="w-full px-3 pb-10 sm:px-4 lg:px-8 lg:pb-14 mx-auto lg:max-w-7xl">
   <%# Seção de Categorias %>
   <div class="mb-8">
     <div class="flex justify-between items-center mb-2 mt-8">
       <h2 class="text-2xl font-semibold font-geist text-gray-800 dark:text-white">Navegar por Categoria</h2>
       <%= link_to "Ver todas (#{@categories.count})", categories_path, class: "text-sm font-medium transition-colors", style: "color: var(--color-primary-dark);" %>
     </div>
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
       <%# Loop pelas top 4 categorias com mais posts, ou as 4 primeiras se nenhuma tiver posts %>
       <% @categories.left_joins(:discussions).group('categories.id').order('COUNT(discussions.id) DESC, categories.created_at ASC').limit(4).each do |category| %>
         <%= link_to category_path(category), class: "block p-4 sm:p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md focus:shadow-md focus:outline-none focus:ring-2 focus:ring-lime-500 focus:ring-offset-2 transition-all duration-200 ease-in-out transform hover:-translate-y-1 dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700 dark:focus:ring-offset-neutral-800" do %>
@@ -84,51 +84,97 @@
     </div>
   </div>
 
-  <div class="grid md:grid-cols-3 gap-8">
+  <div class="flex flex-col lg:grid lg:grid-cols-3 gap-4 lg:gap-8">
     <%# Coluna Principal %>
-    <div class="md:col-span-2">
-      <div class="space-y-6">
+    <div class="w-full lg:col-span-2">
+      <div class="space-y-4 sm:space-y-6">
         <%# Itera sobre as discussões reais %>
         <% @discussions.each do |discussion| %>
           <%# Card de Discussão Redesenhado %>
-          <div class="p-4 md:p-5 rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-neutral-800 dark:border-neutral-600">
-            <%# Header com Título e Badge %>
-            <div class="flex items-start justify-between">
-              <div class="flex-1">
-                <%# Título e Badge na mesma linha %>
-                <div class="flex items-baseline gap-x-3 mb-2">
-                  <h2 class="text-lg font-semibold text-black dark:text-white">
-                    <%= link_to discussion.title, discussion_path(discussion), class: "hover:text-lime-600 dark:hover:text-lime-500 transition-colors" %>
-                  </h2>
-                  <%# Badge da Categoria %>
-                  <% bg_class = case discussion.category.color_class
-                    when /lime/ then 'bg-lime-100 text-lime-800 dark:bg-lime-500/10 dark:text-lime-500'
-                    when /blue/ then 'bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-500'
-                    when /red/ then 'bg-red-100 text-red-800 dark:bg-red-500/10 dark:text-red-500'
-                    when /purple/ then 'bg-purple-100 text-purple-800 dark:bg-purple-500/10 dark:text-purple-500'
-                    when /yellow/ then 'bg-yellow-100 text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500'
-                    when /teal/ then 'bg-teal-100 text-teal-800 dark:bg-teal-500/10 dark:text-teal-500'
-                    when /pink/ then 'bg-pink-100 text-pink-800 dark:bg-pink-500/10 dark:text-pink-500'
-                    when /indigo/ then 'bg-indigo-100 text-indigo-800 dark:bg-indigo-500/10 dark:text-indigo-500'
-                    when /green/ then 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500'
-                    else 'bg-gray-100 text-gray-800 dark:bg-neutral-800 dark:text-neutral-300'
-                  end %>
-                  <span class="inline-flex items-center gap-x-1.5 px-2.5 py-1 rounded-full text-xs font-medium <%= bg_class %>">
-                    <%= lucide_icon(discussion.category.icon, class: "flex-shrink-0 size-3") %>
-                    <%= discussion.category.name %>
+          <div class="w-full p-3 sm:p-4 md:p-5 rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-neutral-800 dark:border-neutral-600">
+            <%# Mobile Layout %>
+            <div class="md:hidden">
+              <%# Título %>
+              <div class="mb-3">
+                <h2 class="text-lg font-semibold text-black dark:text-white">
+                  <%= link_to discussion.title, discussion_path(discussion), class: "hover:text-lime-600 dark:hover:text-lime-500 transition-colors" %>
+                </h2>
+              </div>
+              
+              <%# Badge e Timestamp acima do conteúdo no mobile %>
+              <div class="flex items-center justify-between mb-3">
+                <%# Badge da Categoria %>
+                <% bg_class = case discussion.category.color_class
+                  when /lime/ then 'bg-lime-100 text-lime-800 dark:bg-lime-500/10 dark:text-lime-500'
+                  when /blue/ then 'bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-500'
+                  when /red/ then 'bg-red-100 text-red-800 dark:bg-red-500/10 dark:text-red-500'
+                  when /purple/ then 'bg-purple-100 text-purple-800 dark:bg-purple-500/10 dark:text-purple-500'
+                  when /yellow/ then 'bg-yellow-100 text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500'
+                  when /teal/ then 'bg-teal-100 text-teal-800 dark:bg-teal-500/10 dark:text-teal-500'
+                  when /pink/ then 'bg-pink-100 text-pink-800 dark:bg-pink-500/10 dark:text-pink-500'
+                  when /indigo/ then 'bg-indigo-100 text-indigo-800 dark:bg-indigo-500/10 dark:text-indigo-500'
+                  when /green/ then 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500'
+                  else 'bg-gray-100 text-gray-800 dark:bg-neutral-800 dark:text-neutral-300'
+                end %>
+                <span class="inline-flex items-center gap-x-1.5 px-2.5 py-1 rounded-full text-xs font-medium <%= bg_class %>">
+                  <%= lucide_icon(discussion.category.icon, class: "flex-shrink-0 size-3") %>
+                  <%= discussion.category.name %>
+                </span>
+                
+                <%# Timestamp e Pin %>
+                <div class="flex items-center gap-x-2">
+                  <span class="text-xs text-gray-500 dark:text-neutral-500" title="<%= discussion.created_at.strftime('%d %b %Y, %H:%M') %>">
+                    <%= time_ago_in_words(discussion.created_at) %> atrás
                   </span>
+                  <% if current_user&.is_admin? %>
+                    <%= button_to toggle_pin_discussion_path(discussion), method: :patch, class: 'ml-1', form: { data: { turbo: false } }, title: (discussion.pinned? ? 'Unpin discussion' : 'Pin discussion') do %>
+                      <%= lucide_icon(discussion.pinned? ? 'pin' : 'pin', class: "size-4 #{discussion.pinned? ? 'text-lime-600 fill-lime-600' : 'text-gray-400'}") %>
+                    <% end %>
+                  <% end %>
                 </div>
               </div>
-              <%# Timestamp e Pin (se admin) %>
-              <div class="flex items-center gap-x-2">
-                <span class="text-xs text-gray-500 dark:text-neutral-500" title="<%= discussion.created_at.strftime('%d %b %Y, %H:%M') %>">
-                  <%= time_ago_in_words(discussion.created_at) %> atrás
-                </span>
-                <% if current_user&.is_admin? %>
-                  <%= button_to toggle_pin_discussion_path(discussion), method: :patch, class: 'ml-1', form: { data: { turbo: false } }, title: (discussion.pinned? ? 'Unpin discussion' : 'Pin discussion') do %>
-                    <%= lucide_icon(discussion.pinned? ? 'pin' : 'pin', class: "size-4 #{discussion.pinned? ? 'text-lime-600 fill-lime-600' : 'text-gray-400'}") %>
+            </div>
+
+            <%# Desktop Layout %>
+            <div class="hidden md:block">
+              <%# Header com Título e Badge %>
+              <div class="flex items-start justify-between">
+                <div class="flex-1">
+                  <%# Título e Badge na mesma linha %>
+                  <div class="flex items-baseline gap-x-3 mb-2">
+                    <h2 class="text-lg font-semibold text-black dark:text-white">
+                      <%= link_to discussion.title, discussion_path(discussion), class: "hover:text-lime-600 dark:hover:text-lime-500 transition-colors" %>
+                    </h2>
+                    <%# Badge da Categoria %>
+                    <% bg_class = case discussion.category.color_class
+                      when /lime/ then 'bg-lime-100 text-lime-800 dark:bg-lime-500/10 dark:text-lime-500'
+                      when /blue/ then 'bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-500'
+                      when /red/ then 'bg-red-100 text-red-800 dark:bg-red-500/10 dark:text-red-500'
+                      when /purple/ then 'bg-purple-100 text-purple-800 dark:bg-purple-500/10 dark:text-purple-500'
+                      when /yellow/ then 'bg-yellow-100 text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500'
+                      when /teal/ then 'bg-teal-100 text-teal-800 dark:bg-teal-500/10 dark:text-teal-500'
+                      when /pink/ then 'bg-pink-100 text-pink-800 dark:bg-pink-500/10 dark:text-pink-500'
+                      when /indigo/ then 'bg-indigo-100 text-indigo-800 dark:bg-indigo-500/10 dark:text-indigo-500'
+                      when /green/ then 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500'
+                      else 'bg-gray-100 text-gray-800 dark:bg-neutral-800 dark:text-neutral-300'
+                    end %>
+                    <span class="inline-flex items-center gap-x-1.5 px-2.5 py-1 rounded-full text-xs font-medium <%= bg_class %>">
+                      <%= lucide_icon(discussion.category.icon, class: "flex-shrink-0 size-3") %>
+                      <%= discussion.category.name %>
+                    </span>
+                  </div>
+                </div>
+                <%# Timestamp e Pin (se admin) %>
+                <div class="flex items-center gap-x-2">
+                  <span class="text-xs text-gray-500 dark:text-neutral-500" title="<%= discussion.created_at.strftime('%d %b %Y, %H:%M') %>">
+                    <%= time_ago_in_words(discussion.created_at) %> atrás
+                  </span>
+                  <% if current_user&.is_admin? %>
+                    <%= button_to toggle_pin_discussion_path(discussion), method: :patch, class: 'ml-1', form: { data: { turbo: false } }, title: (discussion.pinned? ? 'Unpin discussion' : 'Pin discussion') do %>
+                      <%= lucide_icon(discussion.pinned? ? 'pin' : 'pin', class: "size-4 #{discussion.pinned? ? 'text-lime-600 fill-lime-600' : 'text-gray-400'}") %>
+                    <% end %>
                   <% end %>
-                <% end %>
+                </div>
               </div>
             </div>
 
@@ -190,59 +236,86 @@
 
         <%# Paginação %>
         <% if @discussions.respond_to?(:current_page) && @discussions.total_pages > 1 %>
-          <nav class="mt-8 flex justify-center" aria-label="Pagination">
-            <div class="flex items-center space-x-1">
-              <%# Botão Anterior %>
-              <% if @discussions.prev_page %>
-                <%= link_to root_path(page: @discussions.prev_page), 
-                    class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-50 hover:text-gray-900 dark:bg-neutral-800 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:hover:text-white transition-colors" do %>
-                  <%= lucide_icon('chevron-left', class: "size-4 mr-1") %>
-                  Anterior
-                <% end %>
-              <% else %>
-                <span class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-l-lg cursor-not-allowed dark:bg-neutral-700 dark:border-neutral-600 dark:text-neutral-500">
-                  <%= lucide_icon('chevron-left', class: "size-4 mr-1") %>
-                  Anterior
-                </span>
-              <% end %>
-
-              <%# Páginas Simples %>
-              <% (1..@discussions.total_pages).each do |page| %>
-                <% if page == @discussions.current_page %>
-                  <span class="inline-flex items-center px-3 py-2 text-sm font-medium text-white border" style="background-color: var(--color-primary); border-color: var(--color-primary);">
-                    <%= page %>
-                  </span>
+          <nav class="mt-8 w-full" aria-label="Pagination">
+            <div class="flex items-center justify-center">
+              <div class="flex items-center space-x-0.5 sm:space-x-1">
+                <%# Botão Anterior %>
+                <% if @discussions.prev_page %>
+                  <%= link_to root_path(page: @discussions.prev_page), 
+                      class: "inline-flex items-center px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-50 hover:text-gray-900 dark:bg-neutral-800 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:hover:text-white transition-colors" do %>
+                    <%= lucide_icon('chevron-left', class: "size-3 sm:size-4 sm:mr-1") %>
+                    <span class="hidden sm:inline">Anterior</span>
+                  <% end %>
                 <% else %>
-                  <%= link_to root_path(page: page), 
-                      class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-900 dark:bg-neutral-800 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:hover:text-white transition-colors" do %>
-                    <%= page %>
+                  <span class="inline-flex items-center px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-l-lg cursor-not-allowed dark:bg-neutral-700 dark:border-neutral-600 dark:text-neutral-500">
+                    <%= lucide_icon('chevron-left', class: "size-3 sm:size-4 sm:mr-1") %>
+                    <span class="hidden sm:inline">Anterior</span>
+                  </span>
+                <% end %>
+
+                <%# Páginas - Limitadas no mobile %>
+                <% 
+                  total_pages = @discussions.total_pages
+                  current_page = @discussions.current_page
+                  
+                  # Mobile: mostra apenas 3 páginas ao redor da atual
+                  # Desktop: mostra todas (se <= 7) ou janela de 5 páginas
+                  if total_pages <= 7
+                    pages_to_show = (1..total_pages).to_a
+                  else
+                    # Mobile logic
+                    start_page = [current_page - 1, 1].max
+                    end_page = [start_page + 2, total_pages].min
+                    start_page = [end_page - 2, 1].max
+                    pages_to_show = (start_page..end_page).to_a
+                  end
+                %>
+                
+                <% pages_to_show.each do |page| %>
+                  <% if page == current_page %>
+                    <span class="inline-flex items-center px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-white border" style="background-color: var(--color-primary); border-color: var(--color-primary);">
+                      <%= page %>
+                    </span>
+                  <% else %>
+                    <%= link_to root_path(page: page), 
+                        class: "inline-flex items-center px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-900 dark:bg-neutral-800 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:hover:text-white transition-colors" do %>
+                      <%= page %>
+                    <% end %>
                   <% end %>
                 <% end %>
-              <% end %>
 
-              <%# Botão Próximo %>
-              <% if @discussions.next_page %>
-                <%= link_to root_path(page: @discussions.next_page), 
-                    class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-50 hover:text-gray-900 dark:bg-neutral-800 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:hover:text-white transition-colors" do %>
-                  Próximo
-                  <%= lucide_icon('chevron-right', class: "size-4 ml-1") %>
+                <%# Indicador de mais páginas no mobile %>
+                <% if total_pages > 7 && current_page < total_pages - 1 %>
+                  <span class="sm:hidden inline-flex items-center px-2 py-2 text-xs font-medium text-gray-400">
+                    ...
+                  </span>
                 <% end %>
-              <% else %>
-                <span class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-r-lg cursor-not-allowed dark:bg-neutral-700 dark:border-neutral-600 dark:text-neutral-500">
-                  Próximo
-                  <%= lucide_icon('chevron-right', class: "size-4 ml-1") %>
-                </span>
-              <% end %>
+
+                <%# Botão Próximo %>
+                <% if @discussions.next_page %>
+                  <%= link_to root_path(page: @discussions.next_page), 
+                      class: "inline-flex items-center px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-50 hover:text-gray-900 dark:bg-neutral-800 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:hover:text-white transition-colors" do %>
+                    <span class="hidden sm:inline">Próximo</span>
+                    <%= lucide_icon('chevron-right', class: "size-3 sm:size-4 sm:ml-1") %>
+                  <% end %>
+                <% else %>
+                  <span class="inline-flex items-center px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-r-lg cursor-not-allowed dark:bg-neutral-700 dark:border-neutral-600 dark:text-neutral-500">
+                    <span class="hidden sm:inline">Próximo</span>
+                    <%= lucide_icon('chevron-right', class: "size-3 sm:size-4 sm:ml-1") %>
+                  </span>
+                <% end %>
+              </div>
             </div>
           </nav>
 
           <%# Informações da Paginação %>
-          <div class="mt-4 text-center text-sm text-gray-600 dark:text-neutral-400">
+          <div class="mt-4 text-center text-xs sm:text-sm text-gray-600 dark:text-neutral-400 px-2">
             <% 
               start_num = (@discussions.current_page - 1) * 10 + 1
               end_num = [@discussions.current_page * 10, @discussions.total_count].min
             %>
-            Exibindo <%= start_num %> - <%= end_num %> de <%= @discussions.total_count %> discussões
+            <span class="hidden sm:inline">Exibindo <%= start_num %> - <%= end_num %> de <%= @discussions.total_count %> discussões</span>
+            <span class="sm:hidden">Página <%= @discussions.current_page %> de <%= @discussions.total_pages %></span>
           </div>
         <% end %>
 
@@ -255,9 +328,9 @@
     <%# Fim Coluna Principal %>
 
     <%# Coluna Lateral (Aside) - Mantida com Mock Data por enquanto %>
-    <aside class="md:col-span-1 space-y-6">
+    <aside class="w-full lg:col-span-1 space-y-6">
       <%# Card Recomendadas %>
-      <div class="rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-neutral-800 dark:border-neutral-600">
+      <div class="w-full rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-neutral-800 dark:border-neutral-600">
         <div class="py-3 px-4 border-b dark:border-neutral-600">
           <h2 class="text-xl font-semibold font-geist text-black dark:text-white">Recomendadas</h2>
         </div>
@@ -284,7 +357,7 @@
       </div>
 
       <%# Card Tags Populares %>
-      <div class="rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-neutral-800 dark:border-neutral-600">
+      <div class="w-full rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-neutral-800 dark:border-neutral-600">
          <div class="py-3 px-4 border-b dark:border-neutral-600">
            <h2 class="text-xl font-semibold font-geist text-black dark:text-white">Tags Populares</h2>
          </div>
@@ -314,7 +387,7 @@
       </div>
 
       <%# Card: Discussões Mais Votadas %>
-      <div class="rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-neutral-800 dark:border-neutral-600">
+      <div class="w-full rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-neutral-800 dark:border-neutral-600">
         <div class="py-3 px-4 border-b dark:border-neutral-600">
           <h2 class="text-xl font-semibold font-geist text-black dark:text-white">Mais Votadas 🔥</h2>
         </div>
@@ -364,7 +437,7 @@
       <%# Fim Card: Discussões Mais Votadas %>
 
       <%# Card: Usuários Mais Ativos %>
-      <div class="rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-neutral-800 dark:border-neutral-600">
+      <div class="w-full rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-neutral-800 dark:border-neutral-600">
         <div class="py-3 px-4 border-b dark:border-neutral-600">
           <h2 class="text-xl font-semibold font-geist text-black dark:text-white">Usuários Mais Ativos 👥</h2>
         </div>
