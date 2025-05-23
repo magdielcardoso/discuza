@@ -35,8 +35,42 @@
   </div>
   <%# Fim Seção de Categorias %>
 
+  <!-- Search Results Header -->
+  <% if @search_term.present? %>
+    <div class="mb-6 p-4 bg-lime-50 border border-lime-200 rounded-lg dark:bg-lime-500/10 dark:border-lime-500/20">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-x-3">
+          <%= lucide_icon('search', class: "size-5 text-lime-600 dark:text-lime-500") %>
+          <div>
+            <h3 class="text-lg font-semibold text-lime-800 dark:text-lime-400">
+              Resultados da busca
+            </h3>
+            <p class="text-sm text-lime-700 dark:text-lime-300">
+              <% if @discussions.any? %>
+                Encontrado<%= 's' if @discussions.count != 1 %> <strong><%= @discussions.count %></strong> discussão<%= 'ões' if @discussions.count != 1 %> para "<strong><%= @search_term %></strong>"
+              <% else %>
+                Nenhuma discussão encontrada para "<strong><%= @search_term %></strong>"
+              <% end %>
+            </p>
+          </div>
+        </div>
+        <%= link_to root_path, class: "inline-flex items-center gap-x-1.5 text-sm font-medium text-lime-600 hover:text-lime-700 dark:text-lime-500 dark:hover:text-lime-400" do %>
+          <%= lucide_icon('x', class: "size-4") %>
+          Limpar busca
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+  <!-- End Search Results Header -->
+
   <div class="flex justify-between items-center mb-2">
-    <h1 class="text-3xl font-bold font-geist text-black dark:text-white">Discussões Recentes</h1>
+    <h1 class="text-3xl font-bold font-geist text-black dark:text-white">
+      <% if @search_term.present? %>
+        Resultados da Busca
+      <% else %>
+        Discussões Recentes
+      <% end %>
+    </h1>
     <%# Botão Filtros %>
     <div>
       <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm opacity-60 cursor-not-allowed dark:bg-neutral-800 dark:border-neutral-600 dark:text-white">

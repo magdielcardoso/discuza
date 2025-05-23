@@ -27,6 +27,22 @@ class Discussion < ApplicationRecord
   attribute :pinned, :boolean, default: false
   attribute :closed, :boolean, default: false
 
+  # Search scope for discussions
+  scope :search_by_term, ->(term) {
+    return all if term.blank?
+
+    sanitized_term = "%#{term.strip}%"
+    left_joins(:rich_text_content)
+      .joins(:user, :category)
+      .where(
+        "discussions.title ILIKE :search OR
+         action_text_rich_texts.body ILIKE :search OR
+         users.name ILIKE :search OR
+         categories.name ILIKE :search",
+        search: sanitized_term
+      )
+  }
+
   # --- Métodos Manuais (Substituindo Enum) ---
 
   # Verifica se o status é 'resolved'

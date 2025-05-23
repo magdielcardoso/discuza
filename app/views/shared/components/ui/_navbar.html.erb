@@ -19,25 +19,32 @@
 
     <div class="hidden md:block">
       <!-- Search Input -->
-      <div class="relative">
+      <%= form_with url: root_path, method: :get, local: true, class: "relative" do |form| %>
         <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-3.5">
           <svg class="shrink-0 size-4 text-gray-400 dark:text-white/60" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
         </div>
-        <input type="text" class="py-2 ps-10 pe-16 block w-full bg-transparent border-gray-700 rounded-lg text-sm focus:outline-hidden focus:border-gray-600 focus:ring-0 disabled:opacity-50 disabled:pointer-events-none dark:border-neutral-700 dark:text-neutral-400 dark:placeholder:text-neutral-400 dark:focus:border-neutral-600" placeholder="Buscar">
-        <div class="hidden absolute inset-y-0 end-0 flex items-center pointer-events-none z-20 pe-1">
-          <button type="button" class="inline-flex shrink-0 justify-center items-center size-6 rounded-full text-gray-500 hover:text-blue-600 focus:outline-hidden focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500" aria-label="Close">
-            <span class="sr-only">Close</span>
-            <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
-          </button>
-        </div>
-        <div class="absolute inset-y-0 end-0 flex items-center pointer-events-none z-20 pe-3 text-gray-400">
-          <svg class="shrink-0 size-3 text-gray-400 dark:text-white/60" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3"/></svg>
-          <span class="mx-1">
-            <svg class="shrink-0 size-3 text-gray-400 dark:text-white/60" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-          </span>
-          <span class="text-xs">/</span>
-        </div>
-      </div>
+        <%= form.text_field :search, 
+            placeholder: "Buscar discussões...", 
+            value: @search_term,
+            class: "py-2 ps-10 pe-16 block w-full bg-transparent border-gray-700 rounded-lg text-sm focus:outline-hidden focus:border-gray-600 focus:ring-0 disabled:opacity-50 disabled:pointer-events-none dark:border-neutral-700 text-white placeholder:text-gray-400 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-neutral-600" %>
+        
+        <% if @search_term.present? %>
+          <div class="absolute inset-y-0 end-0 flex items-center z-20 pe-1">
+            <%= link_to root_path, class: "inline-flex shrink-0 justify-center items-center size-6 rounded-full text-gray-500 hover:text-red-600 focus:outline-hidden focus:text-red-600 dark:text-neutral-500 dark:hover:text-red-500 dark:focus:text-red-500", title: "Limpar busca" do %>
+              <span class="sr-only">Limpar busca</span>
+              <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
+            <% end %>
+          </div>
+        <% else %>
+          <div class="absolute inset-y-0 end-0 flex items-center pointer-events-none z-20 pe-3 text-gray-400">
+            <svg class="shrink-0 size-3 text-gray-400 dark:text-white/60" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3"/></svg>
+            <span class="mx-1">
+              <svg class="shrink-0 size-3 text-gray-400 dark:text-white/60" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            </span>
+            <span class="text-xs">/</span>
+          </div>
+        <% end %>
+      <% end %>
       <!-- End Search Input -->
     </div>
 
@@ -52,7 +59,16 @@
       </div>
       <!-- End Collapse -->
 
-      <button type="button" class="hidden md:inline-flex size-9.5 relative justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-white hover:bg-white/10 focus:outline-hidden focus:bg-white/10 disabled:opacity-50 disabled:pointer-events-none">
+      <!-- Mobile Search Toggle -->
+      <button type="button" 
+              id="mobile-search-toggle"
+              class="md:hidden size-9.5 relative justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-white hover:bg-white/10 focus:outline-hidden focus:bg-white/10 disabled:opacity-50 disabled:pointer-events-none">
+        <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <span class="sr-only">Search</span>
+      </button>
+
+      <!-- Desktop Search Button (Hidden, keeping for consistency) -->
+      <button type="button" class="hidden size-9.5 relative justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-white hover:bg-white/10 focus:outline-hidden focus:bg-white/10 disabled:opacity-50 disabled:pointer-events-none">
         <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
         <span class="sr-only">Search</span>
       </button>
@@ -114,4 +130,48 @@
     </div>
   </nav>
 </header>
+
+<!-- Mobile Search Form (Hidden by default) -->
+<div id="mobile-search-form" class="hidden md:hidden bg-gray-900 border-b border-gray-700 px-4 py-3 dark:bg-neutral-950 dark:border-neutral-700">
+  <%= form_with url: root_path, method: :get, local: true, class: "relative" do |form| %>
+    <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-3.5">
+      <svg class="shrink-0 size-4 text-gray-400 dark:text-white/60" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    </div>
+    <%= form.text_field :search, 
+        placeholder: "Buscar discussões...", 
+        value: @search_term,
+        class: "py-2 ps-10 pe-16 block w-full bg-transparent border-gray-700 rounded-lg text-sm focus:outline-hidden focus:border-gray-600 focus:ring-0 disabled:opacity-50 disabled:pointer-events-none dark:border-neutral-700 text-white placeholder:text-gray-400 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-neutral-600" %>
+    
+    <% if @search_term.present? %>
+      <div class="absolute inset-y-0 end-0 flex items-center z-20 pe-1">
+        <%= link_to root_path, class: "inline-flex shrink-0 justify-center items-center size-6 rounded-full text-gray-500 hover:text-red-600 focus:outline-hidden focus:text-red-600 dark:text-neutral-500 dark:hover:text-red-500 dark:focus:text-red-500", title: "Limpar busca" do %>
+          <span class="sr-only">Limpar busca</span>
+          <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const mobileSearchToggle = document.getElementById('mobile-search-toggle');
+    const mobileSearchForm = document.getElementById('mobile-search-form');
+    
+    if (mobileSearchToggle && mobileSearchForm) {
+      mobileSearchToggle.addEventListener('click', function() {
+        mobileSearchForm.classList.toggle('hidden');
+        
+        // Focus on the search input when opened
+        if (!mobileSearchForm.classList.contains('hidden')) {
+          const searchInput = mobileSearchForm.querySelector('input[type="text"]');
+          if (searchInput) {
+            setTimeout(() => searchInput.focus(), 100);
+          }
+        }
+      });
+    }
+  });
+</script>
+
 <!-- ========== END HEADER ========== -->
