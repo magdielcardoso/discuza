@@ -32,7 +32,8 @@ class Admin::SystemConfigurationsController < ApplicationController
       :site_description,
       :contact_email,
       :logo,
-      :primary_color
+      :primary_color,
+      :ai_name
     )
   end
 

@@ -62,6 +62,14 @@
             <dt class="text-sm font-medium text-gray-500 dark:text-neutral-400">Email de Contato</dt>
             <dd class="mt-1 text-sm text-gray-900 dark:text-white font-medium"><%= @system_configuration.contact_email %></dd>
           </div>
+          <div>
+            <dt class="text-sm font-medium text-gray-500 dark:text-neutral-400">Nome da IA</dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-white font-medium">
+              <%= @system_configuration.ai_name %>
+              <span class="text-xs text-gray-500 dark:text-neutral-400 ml-2">🤖</span>
+            </dd>
+          </div>
+          <div></div> <%# Empty div to maintain grid layout %>
           <div class="sm:col-span-2">
             <dt class="text-sm font-medium text-gray-500 dark:text-neutral-400">Descrição do Site</dt>
             <dd class="mt-1 text-sm text-gray-900 dark:text-white"><%= @system_configuration.site_description %></dd>

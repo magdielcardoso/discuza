@@ -117,6 +117,17 @@
               Máximo de 500 caracteres
             </p>
           </div>
+
+          <%# AI Name %>
+          <div class="sm:col-span-2">
+            <%= form.label :ai_name, "Nome da IA", class: "block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-2" %>
+            <%= form.text_field :ai_name, 
+                class: "block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-lime-500 focus:outline-none focus:ring-1 focus:ring-lime-500 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:focus:border-lime-500",
+                placeholder: "Ex: Discuza AI, AssistBot, Helper..." %>
+            <p class="mt-1 text-xs text-gray-500 dark:text-neutral-400">
+              Nome que aparecerá nas respostas automáticas geradas pela IA. Se vazio, será usado "AI Assistant".
+            </p>
+          </div>
         </div>
       </div>
 

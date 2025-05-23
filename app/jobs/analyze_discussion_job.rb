@@ -114,10 +114,15 @@ class AnalyzeDiscussionJob < ApplicationJob
   def find_or_create_ai_user
     ai_name = SystemConfiguration.instance.ai_name
 
-    User.find_or_create_by(email: "ai@devconnect.com") do |user|
+    ai_user = User.find_or_create_by(email: "ai@devconnect.com") do |user|
       user.name = ai_name
       user.password = SecureRandom.hex(32)
     end
+
+    # Always update the name to match current configuration
+    ai_user.update!(name: ai_name) if ai_user.name != ai_name
+
+    ai_user
   end
 
   def format_discussions_for_ai(discussions)

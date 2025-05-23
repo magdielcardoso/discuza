@@ -16,6 +16,9 @@ class SystemConfiguration < ApplicationRecord
   # Singleton pattern - only one configuration should exist
   validates :id, uniqueness: true, allow_nil: true
 
+  # Callbacks
+  after_update :sync_ai_user_name, if: :saved_change_to_ai_name?
+
   # Class method to get or create the single instance
   def self.instance
     first_or_create(
@@ -175,5 +178,16 @@ class SystemConfiguration < ApplicationRecord
     if logo.byte_size > 2.megabytes
       errors.add(:logo, "deve ter no m\u00E1ximo 2MB")
     end
+  end
+
+  def sync_ai_user_name
+    # Find the AI user and update their name to match the new ai_name
+    ai_user = User.find_by(email: "ai@devconnect.com")
+    if ai_user.present?
+      ai_user.update!(name: ai_name)
+      Rails.logger.info "AI user name updated to: #{ai_name}"
+    end
+  rescue => e
+    Rails.logger.error "Failed to sync AI user name: #{e.message}"
   end
 end
