@@ -1,0 +1,38 @@
+<%# General OpenGraph meta tags for non-specific pages %>
+<% 
+  site_title = "DevConnect Community"
+  site_description = "Conecte-se, compartilhe conhecimento e cresça junto com desenvolvedores de todo o Brasil"
+  default_image_url = "https://og.tailgraph.com/og?" + {
+    fontFamily: 'Inter',
+    title: site_title,
+    titleTailwind: 'font-bold text-6xl text-gray-900 leading-tight px-8',
+    text: site_description,
+    textTailwind: 'text-2xl text-gray-600 mt-6 px-8',
+    bgTailwind: 'bg-gradient-to-br from-blue-50 via-white to-purple-50 p-8',
+    footer: 'devconnect.dev',
+    footerTailwind: 'text-blue-600 font-semibold text-lg mt-8 px-8',
+    refresh: '1'
+  }.map { |k, v| "#{k}=#{ERB::Util.url_encode(v.to_s)}" }.join('&')
+%>
+
+<%# Basic OpenGraph tags %>
+<meta property="og:title" content="<%= content_for(:title) || site_title %>">
+<meta property="og:description" content="<%= site_description %>">
+<meta property="og:image" content="<%= default_image_url %>">
+<meta property="og:url" content="<%= request.original_url %>">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="<%= site_title %>">
+
+<%# Image specifications %>
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/png">
+
+<%# Twitter Card tags %>
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="<%= content_for(:title) || site_title %>">
+<meta name="twitter:description" content="<%= site_description %>">
+<meta name="twitter:image" content="<%= default_image_url %>">
+
+<%# Additional SEO %>
+<link rel="canonical" href="<%= request.original_url %>"> 

@@ -1,0 +1,29 @@
+<%# OpenGraph meta tags for discussion sharing %>
+<% if local_assigns[:discussion] %>
+  <%# Basic OpenGraph tags %>
+  <meta property="og:title" content="<%= discussion.title %>">
+  <meta property="og:description" content="<%= discussion_og_description(discussion) %>">
+  <meta property="og:image" content="<%= discussion_og_image_url(discussion) %>">
+  <meta property="og:url" content="<%= discussion_url(discussion) %>">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="DevConnect">
+  
+  <%# Image specifications %>
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/png">
+  
+  <%# Twitter Card tags %>
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="<%= discussion.title %>">
+  <meta name="twitter:description" content="<%= discussion_og_description(discussion) %>">
+  <meta name="twitter:image" content="<%= discussion_og_image_url(discussion) %>">
+  
+  <%# Article specific tags %>
+  <meta property="article:author" content="<%= discussion.user.name %>">
+  <meta property="article:published_time" content="<%= discussion.created_at.iso8601 %>">
+  <meta property="article:section" content="<%= discussion.category.name %>">
+  
+  <%# Additional SEO %>
+  <link rel="canonical" href="<%= discussion_url(discussion) %>">
+<% end %> 

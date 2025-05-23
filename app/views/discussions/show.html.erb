@@ -1,5 +1,10 @@
 <% content_for :title, @discussion.title %>
 
+<%# OpenGraph meta tags for social media sharing %>
+<% content_for :head do %>
+  <%= render 'shared/components/opengraph/discussion', discussion: @discussion %>
+<% end %>
+
 <%# Adiciona controller Stimulus ao container principal %>
 <div class="max-w-[85rem] px-4 pb-10 sm:px-6 lg:px-8 lg:pb-14 mx-auto" data-controller="modal">
   <%# Aviso de Notice %>
