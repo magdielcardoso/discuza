@@ -18,8 +18,7 @@
 
 /* Apply Geist font to headings */
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Space Grotesk', sans-serif;
-  margin-bottom: 0.75rem; /* Exemplo */
+  font-family: 'Inter', sans-serif;
 }
 
 h1 { font-size: 1.875rem; font-weight: 600; } /* Era 2.25rem */
