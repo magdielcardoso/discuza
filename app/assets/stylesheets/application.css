@@ -318,6 +318,61 @@ html.dark .ai-content {
   background: linear-gradient(to right, rgba(132, 204, 22, 0.08), transparent);
 }
 
+/* AI Discussion Link Buttons - Botões refinados para links de discussions */
+.ai-discussion-link {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--color-primary) 20%, transparent);
+  transition: all 0.2s ease-in-out;
+  text-decoration: none !important;
+  margin: 0.125rem 0.0625rem;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)) !important;
+  color: white !important;
+  border: 1px solid var(--color-primary-light);
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-discussion-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease-in-out;
+}
+
+.ai-discussion-link:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--color-primary) 30%, transparent);
+  color: white !important;
+  text-decoration: none !important;
+}
+
+.ai-discussion-link:hover::before {
+  left: 100%;
+}
+
+.ai-discussion-link:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.ai-discussion-link span:last-child {
+  transition: transform 0.2s ease-in-out;
+}
+
+.ai-discussion-link:hover span:last-child {
+  transform: translateX(2px);
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .ai-badge {
@@ -327,6 +382,11 @@ html.dark .ai-content {
   
   .ai-reply-card:hover {
     transform: none; /* Disable hover transform on mobile */
+  }
+  
+  .ai-discussion-link {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
   }
 }
 

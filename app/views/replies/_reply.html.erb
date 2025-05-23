@@ -89,7 +89,11 @@
 
   <%# Conteúdo da Resposta %>
   <div class="prose prose-sm dark:prose-invert max-w-none <%= 'ai-content' if is_ai_reply %>">
-    <%= reply.content %>
+    <% if is_ai_reply %>
+      <%= process_ai_content(reply.content) %>
+    <% else %>
+      <%= reply.content %>
+    <% end %>
   </div>
 
   <%# Footer com Ações %>
