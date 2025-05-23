@@ -13,6 +13,9 @@ class User < ApplicationRecord
   has_many :reactions, dependent: :destroy
   has_many :answer_marks, dependent: :destroy
 
+  has_many :favorite_discussions, dependent: :destroy
+  has_many :favorited_discussions, through: :favorite_discussions, source: :discussion
+
   validates :name, presence: true
 
   # Returns true if the user is an admin

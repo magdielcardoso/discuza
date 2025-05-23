@@ -116,6 +116,26 @@
                   <%= lucide_icon('message-circle', class: "flex-shrink-0 size-4") %>
                   <%= discussion.replies.count %> <%# Contagem real de respostas %>
                 </span>
+                <%# Favorito %>
+                <% if user_signed_in? %>
+                  <% if current_user.favorited_discussions.include?(discussion) %>
+                    <%= button_to unfavorite_discussion_path(discussion), method: :delete, 
+                                  class: "inline-flex items-center gap-x-1.5 text-yellow-600 dark:text-yellow-400 hover:text-yellow-700 dark:hover:text-yellow-300 transition-colors text-xs",
+                                  form_class: "inline-flex",
+                                  title: "Desfavoritar" do %>
+                      <%= lucide_icon('bookmark-check', class: "flex-shrink-0 size-4") %>
+                      <span>Favoritado</span>
+                    <% end %>
+                  <% else %>
+                    <%= button_to favorite_discussion_path(discussion), method: :post, 
+                                  class: "inline-flex items-center gap-x-1.5 text-gray-400 hover:text-yellow-600 dark:text-neutral-500 dark:hover:text-yellow-400 transition-colors text-xs",
+                                  form_class: "inline-flex",
+                                  title: "Favoritar" do %>
+                      <%= lucide_icon('bookmark', class: "flex-shrink-0 size-4") %>
+                      <span>Favoritar</span>
+                    <% end %>
+                  <% end %>
+                <% end %>
               </div>
               <%# Autor no canto direito %>
               <div class="flex items-center gap-x-2">
@@ -139,104 +159,6 @@
           <p class="text-center text-gray-500 dark:text-neutral-400 py-10">Nenhuma discussão encontrada ainda.</p>
         <% end %>
       </div>
-
-      <%# Paginação %>
-      <% if @discussions.respond_to?(:current_page) && @discussions.respond_to?(:total_pages) && @discussions.total_pages > 1 %>
-        <nav class="mt-8 flex justify-center" aria-label="Pagination">
-          <div class="flex items-center space-x-1">
-            <%# Botão Anterior %>
-            <% if @discussions.respond_to?(:prev_page) && @discussions.prev_page %>
-              <%= link_to root_path(page: @discussions.prev_page), 
-                  class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-50 hover:text-gray-900 dark:bg-neutral-800 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:hover:text-white transition-colors" do %>
-                <%= lucide_icon('chevron-left', class: "size-4 mr-1") %>
-                Anterior
-              <% end %>
-            <% else %>
-              <span class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-l-lg cursor-not-allowed dark:bg-neutral-700 dark:border-neutral-600 dark:text-neutral-500">
-                <%= lucide_icon('chevron-left', class: "size-4 mr-1") %>
-                Anterior
-              </span>
-            <% end %>
-
-            <%# Números das Páginas %>
-            <% 
-              # Calcula o range de páginas a serem exibidas
-              current_page = @discussions.current_page
-              total_pages = @discussions.total_pages
-              window = 2
-              
-              # Determina início e fim da janela de páginas
-              start_page = [current_page - window, 1].max
-              end_page = [current_page + window, total_pages].min
-            %>
-            
-            <%# Primeira página e reticências se necessário %>
-            <% if start_page > 1 %>
-              <%= link_to root_path(page: 1), 
-                  class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-900 dark:bg-neutral-800 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:hover:text-white transition-colors" do %>
-                1
-              <% end %>
-              <% if start_page > 2 %>
-                <span class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-400 bg-white border border-gray-300 dark:bg-neutral-800 dark:border-neutral-600 dark:text-neutral-500">
-                  ...
-                </span>
-              <% end %>
-            <% end %>
-            
-            <%# Páginas na janela atual %>
-            <% (start_page..end_page).each do |page| %>
-              <% if page == current_page %>
-                <span class="inline-flex items-center px-3 py-2 text-sm font-medium text-white border" style="background-color: var(--color-primary); border-color: var(--color-primary);">
-                  <%= page %>
-                </span>
-              <% else %>
-                <%= link_to root_path(page: page), 
-                    class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-900 dark:bg-neutral-800 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:hover:text-white transition-colors" do %>
-                  <%= page %>
-                <% end %>
-              <% end %>
-            <% end %>
-            
-            <%# Última página e reticências se necessário %>
-            <% if end_page < total_pages %>
-              <% if end_page < total_pages - 1 %>
-                <span class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-400 bg-white border border-gray-300 dark:bg-neutral-800 dark:border-neutral-600 dark:text-neutral-500">
-                  ...
-                </span>
-              <% end %>
-              <%= link_to root_path(page: total_pages), 
-                  class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-900 dark:bg-neutral-800 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:hover:text-white transition-colors" do %>
-                <%= total_pages %>
-              <% end %>
-            <% end %>
-
-            <%# Botão Próximo %>
-            <% if @discussions.respond_to?(:next_page) && @discussions.next_page %>
-              <%= link_to root_path(page: @discussions.next_page), 
-                  class: "inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-50 hover:text-gray-900 dark:bg-neutral-800 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:hover:text-white transition-colors" do %>
-                Próximo
-                <%= lucide_icon('chevron-right', class: "size-4 ml-1") %>
-              <% end %>
-            <% else %>
-              <span class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-r-lg cursor-not-allowed dark:bg-neutral-700 dark:border-neutral-600 dark:text-neutral-500">
-                Próximo
-                <%= lucide_icon('chevron-right', class: "size-4 ml-1") %>
-              </span>
-            <% end %>
-          </div>
-        </nav>
-
-        <%# Informações da Paginação %>
-        <% if @discussions.respond_to?(:current_page) && @discussions.respond_to?(:total_count) %>
-          <div class="mt-4 text-center text-sm text-gray-600 dark:text-neutral-400">
-            <% 
-              start_num = (@discussions.current_page - 1) * (@discussions.respond_to?(:limit_value) ? @discussions.limit_value : 10) + 1
-              end_num = [@discussions.current_page * (@discussions.respond_to?(:limit_value) ? @discussions.limit_value : 10), @discussions.total_count].min
-            %>
-            Exibindo <%= start_num %> - <%= end_num %> de <%= @discussions.total_count %> discussões
-          </div>
-        <% end %>
-      <% end %>
     </div>
     <%# Fim Coluna Principal %>
 

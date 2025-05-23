@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_22_223532) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_23_133054) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -87,6 +87,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_22_223532) do
     t.index ["user_id"], name: "index_discussions_on_user_id"
   end
 
+  create_table "favorite_discussions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "discussion_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["discussion_id"], name: "index_favorite_discussions_on_discussion_id"
+    t.index ["user_id"], name: "index_favorite_discussions_on_user_id"
+  end
+
   create_table "reactions", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "reactable_type", null: false
@@ -149,6 +158,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_22_223532) do
   add_foreign_key "discussions", "categories"
   add_foreign_key "discussions", "users"
   add_foreign_key "discussions", "users", column: "closed_by_id"
+  add_foreign_key "favorite_discussions", "discussions"
+  add_foreign_key "favorite_discussions", "users"
   add_foreign_key "reactions", "users"
   add_foreign_key "replies", "discussions"
   add_foreign_key "replies", "users"

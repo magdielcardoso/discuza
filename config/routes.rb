@@ -19,6 +19,8 @@ Rails.application.routes.draw do
     member do
       patch :reopen
       patch :close
+      post "favorite", to: "favorite_discussions#create"
+      delete "unfavorite", to: "favorite_discussions#destroy"
     end
     resources :replies, only: [ :create, :edit, :update, :destroy ] do
       member do

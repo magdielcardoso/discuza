@@ -39,10 +39,28 @@
     </div>
   </div> <%# Fim Coluna Esquerda %>
 
-  <%# Coluna Direita: Botões de Ação (Editar/Excluir/Fechar/Reabrir) %>
-  <div class="flex-shrink-0"> <%# Remove controller daqui %>
-    <% if user_signed_in? && current_user == discussion.user %>
-      <div class="flex gap-x-2">
+  <%# Coluna Direita: Ícone de Favoritar + Botões de Ação %>
+  <div class="flex-shrink-0">
+    <div class="flex items-center gap-x-2">
+      <%# Ícone de Favoritar/Desfavoritar - Para todos os usuários logados %>
+      <% if user_signed_in? %>
+        <% if current_user.favorited_discussions.include?(discussion) %>
+          <%= button_to unfavorite_discussion_path(discussion), method: :delete, 
+                        class: "p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 transition-colors",
+                        title: "Desfavoritar" do %>
+            <%= lucide_icon('bookmark-check', class: "size-5 text-yellow-600 dark:text-yellow-400") %>
+          <% end %>
+        <% else %>
+          <%= button_to favorite_discussion_path(discussion), method: :post, 
+                        class: "p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 transition-colors",
+                        title: "Favoritar" do %>
+            <%= lucide_icon('bookmark', class: "size-5 text-gray-400 hover:text-yellow-600 dark:text-neutral-500 dark:hover:text-yellow-400") %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <%# Botões de Ação do Proprietário %>
+      <% if user_signed_in? && current_user == discussion.user %>
         <%# Botão Reabrir (se fechado) %>
         <% if discussion.closed? %>
           <%= button_to reopen_discussion_path(discussion),
@@ -77,7 +95,7 @@
             Excluir
           </button>
         <% end %>
-      </div>
-    <% end %>
+      <% end %>
+    </div>
   </div> <%# Fim Coluna Direita %>
 </div> <%# Fim Header discussion_header %> 

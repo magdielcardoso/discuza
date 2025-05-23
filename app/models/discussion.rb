@@ -8,6 +8,9 @@ class Discussion < ApplicationRecord
   has_many :votes, as: :votable, dependent: :destroy
   has_many :reactions, as: :reactable, dependent: :destroy
 
+  has_many :favorite_discussions, dependent: :destroy
+  has_many :favoriting_users, through: :favorite_discussions, source: :user
+
   # Enum para status de fechamento com prefixo (Comentado devido a ArgumentError)
   # enum closure_status: { resolved: 'resolved', not_resolved: 'not_resolved' }, _prefix: true
 
