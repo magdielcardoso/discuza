@@ -2,7 +2,7 @@
   <div class="flex justify-between items-center mb-6">
     <h1 class="font-bold text-4xl">Editar Perfil</h1>
     <%# Botão usa Stimulus para abrir %>
-    <button type="button" data-action="click->modal#openProfileModal" class="py-2 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-lime-500 text-white hover:bg-lime-600 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-lime-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-900 transition-all">
+    <button type="button" data-action="click->modal#openProfileModal" class="py-2 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-white disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-neutral-900 transition-all" style="background-color: var(--color-primary); border-color: var(--color-primary);">
       Atualizar Perfil
     </button>
   </div>
@@ -142,7 +142,7 @@
           Cancelar
         </button>
         <%# Botão Confirmar - Usa Stimulus %>
-        <button type="button" data-action="click->modal#submitForm" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-lime-500 text-white hover:bg-lime-600 disabled:opacity-50 disabled:pointer-events-none">
+        <button type="button" data-action="click->modal#submitForm" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-white disabled:opacity-50 disabled:pointer-events-none" style="background-color: var(--color-primary); border-color: var(--color-primary);">
           Confirmar Alterações
         </button>
       </div>

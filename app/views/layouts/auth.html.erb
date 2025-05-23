@@ -1,8 +1,18 @@
+<%
+  # Get system configuration once for the entire layout
+  begin
+    system_config = SystemConfiguration.instance
+    site_name = system_config.site_name
+  rescue
+    system_config = nil
+    site_name = "Discuza"
+  end
+%>
 <!DOCTYPE html>
 <html class="h-full">
   <head>
     <%# Usa o título padrão ou um específico se definido pela view %>
-    <title><%= content_for(:title) || "Autenticação - Discuza" %></title>
+    <title><%= content_for(:title) || "Autenticação - #{site_name}" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -20,11 +30,26 @@
 
     <%# Carrega os assets (CSS/JS) %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    
+    <%# Dynamic theme color variables %>
+    <% if system_config %>
+      <% color_vars = system_config.primary_color_variables %>
+      <style>
+        :root {
+          --color-primary: <%= color_vars[:primary] %>;
+          --color-primary-dark: <%= color_vars[:primary_dark] %>;
+          --color-primary-light: <%= color_vars[:primary_light] %>;
+        }
+      </style>
+    <% else %>
+      <!-- System configuration not available, using defaults -->
+    <% end %>
+    
     <%= javascript_importmap_tags %>
   </head>
 
   <%# Body ocupa toda altura e é flex container %>
-  <body class="bg-gray-50 dark:bg-neutral-950 min-h-screen flex flex-col">
+  <body class="bg-gray-900 dark:bg-neutral-950 min-h-screen flex flex-col">
     <%# Main agora é flex container para as colunas em telas médias+ %>
     <main class="flex-grow md:flex">
       <%# Coluna Esquerda: Logo e Formulário %>
@@ -32,7 +57,11 @@
         <%# Logo %>
         <div class="mb-8 w-full max-w-md">
           <%= link_to root_path, class: "flex items-center justify-center focus:outline-none focus:opacity-80" do %>
-            <%= image_tag 'logo_light.svg', alt: 'Discuza Logo', class: "h-12 w-auto" %>
+            <% if system_config&.logo&.attached? %>
+              <%= image_tag system_config.logo, alt: site_name, class: "h-12 w-auto object-contain" %>
+            <% else %>
+              <%= image_tag 'logo_light.svg', alt: "#{site_name} Logo", class: "h-12 w-auto" %>
+            <% end %>
           <% end %>
         </div>
 
@@ -40,17 +69,23 @@
         <%= yield %>
       </div>
 
-      <%# Coluna Direita: Imagem alinhada à direita com overlay de citação no canto inferior esquerdo %>
-      <div class="hidden md:flex md:w-1/2 bg-cover bg-right relative items-end justify-start p-12" style="background-image: url('https://github.blog/wp-content/uploads/2023/07/developers-guide-to-prompt-engineering-LLMs-1.jpg?fit=3840%2C2160');">
-        <%# Overlay com a citação %>
-        <div class="absolute inset-0 bg-gray-900 opacity-50"></div> <%# Overlay escuro para legibilidade %>
+      <%# Coluna Direita: Imagem com overlay da cor primária %>
+      <div class="hidden md:flex md:w-1/2 relative items-end justify-start p-12" style="
+        background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 80%, #374151 100%);
+      ">
+        <%# Imagem original com opacidade equilibrada %>
+        <div class="absolute inset-0 bg-cover bg-right opacity-45 mix-blend-multiply" style="background-image: url('https://github.blog/wp-content/uploads/2023/07/developers-guide-to-prompt-engineering-LLMs-1.jpg?fit=3840%2C2160');"></div>
+        <%# Segunda camada da imagem com blend diferente para mais textura %>
+        <div class="absolute inset-0 bg-cover bg-right opacity-25 mix-blend-soft-light" style="background-image: url('https://github.blog/wp-content/uploads/2023/07/developers-guide-to-prompt-engineering-LLMs-1.jpg?fit=3840%2C2160');"></div>
+        <%# Overlay bem sutil para profundidade %>
+        <div class="absolute inset-0 bg-gradient-to-br from-transparent to-gray-900 opacity-20"></div>
         <div class="relative z-10 max-w-md">
           <blockquote class="text-left">
             <p class="text-2xl lg:text-3xl font-semibold font-geist text-white italic">
               "Onde ideias se conectam e o código evolui."
             </p>
-            <footer class="mt-4 text-lg text-lime-300">
-              - discuza.app
+            <footer class="mt-4 text-lg" style="color: var(--color-primary-light);">
+              - <%= site_name.downcase %>.app
             </footer>
           </blockquote>
         </div>
