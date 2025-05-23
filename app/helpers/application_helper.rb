@@ -17,26 +17,43 @@ module ApplicationHelper
     truncate(plain_text, length: length, separator: " ", omission: "...")
   end
 
-  # Processa conteúdo de respostas AI, transformando links markdown em botões clicáveis
-  def process_ai_content(content)
+  # Processa conteúdo de respostas, transformando links markdown em botões clicáveis
+  def process_reply_content(content)
     return content unless content.respond_to?(:to_s)
 
     processed_content = content.to_s
 
-    # Regex para encontrar links markdown de discussions: [text](/discussions/id)
+    # Primeiro: Regex para encontrar links markdown de discussions: [text](/discussions/id)
     discussion_link_regex = /\[([^\]]+)\]\(\/discussions\/(\d+)\)/
 
-    processed_content.gsub(discussion_link_regex) do |match|
+    processed_content = processed_content.gsub(discussion_link_regex) do |match|
       link_text = $1
       discussion_id = $2
 
       # Cria um botão estilizado refinado para o link da discussion
       link_to discussion_path(discussion_id),
-              class: "ai-discussion-link inline-flex items-center gap-x-1.5 px-3 py-1.5 text-xs font-medium rounded-lg shadow-sm transition-all duration-200 hover:shadow-lg",
+              class: "discussion-link inline-flex items-center gap-x-1.5 px-3 py-1.5 text-xs font-medium rounded-lg shadow-sm transition-all duration-200 hover:shadow-lg",
               style: "background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); color: white; text-decoration: none; margin: 2px 1px; border: 1px solid var(--color-primary-light);" do
         content_tag(:span, link_text, class: "font-medium") +
         content_tag(:span, "→", class: "text-xs font-bold transition-transform duration-200 group-hover:translate-x-1")
       end
-    end.html_safe
+    end
+
+    # Segundo: Regex para encontrar links simples de discussions: /discussions/id
+    simple_discussion_regex = /(?<!\[)(?<!\()\/discussions\/(\d+)(?!\))/
+
+    processed_content = processed_content.gsub(simple_discussion_regex) do |match|
+      discussion_id = $1
+
+      # Cria um botão estilizado refinado para o link da discussion (usando o ID como texto)
+      link_to discussion_path(discussion_id),
+              class: "discussion-link inline-flex items-center gap-x-1.5 px-3 py-1.5 text-xs font-medium rounded-lg shadow-sm transition-all duration-200 hover:shadow-lg",
+              style: "background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); color: white; text-decoration: none; margin: 2px 1px; border: 1px solid var(--color-primary-light);" do
+        content_tag(:span, "Discussão ##{discussion_id}", class: "font-medium") +
+        content_tag(:span, "→", class: "text-xs font-bold transition-transform duration-200 group-hover:translate-x-1")
+      end
+    end
+
+    processed_content.html_safe
   end
 end

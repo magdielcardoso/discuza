@@ -65,12 +65,19 @@
           <% end %>
         </div>
       <% end %>
-      <span class="font-semibold text-sm text-gray-800 dark:text-neutral-200 <%= 'ai-username' if is_ai_reply %>">
-        <%= reply.user.name %>
+      <div class="flex flex-col">
+        <span class="font-semibold text-sm text-gray-800 dark:text-neutral-200 <%= 'ai-username' if is_ai_reply %>">
+          <%= reply.user.name %>
+          <% if is_ai_reply %>
+            <span class="ai-label-inline">🤖</span>
+          <% end %>
+        </span>
         <% if is_ai_reply %>
-          <span class="ai-label-inline">🤖</span>
+          <div class="text-xs text-gray-500 dark:text-neutral-400 mt-0.5">
+            💡 Resposta gerada automaticamente devido a discussões semelhantes
+          </div>
         <% end %>
-      </span>
+      </div>
     </div>
     <div class="flex items-center gap-x-3">
       <%# Badge com Contagem de Marcas (se > 0) %>
@@ -89,11 +96,7 @@
 
   <%# Conteúdo da Resposta %>
   <div class="prose prose-sm dark:prose-invert max-w-none <%= 'ai-content' if is_ai_reply %>">
-    <% if is_ai_reply %>
-      <%= process_ai_content(reply.content) %>
-    <% else %>
-      <%= reply.content %>
-    <% end %>
+    <%= process_reply_content(reply.content) %>
   </div>
 
   <%# Footer com Ações %>

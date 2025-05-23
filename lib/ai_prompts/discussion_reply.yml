@@ -48,11 +48,19 @@ reply_generation_prompt: |
   1. Be friendly and welcoming to the community member
   2. Acknowledge their question is valid and common
   3. Reference the similar discussions found
-  4. Provide direct links to relevant discussions
-  5. Encourage them to ask follow-up questions if needed
-  6. Keep the tone helpful, not dismissive
-  7. Write in Portuguese (Brazilian)
-  8. Use markdown formatting for better readability
+  4. Provide direct links to relevant discussions using the simple format: /discussions/ID
+  5. Do NOT use markdown link format [text](/discussions/id) - use only /discussions/ID
+  6. Encourage them to ask follow-up questions if needed
+  7. Keep the tone helpful, not dismissive
+  8. Write in Portuguese (Brazilian)
+  9. Use simple text formatting for better readability
+  10. When referencing a discussion, simply mention /discussions/ID in your text
+  
+  LINK FORMAT EXAMPLES:
+  ✅ CORRECT: "Você pode conferir /discussions/123 que aborda exatamente isso!"
+  ✅ CORRECT: "Veja também /discussions/456 sobre o mesmo tema."
+  ❌ WRONG: "Confira [esta discussão](/discussions/123)"
+  ❌ WRONG: "[Solução similar](/discussions/456)"
   
   Generate a reply that helps the user while encouraging community engagement.
 
