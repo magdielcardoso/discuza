@@ -33,7 +33,8 @@ module ApplicationHelper
       # Cria um botão estilizado refinado para o link da discussion
       link_to discussion_path(discussion_id),
               class: "discussion-link inline-flex items-center gap-x-1.5 px-3 py-1.5 text-xs font-medium rounded-lg shadow-sm transition-all duration-200 hover:shadow-lg",
-              style: "background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); color: white; text-decoration: none; margin: 2px 1px; border: 1px solid var(--color-primary-light);" do
+              style: "background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); color: white; text-decoration: none; margin: 2px 1px; border: 1px solid var(--color-primary-light);",
+              data: { turbo: false } do
         content_tag(:span, link_text, class: "font-medium") +
         content_tag(:span, "→", class: "text-xs font-bold transition-transform duration-200 group-hover:translate-x-1")
       end
@@ -48,7 +49,8 @@ module ApplicationHelper
       # Cria um botão estilizado refinado para o link da discussion (usando o ID como texto)
       link_to discussion_path(discussion_id),
               class: "discussion-link inline-flex items-center gap-x-1.5 px-3 py-1.5 text-xs font-medium rounded-lg shadow-sm transition-all duration-200 hover:shadow-lg",
-              style: "background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); color: white; text-decoration: none; margin: 2px 1px; border: 1px solid var(--color-primary-light);" do
+              style: "background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); color: white; text-decoration: none; margin: 2px 1px; border: 1px solid var(--color-primary-light);",
+              data: { turbo: false } do
         content_tag(:span, "Discussão ##{discussion_id}", class: "font-medium") +
         content_tag(:span, "→", class: "text-xs font-bold transition-transform duration-200 group-hover:translate-x-1")
       end
