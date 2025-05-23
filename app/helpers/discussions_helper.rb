@@ -7,10 +7,10 @@ module DiscussionsHelper
       titleTailwind: "font-bold text-5xl text-gray-900 leading-tight px-8",
       text: "Por #{discussion.user.name} • #{discussion.category.name} • #{time_ago_in_words(discussion.created_at)} atrás",
       textTailwind: "text-xl text-gray-600 mt-6 px-8",
-      logoUrl: "", # Add your logo URL here if needed
-      logoTailwind: "w-12 h-12 mb-4",
+      logoUrl: "https://kanbanparachatwoot.com.br/wp-content/uploads/2025/02/image-5-114.png", # Add your logo URL here if needed
+      logoTailwind: "w-40 h-40 mb-4",
       bgTailwind: "bg-gradient-to-br from-blue-50 via-white to-purple-50 p-8",
-      footer: "DevConnect Community",
+      footer: "Discuza Community",
       footerTailwind: "text-blue-600 font-semibold text-lg mt-8 px-8",
       refresh: "1"
     }
