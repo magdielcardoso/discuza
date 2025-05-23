@@ -1,9 +1,45 @@
 <%# Verifica se esta é a resposta mais marcada %>
 <% is_top_reply = top_reply_id && reply.id == top_reply_id %>
+<%# Verifica se é resposta gerada por AI %>
+<% is_ai_reply = reply.ai_generated? %>
+<%# Pega o nome configurado da AI %>
+<% ai_name = SystemConfiguration.instance.ai_name %>
 
-<div id="<%= dom_id reply %>" class="reply-card relative p-4 rounded-lg border bg-white shadow-sm dark:bg-neutral-900 
-     <%= is_top_reply ? 'border-2' : 'border-gray-200 dark:border-neutral-700' %>" 
-     <%= is_top_reply ? "style=border-color:var(--color-primary);".html_safe : "" %>>
+<%# Define classes CSS dinamicamente %>
+<% 
+  card_classes = "reply-card relative p-4 rounded-lg border bg-white shadow-sm dark:bg-neutral-900"
+  if is_ai_reply
+    card_classes += " ai-reply-card border-2"
+  elsif is_top_reply
+    card_classes += " border-2"
+  else
+    card_classes += " border-gray-200 dark:border-neutral-700"
+  end
+%>
+
+<%# Define estilos inline dinamicamente %>
+<% 
+  card_styles = ""
+  if is_ai_reply
+    card_styles = ""  # Background agora é gerenciado via CSS
+  elsif is_top_reply
+    card_styles = "border-color:var(--color-primary);"
+  end
+%>
+
+<div id="<%= dom_id reply %>" class="<%= card_classes %>" 
+     <%= "style=#{card_styles}".html_safe unless card_styles.empty? %>>
+  
+  <%# Badge de AI (se aplicável) %>
+  <% if is_ai_reply %>
+    <div class="absolute -top-3 -left-3 transform z-10">
+      <span class="inline-flex items-center gap-x-1.5 py-1 px-3 rounded-full text-xs font-semibold text-white shadow-md ai-badge" style="background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));">
+        <%= lucide_icon('sparkles', class: "size-4") %>
+        <%= ai_name %>
+      </span>
+    </div>
+  <% end %>
+  
   <%# Badge/Selo de Melhor Resposta (se aplicável) %>
   <% if is_top_reply %>
     <div class="absolute -top-3 -right-3 transform">
@@ -19,13 +55,22 @@
     <div class="flex items-center gap-x-3">
       <%# Avatar do Autor %>
       <% if reply.user.avatar.attached? %>
-        <img class="inline-block size-7 rounded-full object-cover" src="<%= url_for(reply.user.avatar) %>" alt="<%= reply.user.name %> avatar">
+        <img class="inline-block size-7 rounded-full object-cover <%= 'ai-avatar' if is_ai_reply %>" src="<%= url_for(reply.user.avatar) %>" alt="<%= reply.user.name %> avatar">
       <% else %>
-        <div class="inline-flex items-center justify-center size-7 rounded-full bg-gray-500 text-white text-xs font-semibold">
-          <%= user_initials(reply.user) %>
+        <div class="inline-flex items-center justify-center size-7 rounded-full <%= is_ai_reply ? 'ai-avatar-placeholder' : 'bg-gray-500' %> text-white text-xs font-semibold">
+          <% if is_ai_reply %>
+            <%= lucide_icon('bot', class: "size-4") %>
+          <% else %>
+            <%= user_initials(reply.user) %>
+          <% end %>
         </div>
       <% end %>
-      <span class="font-semibold text-sm text-gray-800 dark:text-neutral-200"><%= reply.user.name %></span>
+      <span class="font-semibold text-sm text-gray-800 dark:text-neutral-200 <%= 'ai-username' if is_ai_reply %>">
+        <%= reply.user.name %>
+        <% if is_ai_reply %>
+          <span class="ai-label-inline">🤖</span>
+        <% end %>
+      </span>
     </div>
     <div class="flex items-center gap-x-3">
       <%# Badge com Contagem de Marcas (se > 0) %>
@@ -43,7 +88,7 @@
   </div>
 
   <%# Conteúdo da Resposta %>
-  <div class="prose prose-sm dark:prose-invert max-w-none">
+  <div class="prose prose-sm dark:prose-invert max-w-none <%= 'ai-content' if is_ai_reply %>">
     <%= reply.content %>
   </div>
 

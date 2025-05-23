@@ -112,8 +112,10 @@ class AnalyzeDiscussionJob < ApplicationJob
   end
 
   def find_or_create_ai_user
+    ai_name = SystemConfiguration.instance.ai_name
+
     User.find_or_create_by(email: "ai@devconnect.com") do |user|
-      user.name = "DevConnect AI"
+      user.name = ai_name
       user.password = SecureRandom.hex(32)
     end
   end

@@ -7,6 +7,7 @@ class SystemConfiguration < ApplicationRecord
   validates :contact_email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :site_description, length: { maximum: 500 }
   validates :primary_color, inclusion: { in: %w[lime green blue indigo purple pink red orange amber yellow emerald teal cyan sky violet rose] }
+  validates :ai_name, presence: true, length: { maximum: 50 }
 
   # Logo validations
   validate :logo_format, if: -> { logo.attached? }
@@ -21,7 +22,8 @@ class SystemConfiguration < ApplicationRecord
       site_name: "DevConnect",
       site_description: "Uma plataforma para desenvolvedores compartilharem conhecimento e experiências.",
       contact_email: "admin@devconnect.com",
-      primary_color: "lime"
+      primary_color: "lime",
+      ai_name: "Discuza AI"
     )
   end
 

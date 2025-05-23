@@ -192,3 +192,153 @@ html.dark a {
 html.dark a:hover {
   color: var(--color-primary-light); /* Dynamic primary light color - lighter on hover in dark mode */
 }
+
+/* ===========================================
+   AI REPLY STYLES - Diferenciação Visual para Respostas AI
+   =========================================== */
+
+/* AI Reply Card - Borda e fundo especiais */
+.ai-reply-card {
+  position: relative;
+  border: 2px solid transparent !important;
+  border-radius: 16px !important; /* Bordas mais arredondadas para AI */
+  background: linear-gradient(white, white) padding-box,
+              linear-gradient(135deg, var(--color-primary), var(--color-primary-light)) border-box;
+  animation: ai-glow 3s ease-in-out infinite alternate;
+  transition: all 0.3s ease-in-out;
+}
+
+.ai-reply-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--color-primary) 2%, transparent), color-mix(in srgb, var(--color-primary) 5%, transparent));
+  border-radius: 14px; /* Ligeiramente menor que o card principal */
+  pointer-events: none;
+  z-index: -1;
+}
+
+.ai-reply-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px color-mix(in srgb, var(--color-primary) 15%, transparent);
+}
+
+/* Animação de brilho sutil para cards AI */
+@keyframes ai-glow {
+  0% {
+    box-shadow: 0 0 5px color-mix(in srgb, var(--color-primary) 30%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 15px color-mix(in srgb, var(--color-primary) 50%, transparent);
+  }
+}
+
+/* AI Badge - Badge identificador */
+.ai-badge {
+  box-shadow: 0 4px 15px color-mix(in srgb, var(--color-primary) 40%, transparent);
+}
+
+/* AI Avatar - Avatar com borda especial */
+.ai-avatar {
+  border: 2px solid var(--color-primary);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--color-primary) 30%, transparent);
+}
+
+.ai-avatar-placeholder {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  border: 2px solid var(--color-primary-light);
+}
+
+/* AI Username - Nome com efeito especial */
+.ai-username {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
+}
+
+.ai-label-inline {
+  margin-left: 4px;
+  font-size: 0.75rem;
+  animation: ai-emoji-bounce 1.5s ease-in-out infinite;
+}
+
+@keyframes ai-emoji-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+/* AI Content - Conteúdo com styling especial */
+.ai-content {
+  position: relative;
+  padding-left: 12px;
+  border-left: 3px solid var(--color-primary);
+  background: linear-gradient(to right, rgba(132, 204, 22, 0.03), transparent);
+}
+
+.ai-content::before {
+  content: '';
+  position: absolute;
+  left: -3px;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--color-primary), var(--color-primary-light));
+  animation: ai-content-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes ai-content-glow {
+  0% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Dark Mode Adjustments for AI */
+html.dark .ai-reply-card {
+  background: linear-gradient(#1f2937, #1f2937) padding-box,
+              linear-gradient(135deg, var(--color-primary), var(--color-primary-light)) border-box;
+}
+
+html.dark .ai-reply-card::before {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--color-primary) 5%, transparent), color-mix(in srgb, var(--color-primary) 8%, transparent));
+}
+
+html.dark .ai-content {
+  background: linear-gradient(to right, rgba(132, 204, 22, 0.08), transparent);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .ai-badge {
+    font-size: 0.7rem;
+    padding: 0.375rem 0.75rem;
+  }
+  
+  .ai-reply-card:hover {
+    transform: none; /* Disable hover transform on mobile */
+  }
+}
+
+/* Accessibility - Reduce animations for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .ai-reply-card,
+  .ai-label-inline,
+  .ai-content::before {
+    animation: none;
+  }
+  
+  .ai-reply-card:hover {
+    transform: none;
+  }
+}
