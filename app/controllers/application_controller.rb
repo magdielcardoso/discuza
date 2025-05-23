@@ -7,8 +7,20 @@ class ApplicationController < ActionController::Base
   layout :layout_by_resource
 
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :redirect_to_onboarding_if_needed
 
   protected
+
+  def redirect_to_onboarding_if_needed
+    # Check if no users exist and we are not already in the onboarding process or Devise controllers
+    if !User.exists? && !onboarding_controller? && !devise_controller?
+      redirect_to onboarding_path
+    end
+  end
+
+  def onboarding_controller?
+    controller_name == "onboarding"
+  end
 
   # Escolhe o layout: 'application' para devise/registrations#edit, 'auth' para outros Devise, 'application' para o resto
   def layout_by_resource

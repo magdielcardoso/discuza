@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  # Routes for the onboarding process
+  get "onboarding", to: "onboarding#index", as: "onboarding"
+  post "onboarding", to: "onboarding#create"
+
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
