@@ -1,24 +1,18 @@
 module DiscussionsHelper
-  # OpenGraph image generation using TailGraph API - GitHub Style
+  # OpenGraph image generation using TailGraph API
   def discussion_og_image_url(discussion)
-    # Use Rails asset helper for logo
-    logo_url = ActionController::Base.helpers.asset_url("logo_dark.svg")
-
-    # Clean metadata formatting like GitHub
-    metadata = "#{discussion.user.name} em #{discussion.category.name}"
-
     og_params = {
       fontFamily: "Inter",
       title: discussion.title,
-      titleTailwind: "font-bold text-6xl text-gray-900 leading-tight px-20 mt-4 mb-3 tracking-tight max-w-5xl",
-      text: metadata,
-      textTailwind: "text-2xl text-gray-600 px-20 mb-6 font-medium",
-      logoUrl: logo_url,
-      logoTailwind: "w-16 h-16 ml-20 mt-16 mb-10 object-contain",
-      bgTailwind: "bg-gray-50 border-l-4 border-blue-600",
-      footer: "\u{1F680} DevConnect Community",
-      footerTailwind: "text-gray-500 text-xl px-20 absolute bottom-12 font-medium",
-      refresh: Time.current.to_i.to_s
+      titleTailwind: "font-bold text-5xl text-gray-900 leading-tight px-8",
+      text: "Por #{discussion.user.name} • #{discussion.category.name} • #{time_ago_in_words(discussion.created_at)} atrás",
+      textTailwind: "text-xl text-gray-600 mt-6 px-8",
+      logoUrl: "", # Add your logo URL here if needed
+      logoTailwind: "w-12 h-12 mb-4",
+      bgTailwind: "bg-gradient-to-br from-blue-50 via-white to-purple-50 p-8",
+      footer: "DevConnect Community",
+      footerTailwind: "text-blue-600 font-semibold text-lg mt-8 px-8",
+      refresh: "1"
     }
 
     # Convert params to URL query string
