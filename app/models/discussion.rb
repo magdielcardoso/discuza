@@ -62,7 +62,8 @@ class Discussion < ApplicationRecord
 
   # Método para a condição da validação
   def requires_closure_reason?
-    closed? && closure_status_not_resolved?
+    # Só exige closure_reason se estiver fechado E o status for 'not_resolved'
+    closed? && closure_status == NOT_RESOLVED
   end
 
   # Schedule AI analysis job for new discussions

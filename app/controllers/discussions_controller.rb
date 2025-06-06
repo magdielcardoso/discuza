@@ -4,8 +4,10 @@ class DiscussionsController < ApplicationController
   # Garante que o usuário esteja logado para as ações que precisam de um usuário
   before_action :authenticate_user!, only: [ :index, :new, :create, :edit, :update, :destroy, :reopen, :close, :toggle_pin ]
   before_action :set_discussion, only: %i[ show edit update destroy reopen close toggle_pin ]
-  # Garante que apenas o dono possa editar, atualizar, destruir ou fechar/reabrir
-  before_action :authorize_discussion_owner!, only: %i[ edit update destroy reopen close ]
+  # Garante que apenas o dono possa editar, atualizar, destruir ou reabrir
+  before_action :authorize_discussion_owner!, only: %i[ edit update destroy reopen ]
+  # Permite que dono ou admin fechem discussões
+  before_action :authorize_discussion_close!, only: [ :close ]
   before_action :authorize_admin!, only: [ :toggle_pin ]
 
   # GET /discussions or /discussions.json
@@ -113,8 +115,20 @@ class DiscussionsController < ApplicationController
 
   # PATCH /discussions/1/close
   def close
+    # Debug: log the parameters being received
+    Rails.logger.debug "Close params: #{close_params.inspect}"
+    Rails.logger.debug "Full params: #{params.inspect}"
+
+    # Prepare the close parameters
+    close_attributes = close_params.merge(closed: true, closed_at: Time.current, closed_by: current_user)
+
+    # Clear closure_reason if status is 'resolved'
+    if close_attributes[:closure_status] == "resolved"
+      close_attributes[:closure_reason] = nil
+    end
+
     # Fecha a discussão com status e razão
-    if @discussion.update(close_params.merge(closed: true, closed_at: Time.current, closed_by: current_user))
+    if @discussion.update(close_attributes)
       respond_to do |format|
         format.turbo_stream {
           @discussion.reload
@@ -158,6 +172,11 @@ class DiscussionsController < ApplicationController
     # Helper de autorização para o dono da discussão
     def authorize_discussion_owner!
       head :forbidden unless @discussion.user == current_user
+    end
+
+    # Permite que dono ou admin fechem discussões
+    def authorize_discussion_close!
+      head :forbidden unless @discussion.user == current_user || current_user&.is_admin?
     end
 
     # Permite apenas admins para certas ações

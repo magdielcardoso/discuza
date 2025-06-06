@@ -445,8 +445,8 @@
           <ul class="space-y-4">
             <%# Busca usuários mais ativos com base em discussões + respostas %>
             <% 
-              # Query para encontrar usuários mais ativos
-              active_users = User.joins("LEFT JOIN discussions ON discussions.user_id = users.id")
+              # Query para encontrar usuários mais ativos - only considering open discussions
+              active_users = User.joins("LEFT JOIN discussions ON discussions.user_id = users.id AND discussions.closed = false")
                                 .joins("LEFT JOIN replies ON replies.user_id = users.id")
                                 .group("users.id")
                                 .select("users.*, 

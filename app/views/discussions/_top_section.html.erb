@@ -73,8 +73,8 @@
   <%# Renderiza o header da discussão (contém o botão que abre o modal) %>
   <%= render "discussions/header", discussion: discussion %>
 
-  <%# Renderiza o modal de fechamento APENAS se a discussão NÃO estiver fechada %>
-  <% unless discussion.closed? %>
+  <%# Renderiza o modal de fechamento para proprietário ou administradores quando discussão não está fechada %>
+  <% if user_signed_in? && !discussion.closed? && (current_user == discussion.user || current_user.is_admin?) %>
     <%= render "discussions/close_modal", discussion: discussion %>
   <% end %>
 

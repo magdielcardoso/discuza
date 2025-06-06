@@ -61,7 +61,7 @@
 
       <%# Botões de Ação do Proprietário %>
       <% if user_signed_in? && current_user == discussion.user %>
-        <%# Botão Reabrir (se fechado) %>
+        <%# Botão Reabrir (se fechado) - Apenas para proprietário %>
         <% if discussion.closed? %>
           <%= button_to reopen_discussion_path(discussion),
                         method: :patch,
@@ -69,16 +69,21 @@
             <%= lucide_icon('unlock', class: "size-3.5 mr-1.5") %> <%# Adicionado mr %>
             Reabrir
           <% end %>
-        <% else %>
-          <%# Botão Fechar (Trigga Modal específico) %>
-          <button type="button" 
-                  data-action="click->modal#openCloseModal" 
-                  class="btn btn-warning"> <%# Estilo Aviso %>
-            <%= lucide_icon('lock', class: "size-3.5 mr-1.5") %> <%# Adicionado mr %>
-            Fechar
-          </button>
         <% end %>
+      <% end %>
 
+      <%# Botão Fechar - Visível para proprietário ou administradores %>
+      <% if user_signed_in? && !discussion.closed? && (current_user == discussion.user || current_user.is_admin?) %>
+        <button type="button" 
+                data-action="click->modal#openCloseModal" 
+                class="btn btn-warning"> <%# Estilo Aviso %>
+          <%= lucide_icon('lock', class: "size-3.5 mr-1.5") %> <%# Adicionado mr %>
+          Fechar
+        </button>
+      <% end %>
+
+      <%# Botões de Edição e Exclusão - Apenas para proprietário %>
+      <% if user_signed_in? && current_user == discussion.user %>
         <%# Botão Editar %>
         <%= link_to edit_discussion_path(discussion),
                     class: "btn btn-secondary" do %> <%# Estilo Secundário %>
